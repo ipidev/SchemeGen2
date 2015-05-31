@@ -11,6 +11,18 @@ namespace SchemeGen2
     {
         static void Main(string[] args)
         {
+            //XML testing
+            try
+            {
+                XmlParser.XmlParser schemeXmlParse = new XmlParser.XmlParser("testXml.xml");
+                schemeXmlParse.Parse();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            //Scheme testing
             Scheme testScheme = new Scheme(true);
 
             byte[] schemeBytes = testScheme.GetBytes();
