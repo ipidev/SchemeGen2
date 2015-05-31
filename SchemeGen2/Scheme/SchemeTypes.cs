@@ -131,6 +131,35 @@ namespace SchemeGen2
         Count
     }
 
+    enum StockpilingModes : byte
+    {
+        Off,
+        On,
+        Anti,
+
+        Count
+    }
+
+    enum WormSelectModes : byte
+    {
+        Off,
+        On,
+        Random,
+
+        Count
+    }
+
+
+    enum SuddenDeathEvents : byte
+    {
+        RoundEnds,
+        NuclearStrike,
+        OneHitPoint,
+        Nothing,
+
+        Count
+    }
+
     enum RubberWormSettings
     {
         Bounciness          = WeaponTypes.Armageddon,
@@ -184,6 +213,9 @@ namespace SchemeGen2
 
     static class SchemeTypes
     {
+        public const byte False = 0x00;
+        public const byte True = 0x01;
+
         public static bool IsTeamWeapon(WeaponTypes weaponType)
         {
             switch (weaponType)

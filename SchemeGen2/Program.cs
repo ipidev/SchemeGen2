@@ -12,7 +12,6 @@ namespace SchemeGen2
         static void Main(string[] args)
         {
             Scheme testScheme = new Scheme(true);
-            testScheme.Initialise();
 
             byte[] schemeBytes = testScheme.GetBytes();
 

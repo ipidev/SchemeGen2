@@ -24,12 +24,22 @@ namespace SchemeGen2
         public const int SchemeFileLength = SchemeWeaponsStartIndex + NumberOfWeaponSettings;
 
         public Scheme(bool useRubberWorm)
+            : this(useRubberWorm, true)
+        {
+        }
+
+        public Scheme(bool useRubberWorm, bool setUpDefaults)
         {
             _settings = new Setting[NumberOfNonWeaponSettings];
             _weapons = new Weapon[NumberOfWeapons];
             _useRubberWorm = useRubberWorm;
 
             Initialise();
+
+            if (setUpDefaults)
+            {
+                SetUpDefaults();
+            }
         }
 
         ///////////////////////////////////////////////////////////////////////
@@ -96,11 +106,6 @@ namespace SchemeGen2
                 setting.SetRange(0x00, 0x03);
                 break;
 
-            //Make sure the worms start with some health!
-            case SettingTypes.InitialWormEnergy:
-                setting.Value = 100;
-                break;
-
             //Everything else has full byte range.
             default:
                 //Nothing.
@@ -164,6 +169,29 @@ namespace SchemeGen2
             }
             
             //TODO: What are the valid ranges for other weapons?
+        }
+
+        public void SetUpDefaults()
+        {
+            //Most of these are taken from Intermediate.
+            Get(SettingTypes.HotSeatDelay).Value            = 5;
+            Get(SettingTypes.RetreatTime).Value             = 3;
+            Get(SettingTypes.RopeRetreatTime).Value         = 5;
+            Get(SettingTypes.DisplayTotalRoundTime).Value   = SchemeTypes.False;
+            Get(SettingTypes.AutomaticReplays).Value        = SchemeTypes.False;
+            Get(SettingTypes.FallDamage).Value              = SchemeTypes.True;
+            Get(SettingTypes.ArtilleryMode).Value           = SchemeTypes.False;
+            Get(SettingTypes.StockpilingMode).Value         = (byte)StockpilingModes.Off;
+            Get(SettingTypes.WormSelect).Value              = (byte)WormSelectModes.Off;
+            Get(SettingTypes.SuddenDeathEvent).Value        = (byte)SuddenDeathEvents.Nothing;
+            Get(SettingTypes.WaterRiseRate).Value           = 0;
+            Get(SettingTypes.MineDelay).Value               = 3;
+            Get(SettingTypes.InitialWormEnergy).Value       = 100;
+            Get(SettingTypes.TurnTime).Value                = 45;
+            Get(SettingTypes.RoundTime).Value               = 15;
+            Get(SettingTypes.NumberOfRounds).Value          = 1;
+            Get(SettingTypes.TeamWeapons).Value             = SchemeTypes.False;
+            Get(SettingTypes.SuperWeapons).Value            = SchemeTypes.True;
         }
 
         ///////////////////////////////////////////////////////////////////////
