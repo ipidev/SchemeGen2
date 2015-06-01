@@ -117,24 +117,20 @@ namespace SchemeGen2.XmlParser
             foreach (XElement element in elements)
             {
                 //Handle setting element.
-                if (element.Name.LocalName == ElementTypes.Setting.ToString())
+                SettingTypes setting;
+
+                if (Enum.TryParse<SettingTypes>(element.Name.LocalName, out setting))
                 {
-                    XAttribute attribute = element.Attributes().First(a => a.Name == "name");
-
-                    if (attribute != null)
+                    if (!foundElements.Contains(setting))
                     {
-                        SettingTypes setting;
+                        foundElements.Add(setting, element);
 
-                        if (Enum.TryParse<SettingTypes>(attribute.Value, out setting))
-                        {
-                            if (!foundElements.Contains(setting))
-                            {
-                                foundElements.Add(setting, element);
-
-                                //TODO: Handle setting.
-                                Console.WriteLine(attribute.Value);
-                            }
-                        }
+                        //TODO: Handle setting.
+                        Console.WriteLine(element.Name.LocalName);
+                    }
+                    else
+                    {
+                        errorCollection.AddRepeatedElement(element, foundElements.Get(setting));
                     }
                 }
                 //Invalid element.
@@ -154,25 +150,21 @@ namespace SchemeGen2.XmlParser
 
             foreach (XElement element in elements)
             {
-                //Handle setting element.
-                if (element.Name.LocalName == ElementTypes.Weapon.ToString())
+                //Handle weapon element.
+                WeaponTypes weapon;
+
+                if (Enum.TryParse<WeaponTypes>(element.Name.LocalName, out weapon))
                 {
-                    XAttribute attribute = element.Attributes().First(a => a.Name == "name");
-
-                    if (attribute != null)
+                    if (!foundElements.Contains(weapon))
                     {
-                        WeaponTypes weapon;
+                        foundElements.Add(weapon, element);
 
-                        if (Enum.TryParse<WeaponTypes>(attribute.Value, out weapon))
-                        {
-                            if (!foundElements.Contains(weapon))
-                            {
-                                foundElements.Add(weapon, element);
-
-                                //TODO: Handle weapon.
-                                Console.WriteLine(attribute.Value);
-                            }
-                        }
+                        //TODO: Handle weapon.
+                        Console.WriteLine(element.Name.LocalName);
+                    }
+                    else
+                    {
+                        errorCollection.AddRepeatedElement(element, foundElements.Get(weapon));
                     }
                 }
                 //Invalid element.
