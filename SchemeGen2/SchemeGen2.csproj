@@ -63,6 +63,7 @@
     <Compile Include="Scheme\SchemeTypes.cs" />
     <Compile Include="Scheme\Weapon.cs" />
     <Compile Include="XmlParser\FoundElements.cs" />
+    <Compile Include="XmlParser\XmlErrorCollection.cs" />
     <Compile Include="XmlParser\XmlParser.cs" />
     <Compile Include="XmlParser\XmlParserTypes.cs" />
   </ItemGroup>

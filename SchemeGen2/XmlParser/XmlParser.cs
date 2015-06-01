@@ -17,12 +17,15 @@ namespace SchemeGen2.XmlParser
             _xDoc = XDocument.Load(filename, LoadOptions.SetLineInfo);
         }
 
-        public void Parse()
+        public bool Parse(out XmlErrorCollection errorCollection)
         {
             if (_xDoc == null)
             {
                 throw new ArgumentNullException("XML document is not valid.");
             }
+
+            //Error collecting object, handy for flooding the output with errors at the end :)
+            errorCollection = new XmlErrorCollection();
 
             FoundElements foundElements = new FoundElements();
 
@@ -32,15 +35,35 @@ namespace SchemeGen2.XmlParser
             foreach (XElement element in elements)
             {
                 //Handle scheme element.
-                if (element.Name.LocalName == ElementTypes.Scheme.ToString() && !foundElements.Contains(ElementTypes.Scheme))
+                if (element.Name.LocalName == ElementTypes.Scheme.ToString())
                 {
-                    foundElements.Add(ElementTypes.Scheme, element);
-                    ParseSchemeElement(element);
+                    if (!foundElements.Contains(ElementTypes.Scheme))
+                    {
+                        foundElements.Add(ElementTypes.Scheme, element);
+                        ParseSchemeElement(element, ref errorCollection);
+                    }
+                    else
+                    {
+                        errorCollection.AddRepeatedElement(element);
+                    }
+                }
+                //Invalid element.
+                else
+                {
+                    errorCollection.AddInvalidElement(element);
                 }
             }
+
+            //If we didn't get the scheme element, we didn't do anything just now!
+            if (!foundElements.Contains(ElementTypes.Scheme))
+            {
+                errorCollection.AddElementNotFound(ElementTypes.Scheme.ToString());
+            }
+
+            return errorCollection.Errors.Count == 0; 
         }
 
-        void ParseSchemeElement(XElement schemeElement)
+        void ParseSchemeElement(XElement schemeElement, ref XmlErrorCollection errorCollection)
         {
             FoundElements foundElements = new FoundElements();
 
@@ -49,22 +72,42 @@ namespace SchemeGen2.XmlParser
 
             foreach (XElement element in elements)
             {
+                //TODO: Can I generalise these calls?
                 //Handle settings element.
-                if (element.Name.LocalName == ElementTypes.Settings.ToString() && !foundElements.Contains(ElementTypes.Settings))
+                if (element.Name.LocalName == ElementTypes.Settings.ToString())
                 {
-                    foundElements.Add(ElementTypes.Settings, element);
-                    ParseSettingsElement(element);
+                    if (!foundElements.Contains(ElementTypes.Settings))
+                    {
+                        foundElements.Add(ElementTypes.Settings, element);
+                        ParseSettingsElement(element, ref errorCollection);
+                    }
+                    else
+                    {
+                        errorCollection.AddRepeatedElement(element, foundElements.Get(ElementTypes.Settings));
+                    }
                 }
                 //Handle weapons element.
-                else if (element.Name.LocalName == ElementTypes.Weapons.ToString() && !foundElements.Contains(ElementTypes.Weapons))
+                else if (element.Name.LocalName == ElementTypes.Weapons.ToString())
                 {
-                    foundElements.Add(ElementTypes.Weapons, element);
-                    ParseWeaponsElement(element);
+                    if (!foundElements.Contains(ElementTypes.Weapons))
+                    {
+                        foundElements.Add(ElementTypes.Weapons, element);
+                        ParseWeaponsElement(element, ref errorCollection);
+                    }
+                    else
+                    {
+                        errorCollection.AddRepeatedElement(element, foundElements.Get(ElementTypes.Weapons));
+                    }
+                }
+                //Invalid element.
+                else
+                {
+                    errorCollection.AddInvalidElement(element);
                 }
             }
         }
 
-        void ParseSettingsElement(XElement settingsElement)
+        void ParseSettingsElement(XElement settingsElement, ref XmlErrorCollection errorCollection)
         {
             FoundElements foundElements = new FoundElements();
 
@@ -94,10 +137,15 @@ namespace SchemeGen2.XmlParser
                         }
                     }
                 }
+                //Invalid element.
+                else
+                {
+                    errorCollection.AddInvalidElement(element);
+                }
             }
         }
 
-        void ParseWeaponsElement(XElement settingsElement)
+        void ParseWeaponsElement(XElement settingsElement, ref XmlErrorCollection errorCollection)
         {
             FoundElements foundElements = new FoundElements();
 
@@ -126,6 +174,11 @@ namespace SchemeGen2.XmlParser
                             }
                         }
                     }
+                }
+                //Invalid element.
+                else
+                {
+                    errorCollection.AddInvalidElement(element);
                 }
             }
         }
