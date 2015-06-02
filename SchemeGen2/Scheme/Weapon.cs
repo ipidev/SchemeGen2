@@ -105,6 +105,32 @@ namespace SchemeGen2
             return HasStartingAmmo() || CanAppearInCrates();
         }
 
+        public Setting Get(WeaponSettings weaponSetting)
+        {
+            switch (weaponSetting)
+            {
+            case WeaponSettings.Ammo:
+                return _ammo;
+
+            case WeaponSettings.Power:
+                return _power;
+
+            case WeaponSettings.Delay:
+                return _delay;
+
+            case WeaponSettings.Crate:
+                return _crate;
+
+            default:
+                throw new ArgumentException("Invalid enum " + weaponSetting.ToString());
+            }
+        }
+
+        public Setting this[WeaponSettings weaponSetting]
+        {
+            get { return Get(weaponSetting); }
+        }
+
         public byte[] GetBytes()
         {
             byte[] bytes = new byte[(int)WeaponSettings.Count];

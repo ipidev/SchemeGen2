@@ -11,12 +11,15 @@ namespace SchemeGen2
     {
         static void Main(string[] args)
         {
+            //Scheme testing
+            Scheme testScheme = new Scheme(true);
+
             XmlParser.XmlErrorCollection xmlErrorCollection = null;
 
             //XML testing
             try
             {
-                XmlParser.XmlParser schemeXmlParse = new XmlParser.XmlParser("testXml.xml");
+                XmlParser.XmlParser schemeXmlParse = new XmlParser.XmlParser("testXml.xml", testScheme);
                 schemeXmlParse.Parse(out xmlErrorCollection);
             }
             catch (Exception e)
@@ -43,9 +46,6 @@ namespace SchemeGen2
                     }
                 }
             }
-
-            //Scheme testing
-            Scheme testScheme = new Scheme(true);
 
             byte[] schemeBytes = testScheme.GetBytes();
 

@@ -10,9 +10,12 @@ namespace SchemeGen2.XmlParser
 {
     class XmlParser
     {
-        public XmlParser(string filename)
+        public XmlParser(string filename, Scheme scheme)
         {
+            Debug.Assert(scheme != null);
+
             _filename = filename;
+            _scheme = scheme;
 
             _xDoc = XDocument.Load(filename, LoadOptions.SetLineInfo);
         }
@@ -117,20 +120,19 @@ namespace SchemeGen2.XmlParser
             foreach (XElement element in elements)
             {
                 //Handle setting element.
-                SettingTypes setting;
+                SettingTypes settingType;
 
-                if (Enum.TryParse<SettingTypes>(element.Name.LocalName, out setting))
+                if (Enum.TryParse<SettingTypes>(element.Name.LocalName, out settingType))
                 {
-                    if (!foundElements.Contains(setting))
+                    if (!foundElements.Contains(settingType))
                     {
-                        foundElements.Add(setting, element);
+                        foundElements.Add(settingType, element);
 
-                        //TODO: Handle setting.
-                        Console.WriteLine(element.Name.LocalName);
+                        ParseSettingElement(element, settingType, ref errorCollection);
                     }
                     else
                     {
-                        errorCollection.AddRepeatedElement(element, foundElements.Get(setting));
+                        errorCollection.AddRepeatedElement(element, foundElements.Get(settingType));
                     }
                 }
                 //Invalid element.
@@ -141,12 +143,46 @@ namespace SchemeGen2.XmlParser
             }
         }
 
-        void ParseWeaponsElement(XElement settingsElement, ref XmlErrorCollection errorCollection)
+        void ParseSettingElement(XElement settingElement, SettingTypes settingType, ref XmlErrorCollection errorCollection)
+        {
+            //Iterate through all elements.
+            IEnumerable<XElement> elements = settingElement.Elements();
+
+            foreach (XElement element in elements)
+            {
+                //Handle value element.
+                ValueTypes value;
+
+                if (Enum.TryParse<ValueTypes>(element.Name.LocalName, out value))
+                {
+                    XAttribute valueAttribute = element.Attribute("value");
+
+                    if (valueAttribute != null)
+                    {
+                        Setting setting = _scheme[settingType];
+                        Debug.Assert(setting != null);
+
+                        SetValue(element, valueAttribute, setting, ref errorCollection);
+                    }
+                    else
+                    {
+                        errorCollection.AddAttributeNotFound("value", element);
+                    }
+                }
+                //Invalid element.
+                else
+                {
+                    errorCollection.AddInvalidElement(element);
+                }
+            }
+        }
+
+        void ParseWeaponsElement(XElement weaponsElement, ref XmlErrorCollection errorCollection)
         {
             FoundElements foundElements = new FoundElements();
 
             //Iterate through all elements.
-            IEnumerable<XElement> elements = settingsElement.Elements();
+            IEnumerable<XElement> elements = weaponsElement.Elements();
 
             foreach (XElement element in elements)
             {
@@ -159,8 +195,7 @@ namespace SchemeGen2.XmlParser
                     {
                         foundElements.Add(weapon, element);
 
-                        //TODO: Handle weapon.
-                        Console.WriteLine(element.Name.LocalName);
+                        ParseWeaponElement(element, weapon, ref errorCollection);
                     }
                     else
                     {
@@ -175,7 +210,104 @@ namespace SchemeGen2.XmlParser
             }
         }
 
+        void ParseWeaponElement(XElement weaponElement, WeaponTypes weaponType, ref XmlErrorCollection errorCollection)
+        {
+            FoundElements foundElements = new FoundElements();
+
+            //Iterate through all elements.
+            IEnumerable<XElement> elements = weaponElement.Elements();
+
+            foreach (XElement element in elements)
+            {
+                //Handle weapon setting element.
+                WeaponSettings weaponSetting;
+
+                if (Enum.TryParse<WeaponSettings>(element.Name.LocalName, out weaponSetting))
+                {
+                    if (!foundElements.Contains(weaponSetting))
+                    {
+                        foundElements.Add(weaponSetting, element);
+
+                        ParseWeaponSettingElement(element, weaponType, weaponSetting, ref errorCollection);
+                    }
+                    else
+                    {
+                        errorCollection.AddRepeatedElement(element, foundElements.Get(weaponSetting));
+                    }
+                }
+                //Invalid element.
+                else
+                {
+                    errorCollection.AddInvalidElement(element);
+                }
+            }
+        }
+
+        void ParseWeaponSettingElement(XElement weaponSettingElement, WeaponTypes weaponType, WeaponSettings weaponSetting, ref XmlErrorCollection errorCollection)
+        {
+            //Iterate through all elements.
+            IEnumerable<XElement> elements = weaponSettingElement.Elements();
+
+            foreach (XElement element in elements)
+            {
+                //Handle value element.
+                ValueTypes value;
+
+                if (Enum.TryParse<ValueTypes>(element.Name.LocalName, out value))
+                {
+                    XAttribute valueAttribute = element.Attribute("value");
+
+                    if (valueAttribute != null)
+                    {
+                        Weapon weapon = _scheme[weaponType];
+                        Debug.Assert(weapon != null);
+
+                        Setting setting = weapon[weaponSetting];
+                        Debug.Assert(setting != null);
+
+                        SetValue(element, valueAttribute, setting, ref errorCollection);
+                    }
+                    else
+                    {
+                        errorCollection.AddAttributeNotFound("value", element);
+                    }
+                }
+                //Invalid element.
+                else
+                {
+                    errorCollection.AddInvalidElement(element);
+                }
+            }
+        }
+
+        void SetValue(XElement element, XAttribute attribute, Setting setting, ref XmlErrorCollection errorCollection)
+        {
+            Debug.Assert(setting != null);
+
+            //Check the attribute's value is of the right type and in range.
+            int intValue;
+
+            if (Int32.TryParse(attribute.Value, out intValue))
+            {
+                if (intValue >= (int)setting.MinimumValue && intValue <= (int)setting.MaximumValue)
+                {
+                    setting.Value = (byte)intValue;
+
+                    Console.WriteLine("Set value: {0}", intValue);
+                }
+                else
+                {
+                    errorCollection.AddAttributeValueOutOfRange(element, attribute, setting);
+                }
+            }
+            else
+            {
+                errorCollection.AddAttributeValueNonInteger(element, attribute);
+            }
+        }
+
         string _filename;
+        Scheme _scheme;
         XDocument _xDoc;
     }
 }
