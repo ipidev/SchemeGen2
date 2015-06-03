@@ -116,32 +116,32 @@ namespace SchemeGen2.XmlParser
 
         public void AddAttributeNotFound(string expectedAttribute, XElement element)
         {
-            string errorString = String.Format("Attribute '{0}' was expected in element '{1}' but was not found.",
-                expectedAttribute, element.Name.LocalName);
+            string errorString = String.Format("Attribute '{0}' was expected but was not found.",
+                expectedAttribute);
 
             Add(errorString, element);
         }
 
         public void AddInvalidAttribute(XElement element, XAttribute attribute)
         {
-            string errorString = String.Format("Attribute '{0}' in element '{1}' is invalid.",
-                attribute.Name.LocalName, element.Name.LocalName);
+            string errorString = String.Format("Attribute '{0}' is invalid.",
+                attribute.Name.LocalName);
 
             Add(errorString, element);
         }
 
         public void AddAttributeValueNonInteger(XElement element, XAttribute attribute)
         {
-            string errorString = String.Format("Attribute '{0}' in element '{1}' has non-integer value '{2}'.",
-                attribute.Name.LocalName, element.Name.LocalName, attribute.Value);
+            string errorString = String.Format("Attribute '{0}' has non-integer value '{1}'.",
+                attribute.Name.LocalName, attribute.Value);
 
             Add(errorString, element);
         }
 
         public void AddAttributeValueOutOfRange(XElement element, XAttribute attribute, Setting setting)
         {
-            string errorString = String.Format("Attribute '{0}' in element '{1}' is out of range value '{2}'. Valid range is [{3} - {4}].",
-                attribute.Name.LocalName, element.Name.LocalName, attribute.Value, setting.MinimumValue, setting.MaximumValue);
+            string errorString = String.Format("Attribute '{0}' has out of range value '{1}'. Valid range is [{2} - {3}].",
+                attribute.Name.LocalName, attribute.Value, setting.MinimumValue, setting.MaximumValue);
 
             Add(errorString, element);
         }
