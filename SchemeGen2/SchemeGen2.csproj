@@ -58,6 +58,8 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Randomisation\SetValueGenerator.cs" />
+    <Compile Include="Randomisation\ValueGenerator.cs" />
     <Compile Include="Scheme\Ranges.cs" />
     <Compile Include="Scheme\Scheme.cs" />
     <Compile Include="Scheme\Setting.cs" />
