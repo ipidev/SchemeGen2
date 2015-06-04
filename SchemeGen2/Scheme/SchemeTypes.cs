@@ -216,6 +216,26 @@ namespace SchemeGen2
         public const byte False = 0x00;
         public const byte True = 0x01;
 
+        /// <summary>
+        /// The number of game settings in the scheme that don't apply to weapons.
+        /// </summary>
+        public const int NumberOfNonWeaponSettings = (int)SettingTypes.Count;
+
+        /// <summary>
+        /// The number of non-super weapons in the scheme.
+        /// </summary>
+        public const int NumberOfNonSuperWeapons = (int)WeaponTypes.NormalWeaponCount;
+
+        /// <summary>
+        /// The number of weapons in the scheme, including super weapons.
+        /// </summary>
+        public const int NumberOfWeapons = (int)WeaponTypes.Count;
+
+        /// <summary>
+        /// The total number of individual weapon parameters, including super weapons.
+        /// </summary>
+        public const int NumberOfWeaponSettings = NumberOfWeapons * (int)WeaponSettings.Count;
+
         public static bool IsTeamWeapon(WeaponTypes weaponType)
         {
             switch (weaponType)

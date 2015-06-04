@@ -9,19 +9,14 @@ namespace SchemeGen2
 {
     class Scheme
     {
-        public const int NumberOfNonWeaponSettings = (int)SettingTypes.Count;
-        public const int NumberOfNonSuperWeapons = (int)WeaponTypes.NormalWeaponCount;
-        public const int NumberOfWeapons = (int)WeaponTypes.Count;
-        public const int NumberOfWeaponSettings = NumberOfWeapons * (int)WeaponSettings.Count;
-
         //Scheme file-specific constants.
         const byte WormsSchemeVersion = 0x02;
         static readonly byte[] SchemeFileMagicNumber = { 0x53, 0x43, 0x48, 0x4D };
         const byte SchemeGeneratorMagicNumber = 0x17;
 
         public const int SchemeSettingsStartIndex = 4; //SchemeFileMagicNumber.Length;
-        public const int SchemeWeaponsStartIndex = SchemeSettingsStartIndex + NumberOfNonWeaponSettings;
-        public const int SchemeFileLength = SchemeWeaponsStartIndex + NumberOfWeaponSettings;
+        public const int SchemeWeaponsStartIndex = SchemeSettingsStartIndex + SchemeTypes.NumberOfNonWeaponSettings;
+        public const int SchemeFileLength = SchemeWeaponsStartIndex + SchemeTypes.NumberOfWeaponSettings;
 
         public Scheme(bool useRubberWorm)
             : this(useRubberWorm, true)
@@ -30,8 +25,8 @@ namespace SchemeGen2
 
         public Scheme(bool useRubberWorm, bool setUpDefaults)
         {
-            _settings = new Setting[NumberOfNonWeaponSettings];
-            _weapons = new Weapon[NumberOfWeapons];
+            _settings = new Setting[SchemeTypes.NumberOfNonWeaponSettings];
+            _weapons = new Weapon[SchemeTypes.NumberOfWeapons];
             _useRubberWorm = useRubberWorm;
 
             Initialise();
@@ -232,9 +227,9 @@ namespace SchemeGen2
 
         byte[] GetSettingsBytes()
         {
-            byte[] bytes = new byte[NumberOfNonWeaponSettings];
+            byte[] bytes = new byte[SchemeTypes.NumberOfNonWeaponSettings];
 
-            for (int i = 0; i < NumberOfNonWeaponSettings; ++i)
+            for (int i = 0; i < bytes.Length; ++i)
             {
                 bytes[i] = _settings[i].Value;
             }
@@ -244,9 +239,9 @@ namespace SchemeGen2
 
         byte[] GetWeaponSettingsBytes()
         {
-            byte[] bytes = new byte[NumberOfWeaponSettings];
+            byte[] bytes = new byte[SchemeTypes.NumberOfWeaponSettings];
 
-            for (int i = 0; i < NumberOfWeapons; ++i)
+            for (int i = 0; i < SchemeTypes.NumberOfWeapons; ++i)
             {
                 int baseByteIndex = i * (int)WeaponSettings.Count;
 
