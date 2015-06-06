@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
+using SchemeGen2.Randomisation;
+
 namespace SchemeGen2.XmlParser
 {
     class XmlParser
@@ -18,17 +20,22 @@ namespace SchemeGen2.XmlParser
             _scheme = scheme;
 
             _xDoc = XDocument.Load(filename, LoadOptions.SetLineInfo);
+
+            _schemeGenerator = null;
+            _errorCollection = null;
         }
 
-        public bool Parse(out XmlErrorCollection errorCollection)
+        public bool Parse(out XmlErrorCollection errorCollection, out SchemeGenerator schemeGenerator)
         {
             if (_xDoc == null)
             {
                 throw new ArgumentNullException("XML document is not valid.");
             }
 
-            //Error collecting object, handy for flooding the output with errors at the end :)
-            errorCollection = new XmlErrorCollection();
+            //Store a reference to a new scheme generator and error collector for ease of use later on.
+            //This object is not responsible for their lifetime once Parse() has finished!
+            _schemeGenerator = new SchemeGenerator();
+            _errorCollection = new XmlErrorCollection();
 
             FoundElements foundElements = new FoundElements();
 
@@ -43,30 +50,37 @@ namespace SchemeGen2.XmlParser
                     if (!foundElements.Contains(ElementTypes.Scheme))
                     {
                         foundElements.Add(ElementTypes.Scheme, element);
-                        ParseSchemeElement(element, ref errorCollection);
+                        ParseSchemeElement(element);
                     }
                     else
                     {
-                        errorCollection.AddRepeatedElement(element);
+                        _errorCollection.AddRepeatedElement(element);
                     }
                 }
                 //Invalid element.
                 else
                 {
-                    errorCollection.AddInvalidElement(element);
+                    _errorCollection.AddInvalidElement(element);
                 }
             }
 
             //If we didn't get the scheme element, we didn't do anything just now!
             if (!foundElements.Contains(ElementTypes.Scheme))
             {
-                errorCollection.AddElementNotFound(ElementTypes.Scheme.ToString());
+                _errorCollection.AddElementNotFound(ElementTypes.Scheme.ToString());
             }
+
+            //Set the out variables and lose our stored references to them.
+            schemeGenerator = _schemeGenerator;
+            _schemeGenerator = null;
+
+            errorCollection = _errorCollection;
+            _errorCollection = null;
 
             return errorCollection.Errors.Count == 0; 
         }
 
-        void ParseSchemeElement(XElement schemeElement, ref XmlErrorCollection errorCollection)
+        void ParseSchemeElement(XElement schemeElement)
         {
             FoundElements foundElements = new FoundElements();
 
@@ -82,11 +96,11 @@ namespace SchemeGen2.XmlParser
                     if (!foundElements.Contains(ElementTypes.Settings))
                     {
                         foundElements.Add(ElementTypes.Settings, element);
-                        ParseSettingsElement(element, ref errorCollection);
+                        ParseSettingsElement(element);
                     }
                     else
                     {
-                        errorCollection.AddRepeatedElement(element, foundElements.Get(ElementTypes.Settings));
+                        _errorCollection.AddRepeatedElement(element, foundElements.Get(ElementTypes.Settings));
                     }
                 }
                 //Handle weapons element.
@@ -95,22 +109,22 @@ namespace SchemeGen2.XmlParser
                     if (!foundElements.Contains(ElementTypes.Weapons))
                     {
                         foundElements.Add(ElementTypes.Weapons, element);
-                        ParseWeaponsElement(element, ref errorCollection);
+                        ParseWeaponsElement(element);
                     }
                     else
                     {
-                        errorCollection.AddRepeatedElement(element, foundElements.Get(ElementTypes.Weapons));
+                        _errorCollection.AddRepeatedElement(element, foundElements.Get(ElementTypes.Weapons));
                     }
                 }
                 //Invalid element.
                 else
                 {
-                    errorCollection.AddInvalidElement(element);
+                    _errorCollection.AddInvalidElement(element);
                 }
             }
         }
 
-        void ParseSettingsElement(XElement settingsElement, ref XmlErrorCollection errorCollection)
+        void ParseSettingsElement(XElement settingsElement)
         {
             FoundElements foundElements = new FoundElements();
 
@@ -128,56 +142,33 @@ namespace SchemeGen2.XmlParser
                     {
                         foundElements.Add(settingType, element);
 
-                        ParseSettingElement(element, settingType, ref errorCollection);
+                        ParseSettingElement(element, settingType);
                     }
                     else
                     {
-                        errorCollection.AddRepeatedElement(element, foundElements.Get(settingType));
+                        _errorCollection.AddRepeatedElement(element, foundElements.Get(settingType));
                     }
                 }
                 //Invalid element.
                 else
                 {
-                    errorCollection.AddInvalidElement(element);
+                    _errorCollection.AddInvalidElement(element);
                 }
             }
         }
 
-        void ParseSettingElement(XElement settingElement, SettingTypes settingType, ref XmlErrorCollection errorCollection)
+        void ParseSettingElement(XElement settingElement, SettingTypes settingType)
         {
-            //Iterate through all elements.
-            IEnumerable<XElement> elements = settingElement.Elements();
+            //Create the value generator.
+            ValueGenerator valueGenerator = CreateValueGenerator(settingElement);
 
-            foreach (XElement element in elements)
-            {
-                //Handle value element.
-                ValueTypes value;
+            //Pass the new value generator to the scheme generator.
+            Debug.Assert(_schemeGenerator != null);
 
-                if (Enum.TryParse<ValueTypes>(element.Name.LocalName, out value))
-                {
-                    XAttribute valueAttribute = element.Attribute("value");
-
-                    if (valueAttribute != null)
-                    {
-                        Setting setting = _scheme[settingType];
-                        Debug.Assert(setting != null);
-
-                        SetValue(element, valueAttribute, setting, ref errorCollection);
-                    }
-                    else
-                    {
-                        errorCollection.AddAttributeNotFound("value", element);
-                    }
-                }
-                //Invalid element.
-                else
-                {
-                    errorCollection.AddInvalidElement(element);
-                }
-            }
+            _schemeGenerator.Set(settingType, valueGenerator);
         }
 
-        void ParseWeaponsElement(XElement weaponsElement, ref XmlErrorCollection errorCollection)
+        void ParseWeaponsElement(XElement weaponsElement)
         {
             FoundElements foundElements = new FoundElements();
 
@@ -195,22 +186,22 @@ namespace SchemeGen2.XmlParser
                     {
                         foundElements.Add(weapon, element);
 
-                        ParseWeaponElement(element, weapon, ref errorCollection);
+                        ParseWeaponElement(element, weapon);
                     }
                     else
                     {
-                        errorCollection.AddRepeatedElement(element, foundElements.Get(weapon));
+                        _errorCollection.AddRepeatedElement(element, foundElements.Get(weapon));
                     }
                 }
                 //Invalid element.
                 else
                 {
-                    errorCollection.AddInvalidElement(element);
+                    _errorCollection.AddInvalidElement(element);
                 }
             }
         }
 
-        void ParseWeaponElement(XElement weaponElement, WeaponTypes weaponType, ref XmlErrorCollection errorCollection)
+        void ParseWeaponElement(XElement weaponElement, WeaponTypes weaponType)
         {
             FoundElements foundElements = new FoundElements();
 
@@ -228,59 +219,33 @@ namespace SchemeGen2.XmlParser
                     {
                         foundElements.Add(weaponSetting, element);
 
-                        ParseWeaponSettingElement(element, weaponType, weaponSetting, ref errorCollection);
+                        ParseWeaponSettingElement(element, weaponType, weaponSetting);
                     }
                     else
                     {
-                        errorCollection.AddRepeatedElement(element, foundElements.Get(weaponSetting));
+                        _errorCollection.AddRepeatedElement(element, foundElements.Get(weaponSetting));
                     }
                 }
                 //Invalid element.
                 else
                 {
-                    errorCollection.AddInvalidElement(element);
+                    _errorCollection.AddInvalidElement(element);
                 }
             }
         }
 
-        void ParseWeaponSettingElement(XElement weaponSettingElement, WeaponTypes weaponType, WeaponSettings weaponSetting, ref XmlErrorCollection errorCollection)
+        void ParseWeaponSettingElement(XElement weaponSettingElement, WeaponTypes weaponType, WeaponSettings weaponSetting)
         {
-            //Iterate through all elements.
-            IEnumerable<XElement> elements = weaponSettingElement.Elements();
+            //Create the value generator.
+            ValueGenerator valueGenerator = CreateValueGenerator(weaponSettingElement);
 
-            foreach (XElement element in elements)
-            {
-                //Handle value element.
-                ValueTypes value;
+            //Pass the new value generator to the scheme generator.
+            Debug.Assert(_schemeGenerator != null);
 
-                if (Enum.TryParse<ValueTypes>(element.Name.LocalName, out value))
-                {
-                    XAttribute valueAttribute = element.Attribute("value");
-
-                    if (valueAttribute != null)
-                    {
-                        Weapon weapon = _scheme[weaponType];
-                        Debug.Assert(weapon != null);
-
-                        Setting setting = weapon[weaponSetting];
-                        Debug.Assert(setting != null);
-
-                        SetValue(element, valueAttribute, setting, ref errorCollection);
-                    }
-                    else
-                    {
-                        errorCollection.AddAttributeNotFound("value", element);
-                    }
-                }
-                //Invalid element.
-                else
-                {
-                    errorCollection.AddInvalidElement(element);
-                }
-            }
+            _schemeGenerator.Set(weaponType, weaponSetting, valueGenerator);
         }
 
-        void SetValue(XElement element, XAttribute attribute, Setting setting, ref XmlErrorCollection errorCollection)
+        void SetValue(XElement element, XAttribute attribute, Setting setting)
         {
             Debug.Assert(setting != null);
 
@@ -297,17 +262,109 @@ namespace SchemeGen2.XmlParser
                 }
                 else
                 {
-                    errorCollection.AddAttributeValueOutOfRange(element, attribute, setting);
+                    _errorCollection.AddAttributeValueOutOfRange(element, attribute, setting);
                 }
             }
             else
             {
-                errorCollection.AddAttributeValueNonInteger(element, attribute);
+                _errorCollection.AddAttributeValueNonInteger(element, attribute);
             }
+        }
+
+        ValueGenerator CreateValueGenerator(XElement settingElement)
+        {
+            ValueGenerator outValueGenerator = null;
+
+            //Iterate through all elements.
+            IEnumerable<XElement> elements = settingElement.Elements();
+
+            foreach (XElement element in elements)
+            {
+                //Handle value element.
+                ValueGeneratorTypes valueGeneratorType;
+
+                if (Enum.TryParse<ValueGeneratorTypes>(element.Name.LocalName, out valueGeneratorType))
+                {
+                    switch (valueGeneratorType)
+                    {
+                    case ValueGeneratorTypes.Set:
+                        outValueGenerator = CreateSetValueGenerator(element);
+                        break;
+
+                    default:
+                        Debug.Assert(false, "Invalid enum.");
+                        break;
+                    }
+                }
+                //Invalid element.
+                else
+                {
+                    _errorCollection.AddInvalidElement(element);
+                }
+            }
+
+            return outValueGenerator;
+        }
+
+        SetValueGenerator CreateSetValueGenerator(XElement setValueElement)
+        {
+            //Get value 
+            XAttribute valueAttribute = setValueElement.Attribute("value");
+
+            if (valueAttribute != null)
+            {
+                byte value;
+
+                if (TryParseValueAttribute(setValueElement, valueAttribute, out value))
+                {
+                    return new SetValueGenerator(value);
+                }
+            }
+            else
+            {
+                _errorCollection.AddAttributeNotFound("value", setValueElement);
+            }
+
+            return null;
+        }
+
+        bool TryParseValueAttribute(XElement element, XAttribute attribute, byte minValue, byte maxValue, out byte byteValue)
+        {
+            //Check the attribute's value is of the right type and in range.
+            int intValue;
+
+            if (Int32.TryParse(attribute.Value, out intValue))
+            {
+                if (intValue >= (int)minValue && intValue <= (int)maxValue)
+                {
+                    byteValue = (byte)intValue;
+                    return true;
+                }
+                else
+                {
+                    _errorCollection.AddAttributeValueOutOfRange(element, attribute, minValue, maxValue);
+                }
+            }
+            else
+            {
+                _errorCollection.AddAttributeValueNonInteger(element, attribute);
+            }
+
+            //Failed to get byte value.
+            byteValue = 0xFF;
+            return false;
+        }
+
+        bool TryParseValueAttribute(XElement element, XAttribute attribute, out byte byteValue)
+        {
+            return TryParseValueAttribute(element, attribute, Byte.MinValue, Byte.MaxValue, out byteValue);
         }
 
         string _filename;
         Scheme _scheme;
         XDocument _xDoc;
+
+        SchemeGenerator _schemeGenerator;
+        XmlErrorCollection _errorCollection;
     }
 }

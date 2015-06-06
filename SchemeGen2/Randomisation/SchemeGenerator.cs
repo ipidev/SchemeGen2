@@ -172,6 +172,17 @@ namespace SchemeGen2.Randomisation
         }
 
         /// <summary>
+        /// Sets the given weapon settings's value generator.
+        /// </summary>
+        public void Set(WeaponTypes weapon, WeaponSettings weaponSetting, ValueGenerator valueGenerator)
+        {
+            Debug.Assert(weapon < WeaponTypes.Count);
+            Debug.Assert(weaponSetting < WeaponSettings.Count);
+
+            _weaponGenerators[(int)weapon].Set(weaponSetting, valueGenerator);
+        }
+
+        /// <summary>
         /// Shorthand accessor/mutator for a value generator. May return null.
         /// </summary>
         public ValueGenerator this[SettingTypes setting]

@@ -17,7 +17,7 @@ namespace SchemeGen2.XmlParser
         Count
     }
 
-    enum ValueTypes
+    enum ValueGeneratorTypes
     {
         Set,
 

@@ -11,16 +11,20 @@ namespace SchemeGen2
     {
         static void Main(string[] args)
         {
-            //Scheme testing
-            Scheme testScheme = new Scheme(true);
+            //TODO: Make separate limits-storing object
+            Scheme limits = new Scheme(true);
+
+            Randomisation.SchemeGenerator schemeGenerator = null;
 
             XmlParser.XmlErrorCollection xmlErrorCollection = null;
+
+            bool parseSucceeded = false;
 
             //XML testing
             try
             {
-                XmlParser.XmlParser schemeXmlParse = new XmlParser.XmlParser("testXml.xml", testScheme);
-                schemeXmlParse.Parse(out xmlErrorCollection);
+                XmlParser.XmlParser schemeXmlParse = new XmlParser.XmlParser("testXml.xml", limits);
+                parseSucceeded = schemeXmlParse.Parse(out xmlErrorCollection, out schemeGenerator);
             }
             catch (Exception e)
             {
@@ -47,22 +51,27 @@ namespace SchemeGen2
                 }
             }
 
-            byte[] schemeBytes = testScheme.GetBytes();
-
-            try
+            if (parseSucceeded)
             {
-                FileStream fs = new FileStream("testScheme.wsc", FileMode.Create, FileAccess.Write);
+                Scheme testScheme = schemeGenerator.GenerateScheme();
 
-                fs.Write(schemeBytes, 0, schemeBytes.Length);
+                byte[] schemeBytes = testScheme.GetBytes();
 
-                fs.Close();
+                try
+                {
+                    FileStream fs = new FileStream("testScheme.wsc", FileMode.Create, FileAccess.Write);
+
+                    fs.Write(schemeBytes, 0, schemeBytes.Length);
+
+                    fs.Close();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+
+                Console.ReadLine();
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-
-            Console.ReadLine();
         }
     }
 }

@@ -138,12 +138,17 @@ namespace SchemeGen2.XmlParser
             Add(errorString, element);
         }
 
-        public void AddAttributeValueOutOfRange(XElement element, XAttribute attribute, Setting setting)
+        public void AddAttributeValueOutOfRange(XElement element, XAttribute attribute, byte minValue, byte maxValue)
         {
             string errorString = String.Format("Attribute '{0}' has out of range value '{1}'. Valid range is [{2} - {3}].",
-                attribute.Name.LocalName, attribute.Value, setting.MinimumValue, setting.MaximumValue);
+                attribute.Name.LocalName, attribute.Value, minValue, maxValue);
 
             Add(errorString, element);
+        }
+
+        public void AddAttributeValueOutOfRange(XElement element, XAttribute attribute, Setting setting)
+        {
+            AddAttributeValueOutOfRange(element, attribute, setting.MinimumValue, setting.MaximumValue);
         }
 
         public List<XmlError> Errors
