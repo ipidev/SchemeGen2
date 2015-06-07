@@ -169,49 +169,45 @@ namespace SchemeGen2
         public void SetUpDefaults()
         {
             //Most of these are taken from Intermediate.
-            Get(SettingTypes.HotSeatDelay).Value            = 5;
-            Get(SettingTypes.RetreatTime).Value             = 3;
-            Get(SettingTypes.RopeRetreatTime).Value         = 5;
-            Get(SettingTypes.DisplayTotalRoundTime).Value   = SchemeTypes.False;
-            Get(SettingTypes.AutomaticReplays).Value        = SchemeTypes.False;
-            Get(SettingTypes.FallDamage).Value              = SchemeTypes.True;
-            Get(SettingTypes.ArtilleryMode).Value           = SchemeTypes.False;
-            Get(SettingTypes.StockpilingMode).Value         = (byte)StockpilingModes.Off;
-            Get(SettingTypes.WormSelect).Value              = (byte)WormSelectModes.Off;
-            Get(SettingTypes.SuddenDeathEvent).Value        = (byte)SuddenDeathEvents.Nothing;
-            Get(SettingTypes.WaterRiseRate).Value           = 0;
-            Get(SettingTypes.MineDelay).Value               = 3;
-            Get(SettingTypes.InitialWormEnergy).Value       = 100;
-            Get(SettingTypes.TurnTime).Value                = 45;
-            Get(SettingTypes.RoundTime).Value               = 15;
-            Get(SettingTypes.NumberOfRounds).Value          = 1;
-            Get(SettingTypes.TeamWeapons).Value             = SchemeTypes.False;
-            Get(SettingTypes.SuperWeapons).Value            = SchemeTypes.True;
+            Access(SettingTypes.HotSeatDelay).Value             = 5;
+            Access(SettingTypes.RetreatTime).Value              = 3;
+            Access(SettingTypes.RopeRetreatTime).Value          = 5;
+            Access(SettingTypes.DisplayTotalRoundTime).Value    = SchemeTypes.False;
+            Access(SettingTypes.AutomaticReplays).Value         = SchemeTypes.False;
+            Access(SettingTypes.FallDamage).Value               = SchemeTypes.True;
+            Access(SettingTypes.ArtilleryMode).Value            = SchemeTypes.False;
+            Access(SettingTypes.StockpilingMode).Value          = (byte)StockpilingModes.Off;
+            Access(SettingTypes.WormSelect).Value               = (byte)WormSelectModes.Off;
+            Access(SettingTypes.SuddenDeathEvent).Value         = (byte)SuddenDeathEvents.Nothing;
+            Access(SettingTypes.WaterRiseRate).Value            = 0;
+            Access(SettingTypes.MineDelay).Value                = 3;
+            Access(SettingTypes.InitialWormEnergy).Value        = 100;
+            Access(SettingTypes.TurnTime).Value                 = 45;
+            Access(SettingTypes.RoundTime).Value                = 15;
+            Access(SettingTypes.NumberOfRounds).Value           = 1;
+            Access(SettingTypes.TeamWeapons).Value              = SchemeTypes.False;
+            Access(SettingTypes.SuperWeapons).Value             = SchemeTypes.True;
         }
 
         ///////////////////////////////////////////////////////////////////////
         // Accessors
 
-        public Setting Get(SettingTypes setting)
+        /// <summary>
+        /// Gets the given setting by reference.
+        /// </summary>
+        public Setting Access(SettingTypes setting)
         {
             Debug.Assert(setting < SettingTypes.Count);
             return _settings[(int)setting];
         }
 
-        public Setting this[SettingTypes setting]
-        {
-            get { return Get(setting); }
-        }
-
-        public Weapon Get(WeaponTypes weapon)
+        /// <summary>
+        /// Gets the given weapon by reference.
+        /// </summary>
+        public Weapon Access(WeaponTypes weapon)
         {
             Debug.Assert(weapon < WeaponTypes.Count);
             return _weapons[(int)weapon];
-        }
-
-        public Weapon this[WeaponTypes weapon]
-        {
-            get { return Get(weapon); }
         }
 
         public byte[] GetBytes()

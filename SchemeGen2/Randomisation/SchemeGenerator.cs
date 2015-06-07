@@ -70,15 +70,6 @@ namespace SchemeGen2.Randomisation
                 break;
             }
         }
-
-        /// <summary>
-        /// Shorthand accessor/mutator for a value generator. May return null.
-        /// </summary>
-        public ValueGenerator this[WeaponSettings weaponSetting]
-        {
-            get { return Get(weaponSetting); }
-            set { Set(weaponSetting, value); }
-        }
     }
 
     /// <summary>
@@ -105,7 +96,7 @@ namespace SchemeGen2.Randomisation
                 if (valueGenerator != null)
                 {
                     SettingTypes settingType = (SettingTypes)i;
-                    Setting setting = scheme[settingType];
+                    Setting setting = scheme.Access(settingType);
                     Debug.Assert(setting != null);
 
                     setting.Value = valueGenerator.GenerateByte();
@@ -120,15 +111,15 @@ namespace SchemeGen2.Randomisation
                 for (int j = 0; j < (int)WeaponSettings.Count; ++j)
                 {
                     WeaponSettings weaponSetting = (WeaponSettings)j;
-                    ValueGenerator valueGenerator = weaponGenerator[weaponSetting];
+                    ValueGenerator valueGenerator = weaponGenerator.Get(weaponSetting);
 
                     if (valueGenerator != null)
                     {
                         WeaponTypes weaponType = (WeaponTypes)i;
-                        Weapon weapon = scheme[weaponType];
+                        Weapon weapon = scheme.Access(weaponType);
                         Debug.Assert(weapon != null);
 
-                        Setting setting = weapon[weaponSetting];
+                        Setting setting = weapon.Access(weaponSetting);
                         Debug.Assert(setting != null);
                         setting.Value = valueGenerator.GenerateByte();
                     }
@@ -142,9 +133,9 @@ namespace SchemeGen2.Randomisation
         // Accessors / Mutators
 
         /// <summary>
-        /// Gets the given setting's value generator. May return null.
+        /// Gets the given setting's value generator by reference. May return null.
         /// </summary>
-        public ValueGenerator Get(SettingTypes setting)
+        public ValueGenerator Access(SettingTypes setting)
         {
             Debug.Assert(setting < SettingTypes.Count);
 
@@ -152,7 +143,7 @@ namespace SchemeGen2.Randomisation
         }
 
         /// <summary>
-        /// Gets the given weapon's value generator collection.
+        /// Gets the given weapon's value generator collection. This returns a copy.
         /// </summary>
         public WeaponGenerator Get(WeaponTypes weapon)
         {
@@ -180,23 +171,6 @@ namespace SchemeGen2.Randomisation
             Debug.Assert(weaponSetting < WeaponSettings.Count);
 
             _weaponGenerators[(int)weapon].Set(weaponSetting, valueGenerator);
-        }
-
-        /// <summary>
-        /// Shorthand accessor/mutator for a value generator. May return null.
-        /// </summary>
-        public ValueGenerator this[SettingTypes setting]
-        {
-            get { return Get(setting); }
-            set { Set(setting, value); }
-        }
-
-        /// <summary>
-        /// Shorthand accessor for a weapon generator. 
-        /// </summary>
-        public WeaponGenerator this[WeaponTypes weapon]
-        {
-            get { return Get(weapon); }
         }
 
         ValueGenerator[] _settingGenerators;
