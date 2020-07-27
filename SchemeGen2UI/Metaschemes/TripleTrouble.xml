@@ -1,0 +1,347 @@
+<Metascheme>
+	<Information>
+		<DisplayName>Triple Trouble</DisplayName>
+		<AuthorName>ipi</AuthorName>
+		<Description>Players start with an infinite supply of three randomly-selected weapons, and Team17-style traversal options.</Description>
+	</Information>
+	<Settings>
+		<WeaponCrateProbability>
+			<Range min="5" max="15" />
+		</WeaponCrateProbability>
+		<HealthCrateProbability>
+			<Range min="5" max="15" />
+		</HealthCrateProbability>
+		<HealthCrateEnergy>
+			<Range min="10" max="30" step="10" />
+		</HealthCrateEnergy>
+		<UtilityCrateProbability>
+			<Range min="0" max="10" />
+		</UtilityCrateProbability>
+		<DonorCards>
+			<Constant value="False" />
+		</DonorCards>
+		<SuddenDeathEvent>
+			<Range min="1" max="3" />
+		</SuddenDeathEvent>
+		<WaterRiseRate>
+			<Constant value="2" />
+		</WaterRiseRate>
+		<InitialWormEnergy>
+			<Range min="50" max="150" step="10" />
+		</InitialWormEnergy>
+		<TurnTime>
+			<Constant value="30" />
+		</TurnTime>
+		<RoundTime>
+			<Constant value="10" />
+		</RoundTime>
+		<NumberOfRounds>
+			<Constant value="1" />
+		</NumberOfRounds>
+		<Blood>
+			<Boolean chance="0.5" />
+		</Blood>
+		<TeamWeapons>
+			<Constant value="False" />
+		</TeamWeapons>
+		<SuperWeapons>
+			<Constant value="True" />
+		</SuperWeapons>
+	</Settings>
+	<Weapons>
+		<!-- Weapons -->
+		<Bazooka>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+		</Bazooka>
+		<HomingMissile>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+		</HomingMissile>
+		<Mortar>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+		</Mortar>
+		<Grenade>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+		</Grenade>
+		<ClusterBomb>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+		</ClusterBomb>
+		<Skunk>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+		</Skunk>
+		<PetrolBomb>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+		</PetrolBomb>
+		<BananaBomb>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+		</BananaBomb>
+		<Handgun>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+		</Handgun>
+		<Shotgun>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+		</Shotgun>
+		<Uzi>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+		</Uzi>
+		<Minigun>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+		</Minigun>
+		<Longbow>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+		</Longbow>
+		<Mine>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+		</Mine>
+		<FirePunch>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+		</FirePunch>
+		<DragonBall>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+		</DragonBall>
+		<BattleAxe>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+		</BattleAxe>
+		<BlowTorch>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+		</BlowTorch>
+		<PneumaticDrill>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+		</PneumaticDrill>
+		<Dynamite>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+		</Dynamite>
+		<Sheep>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+		</Sheep>
+		<BaseballBat>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+		</BaseballBat>
+		<FlameThrower>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+		</FlameThrower>
+		<HomingPigeon>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+		</HomingPigeon>
+		<MadCow>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+		</MadCow>
+		<HolyHandGrenade>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+		</HolyHandGrenade>
+		<OldWoman>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+		</OldWoman>
+		<SheepLauncher>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+		</SheepLauncher>
+		<MoleBomb>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+		</MoleBomb>
+		<SuperSheep>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+		</SuperSheep>
+		<!-- Super weapons -->
+		<SuperBananaBomb>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+		</SuperBananaBomb>
+		<MingVase>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+		</MingVase>
+		<SalvationArmy>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+		</SalvationArmy>
+		<!-- Traversal weapons/utilities -->
+		<Girder>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+		</Girder>
+		<NinjaRope>
+			<Ammo>
+				<Constant value="3" />
+			</Ammo>
+			<Crate>
+				<Constant value="3" />
+			</Crate>
+		</NinjaRope>
+		<Parachute>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+		</Parachute>
+		<Bungee>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+		</Bungee>
+		<Teleport>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+		</Teleport>
+		<JetPack>
+			<Ammo>
+				<Constant value="1" />
+			</Ammo>
+		</JetPack>
+		<SelectWorm>
+			<Ammo>
+				<Constant value="1" />
+			</Ammo>
+		</SelectWorm>
+	</Weapons>
+	<Guarantees>
+		<!-- Occasionally allow one super weapon candidate -->
+		<WeaponSetting setting="Ammo">
+			<InclusionFilter matchType="All">
+				<Category name="SuperWeapon" />
+				<Category name="Damaging" />
+			</InclusionFilter>
+			<MaximumWeaponCount forceExcessWeaponsToValue="0">
+				<CoinFlip headsValue="1" tailsValue="0" headsChance="0.1" />
+			</MaximumWeaponCount>
+			<MinimumSettingValue>
+				<Constant value="1" />
+			</MinimumSettingValue>
+		</WeaponSetting>
+		<!-- Occasionally allow one darksider weapon candidate -->
+		<WeaponSetting setting="Ammo">
+			<InclusionFilter matchType="All">
+				<Category name="Damaging" />
+				<Category name="Traversal" />
+			</InclusionFilter>
+			<MaximumWeaponCount forceExcessWeaponsToValue="0">
+				<CoinFlip headsValue="1" tailsValue="0" headsChance="0.25" />
+			</MaximumWeaponCount>
+			<MinimumSettingValue>
+				<Constant value="1" />
+			</MinimumSettingValue>
+		</WeaponSetting>
+		<!-- Select melee weapon candidate -->
+		<WeaponSetting setting="Ammo">
+			<InclusionFilter>
+				<Category name="Melee" />
+			</InclusionFilter>
+			<MaximumWeaponCount forceExcessWeaponsToValue="0">
+				<Constant value="1" />
+			</MaximumWeaponCount>
+			<MinimumSettingValue>
+				<Constant value="1" />
+			</MinimumSettingValue>
+		</WeaponSetting>
+		<!-- Select firearm weapon candidate -->
+		<WeaponSetting setting="Ammo">
+			<InclusionFilter>
+				<Category name="Firearm" />
+			</InclusionFilter>
+			<MaximumWeaponCount forceExcessWeaponsToValue="0">
+				<Constant value="1" />
+			</MaximumWeaponCount>
+			<MinimumSettingValue>
+				<Constant value="1" />
+			</MinimumSettingValue>
+		</WeaponSetting>
+		<!-- Select dropped weapon candidate -->
+		<WeaponSetting setting="Ammo">
+			<InclusionFilter>
+				<Category name="Dropped" />
+			</InclusionFilter>
+			<MaximumWeaponCount forceExcessWeaponsToValue="0">
+				<Constant value="1" />
+			</MaximumWeaponCount>
+			<MinimumSettingValue>
+				<Constant value="1" />
+			</MinimumSettingValue>
+		</WeaponSetting>
+		<!-- Select two launched weapon candidates (increases apperance chance) -->
+		<WeaponSetting setting="Ammo">
+			<InclusionFilter>
+				<Category name="Launched" />
+			</InclusionFilter>
+			<MaximumWeaponCount forceExcessWeaponsToValue="0">
+				<Constant value="2" />
+			</MaximumWeaponCount>
+			<MinimumSettingValue>
+				<Constant value="1" />
+			</MinimumSettingValue>
+		</WeaponSetting>
+		<!-- Select three of the previous candidates to be used -->
+		<WeaponSetting setting="Ammo">
+			<InclusionFilter>
+				<Category name="Damaging" />
+			</InclusionFilter>
+			<MaximumWeaponCount forceExcessWeaponsToValue="0">
+				<Constant value="3" />
+			</MaximumWeaponCount>
+			<MinimumSettingValue>
+				<Constant value="1" />
+			</MinimumSettingValue>
+		</WeaponSetting>
+	</Guarantees>
+</Metascheme>

@@ -1,0 +1,218 @@
+<Metascheme>
+	<Information>
+		<DisplayName>Original SchemeGen</DisplayName>
+		<AuthorName>ipi</AuthorName>
+		<Description>Mirrors the behaviour of the original SchemeGen.</Description>
+	</Information>
+	<!-- rubber 0.333 -->
+	<!-- sdet 0.25 -->
+	<!-- rope? 0.333 -->
+	<!-- speed? 0.333 -->
+	<!-- wormfx 0.333 -->
+	<!-- god worms 0.111 -->
+	<Settings>
+		<HotSeatDelay>
+			<Range min="0" max="10" />
+		</HotSeatDelay>
+		<RetreatTime>
+			<Range min="0" max="10" />
+		</RetreatTime>
+		<RopeRetreatTime>
+			<Range min="0" max="10" />
+		</RopeRetreatTime>
+		<DisplayTotalRoundTime>
+			<Boolean chance="0.5" />
+		</DisplayTotalRoundTime>
+		<AutomaticReplays>
+			<Constant value="True" />
+		</AutomaticReplays>
+		<FallDamage>
+			<Range min="0" max="255" />
+		</FallDamage>
+		<ArtilleryMode>
+			<Constant value="False" />
+		</ArtilleryMode>
+		<StockpilingMode>
+			<Range min="0" max="2" />
+		</StockpilingMode>
+		<WormSelect>
+			<Range min="0" max="2" />
+		</WormSelect>
+		<SuddenDeathEvent>
+			<Range min="1" max="3" />
+		</SuddenDeathEvent>
+		<WaterRiseRate>
+			<WeightedSelector>
+				<Selection weight="3">
+					<Range min="0" max="3" />
+				</Selection>
+				<Selection weight="1">
+					<Range min="0" max="9" />
+				</Selection>
+			</WeightedSelector>
+		</WaterRiseRate>
+		<WeaponCrateProbability>
+			<Range min="0" max="100" />
+		</WeaponCrateProbability>
+		<DonorCards>
+			<Boolean chance="0.5" />
+		</DonorCards>
+		<HealthCrateProbability>
+			<Range min="0" max="100" />
+		</HealthCrateProbability>
+		<HealthCrateEnergy>
+			<Range min="1" max="255" />
+		</HealthCrateEnergy>
+		<UtilityCrateProbability>
+			<Range min="1" max="100" />
+		</UtilityCrateProbability>
+		<HazardousObjectTypes>
+			<Range min="0" max="255" />
+		</HazardousObjectTypes>
+		<MineDelay>
+			<CoinFlip headsValue="0" tailsValue="4" />
+		</MineDelay>
+		<DudMines>
+			<Boolean chance="0.5" />
+		</DudMines>
+		<InitialWormPlacement>
+			<Constant value="False" />
+		</InitialWormPlacement>
+		<InitialWormEnergy>
+			<Range min="1" max="254" />
+		</InitialWormEnergy>
+		<TurnTime>
+			<Range min="20" max="130" />
+		</TurnTime>
+		<RoundTime>
+			<Range min="0" max="255" />
+		</RoundTime>
+		<NumberOfRounds>
+			<Range min="1" max="3" />
+		</NumberOfRounds>
+		<Blood>
+			<Boolean chance="0.5" />
+		</Blood>
+		<AquaSheep>
+			<Boolean chance="0.5" />
+		</AquaSheep>
+		<SheepHeaven>
+			<Boolean chance="0.5" />
+		</SheepHeaven>
+		<GodWorms>
+			<Boolean chance="0.125" />
+		</GodWorms>
+		<IndestructibleTerrain>
+			<Boolean chance="0.333" />
+		</IndestructibleTerrain>
+		<UpgradedGrenade>
+			<Boolean chance="0.5" />
+		</UpgradedGrenade>
+		<UpgradedShotgun>
+			<Boolean chance="0.5" />
+		</UpgradedShotgun>
+		<UpgradedCluster>
+			<Boolean chance="0.5" />
+		</UpgradedCluster>
+		<UpgradedLongbow>
+			<Boolean chance="0.5" />
+		</UpgradedLongbow>
+		<TeamWeapons>
+			<Constant value="False" />
+		</TeamWeapons>
+		<SuperWeapons>
+			<Constant value="True" />
+		</SuperWeapons>
+	</Settings>
+	<Weapons>
+		<!-- Apply defaults to all weapons -->
+		<Default>
+			<Ammo>
+				<WeightedSelector>
+					<Selection>
+						<Constant value="0" />
+					</Selection>
+					<Selection>
+						<Range min="0" max="11" />
+					</Selection>
+				</WeightedSelector>
+			</Ammo>
+			<Power>
+				<Range min="0" max="14" />
+			</Power>
+			<Delay>
+				<WeightedSelector>
+					<Selection weight="2">
+						<Constant value="0" />
+					</Selection>
+					<Selection weight="1">
+						<Range min="0" max="3" />
+					</Selection>
+					<Selection weight="1">
+						<Range min="0" max="10" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<WeightedSelector>
+					<Selection>
+						<Constant value="0" />
+					</Selection>
+					<Selection>
+						<Range min="0" max="255" />
+					</Selection>
+				</WeightedSelector>
+			</Crate>
+		</Default>
+		<!-- Do not start with double damage -->
+		<DoubleDamage>
+			<Ammo>
+				<Null />
+			</Ammo>
+		</DoubleDamage>
+		<!-- Override default power for some weapons -->
+		<Skunk>
+			<Power>
+				<Range min="0" max="4" />
+			</Power>
+		</Skunk>
+		<PetrolBomb>
+			<Power>
+				<Range min="0" max="4" />
+			</Power>
+		</PetrolBomb>
+		<Longbow>
+			<Power>
+				<Range min="0" max="4" />
+			</Power>
+		</Longbow>
+		<NinjaRope>
+			<Power>
+				<Range min="0" max="4" />
+			</Power>
+		</NinjaRope>
+		<BattleAxe>
+			<Power>
+				<Range min="251" max="255" />
+			</Power>
+		</BattleAxe>
+		<Girder>
+			<Power>
+				<Range min="0" max="255" />
+			</Power>
+		</Girder>
+		<BaseballBat>
+			<Power>
+				<Range min="10" max="14" />
+			</Power>
+		</BaseballBat>
+		<JetPack>
+			<Power>
+				<Range min="5" max="255" />
+			</Power>
+		</JetPack>
+	</Weapons>
+	<Guarantees>
+		<GodWormsIndyTerrainExclusivity />
+	</Guarantees>
+</Metascheme>

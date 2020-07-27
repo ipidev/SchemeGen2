@@ -1,0 +1,276 @@
+<Metascheme>
+	<Information>
+		<DisplayName>Hysteria</DisplayName>
+		<AuthorName>ipi</AuthorName>
+		<Description>Each turn lasts only one second. One randomly-chosen weapon occupies each row of the weapons panel (selectable with the relevant function keys).</Description>
+	</Information>
+	<Settings>
+		<HotSeatDelay>
+			<Constant value="10" />
+		</HotSeatDelay>
+		<RetreatTime>
+			<Constant value="5" />
+		</RetreatTime>
+		<RopeRetreatTime>
+			<Constant value="5" />
+		</RopeRetreatTime>
+		<DisplayTotalRoundTime>
+			<Constant value="True" />
+		</DisplayTotalRoundTime>
+		<AutomaticReplays>
+			<Constant value="False" />
+		</AutomaticReplays>
+		<WeaponCrateProbability>
+			<Constant value="0" />
+		</WeaponCrateProbability>
+		<HealthCrateProbability>
+			<Constant value="0" />
+		</HealthCrateProbability>
+		<UtilityCrateProbability>
+			<Constant value="0" />
+		</UtilityCrateProbability>
+		<HazardousObjectTypes>
+			<Constant value="1" />
+		</HazardousObjectTypes>
+		<MineDelay>
+			<Constant value="3" />
+		</MineDelay>
+		<DudMines>
+			<Constant value="False" />
+		</DudMines>
+		<DonorCards>
+			<Constant value="False" />
+		</DonorCards>
+		<SuddenDeathEvent>
+			<CoinFlip headsValue="3" tailsValue="1" headsChance="0.25" />
+		</SuddenDeathEvent>
+		<WaterRiseRate>
+			<Constant value="3" />
+		</WaterRiseRate>
+		<InitialWormEnergy>
+			<Range min="40" max="100" step="10" />
+		</InitialWormEnergy>
+		<TurnTime>
+			<Constant value="1" />
+		</TurnTime>
+		<RoundTime>
+			<Range min="241" max="246" />
+		</RoundTime>
+		<NumberOfRounds>
+			<Constant value="1" />
+		</NumberOfRounds>
+		<Blood>
+			<Boolean chance="0.5" />
+		</Blood>
+		<TeamWeapons>
+			<Constant value="False" />
+		</TeamWeapons>
+		<SuperWeapons>
+			<Constant value="True" />
+		</SuperWeapons>
+	</Settings>
+	<Weapons>
+		<!-- Enable infinite ammo for all weapons by default -->
+		<Default>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+		</Default>
+		<!-- Override more powerful weapons to have 1 ammo instead -->
+		<HomingPigeon>
+			<Ammo>
+				<Constant value="1" />
+			</Ammo>
+		</HomingPigeon>
+		<SheepLauncher>
+			<Ammo>
+				<Constant value="1" />
+			</Ammo>
+		</SheepLauncher>
+		<BananaBomb>
+			<Ammo>
+				<Constant value="1" />
+			</Ammo>
+		</BananaBomb>
+		<Sheep>
+			<Ammo>
+				<Constant value="1" />
+			</Ammo>
+		</Sheep>
+		<SuperSheep>
+			<Ammo>
+				<Constant value="1" />
+			</Ammo>
+		</SuperSheep>
+		<AirStrike>
+			<Ammo>
+				<Constant value="1" />
+			</Ammo>
+		</AirStrike>
+		<NapalmStrike>
+			<Ammo>
+				<Constant value="1" />
+			</Ammo>
+		</NapalmStrike>
+		<HolyHandGrenade>
+			<Ammo>
+				<Constant value="1" />
+			</Ammo>
+		</HolyHandGrenade>
+		<MadCow>
+			<Ammo>
+				<Constant value="1" />
+			</Ammo>
+		</MadCow>
+		<OldWoman>
+			<Ammo>
+				<Constant value="1" />
+			</Ammo>
+		</OldWoman>
+		<!-- Super weapons to appear less frequently -->
+		<Earthquake>
+			<Ammo>
+				<CoinFlip headsValue="1" tailsValue="0" headsChance="0.25" />
+			</Ammo>
+		</Earthquake>
+		<SuicideBomber>
+			<Ammo>
+				<CoinFlip headsValue="1" tailsValue="0" headsChance="0.25" />
+			</Ammo>
+		</SuicideBomber>
+		<MailStrike>
+			<Ammo>
+				<CoinFlip headsValue="1" tailsValue="0" headsChance="0.25" />
+			</Ammo>
+		</MailStrike>
+		<MineStrike>
+			<Ammo>
+				<CoinFlip headsValue="1" tailsValue="0" headsChance="0.25" />
+			</Ammo>
+		</MineStrike>
+		<GirderStarterPack>
+			<Ammo>
+				<CoinFlip headsValue="1" tailsValue="0" headsChance="0.25" />
+			</Ammo>
+		</GirderStarterPack>
+		<ScalesOfJustice>
+			<Ammo>
+				<CoinFlip headsValue="1" tailsValue="0" headsChance="0.25" />
+			</Ammo>
+		</ScalesOfJustice>
+		<SuperBananaBomb>
+			<Ammo>
+				<CoinFlip headsValue="1" tailsValue="0" headsChance="0.25" />
+			</Ammo>
+		</SuperBananaBomb>
+		<SalvationArmy>
+			<Ammo>
+				<CoinFlip headsValue="1" tailsValue="0" headsChance="0.25" />
+			</Ammo>
+		</SalvationArmy>
+		<MBBomb>
+			<Ammo>
+				<CoinFlip headsValue="1" tailsValue="0" headsChance="0.25" />
+			</Ammo>
+		</MBBomb>
+		<MingVase>
+			<Ammo>
+				<CoinFlip headsValue="1" tailsValue="0" headsChance="0.25" />
+			</Ammo>
+		</MingVase>
+		<SheepStrike>
+			<Ammo>
+				<CoinFlip headsValue="1" tailsValue="0" headsChance="0.25" />
+			</Ammo>
+		</SheepStrike>
+		<ConcreteDonkey>
+			<Ammo>
+				<CoinFlip headsValue="1" tailsValue="0" headsChance="0.1" />
+			</Ammo>
+		</ConcreteDonkey>
+		<NuclearTest>
+			<Ammo>
+				<CoinFlip headsValue="1" tailsValue="0" headsChance="0.1" />
+			</Ammo>
+		</NuclearTest>
+		<Armageddon>
+			<Ammo>
+				<CoinFlip headsValue="1" tailsValue="0" headsChance="0.1" />
+			</Ammo>
+		</Armageddon>
+		<!-- Disable utilities and other traversal weapons -->
+		<LowGravity>
+			<Ammo>
+				<Null />
+			</Ammo>
+		</LowGravity>
+		<FastWalk>
+			<Ammo>
+				<Null />
+			</Ammo>
+		</FastWalk>
+		<LaserSight>
+			<Ammo>
+				<Null />
+			</Ammo>
+		</LaserSight>
+		<Invisibility>
+			<Ammo>
+				<Null />
+			</Ammo>
+		</Invisibility>
+		<DoubleDamage>
+			<Ammo>
+				<Null />
+			</Ammo>
+		</DoubleDamage>
+		<NinjaRope>
+			<Ammo>
+				<Null />
+			</Ammo>
+		</NinjaRope>
+		<Bungee>
+			<Ammo>
+				<Null />
+			</Ammo>
+		</Bungee>
+		<Parachute>
+			<Ammo>
+				<Null />
+			</Ammo>
+		</Parachute>
+		<SelectWorm>
+			<Ammo>
+				<Null />
+			</Ammo>
+		</SelectWorm>
+		<Freeze>
+			<Ammo>
+				<Null />
+			</Ammo>
+		</Freeze>
+		<MagicBullet>
+			<Ammo>
+				<Null />
+			</Ammo>
+		</MagicBullet>
+	</Weapons>
+	<Guarantees>
+		<!-- Occasionally allow a strike weapon to be considered -->
+		<WeaponSetting setting="Ammo">
+			<InclusionFilter matchType="All">
+				<Category name="Strike" />
+			</InclusionFilter>
+			<MaximumWeaponCount forceExcessWeaponsToValue="0">
+				<CoinFlip headsValue="1" tailsValue="0" headsChance="0.5" />
+			</MaximumWeaponCount>
+			<MinimumSettingValue>
+				<Constant value="1" />
+			</MinimumSettingValue>
+		</WeaponSetting>
+		<!-- This guarantees only one weapon per function key -->
+		<WeaponsPerFunctionKey>
+			<Constant value="1" />
+		</WeaponsPerFunctionKey>
+	</Guarantees>
+</Metascheme>
