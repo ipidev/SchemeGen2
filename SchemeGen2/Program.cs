@@ -38,7 +38,7 @@ namespace SchemeGen2
 			catch (Exception e)
 			{
 				if (errorTextWriter != null)
-					errorTextWriter.WriteLine("Error while parsing XML file: " + e.Message);
+					errorTextWriter.WriteLine(String.Format("Error while parsing XML file: {0}\r\nStack:\r\n{1}", e.Message, e.StackTrace));
 				return false;
 			}
 
@@ -84,7 +84,7 @@ namespace SchemeGen2
 			catch (Exception e)
 			{
 				if (errorTextWriter != null)
-					errorTextWriter.WriteLine("Error while writing output: " + e.Message);
+					errorTextWriter.WriteLine(String.Format("Error while writing scheme file: {0}\r\nStack:\r\n{1}", e.Message, e.StackTrace));
 				return false;
 			}
 

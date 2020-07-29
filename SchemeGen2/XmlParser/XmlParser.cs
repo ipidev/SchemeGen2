@@ -162,15 +162,22 @@ namespace SchemeGen2.XmlParser
 
 				if (Enum.TryParse<SettingTypes>(element.Name.LocalName, out settingType))
 				{
-					if (!foundElements.Contains(settingType))
+					if (settingType != SettingTypes.Version && settingType != SettingTypes.BountyMode && settingType != SettingTypes.Count)
 					{
-						foundElements.Add(settingType, element);
+						if (!foundElements.Contains(settingType))
+						{
+							foundElements.Add(settingType, element);
 
-						ParseSettingElement(element, settingType);
+							ParseSettingElement(element, settingType);
+						}
+						else
+						{
+							_errorCollection.AddRepeatedElement(element, foundElements.Get(settingType));
+						}
 					}
 					else
 					{
-						_errorCollection.AddRepeatedElement(element, foundElements.Get(settingType));
+						_errorCollection.AddInvalidElement(element);
 					}
 				}
 				//Invalid element.
@@ -206,15 +213,22 @@ namespace SchemeGen2.XmlParser
 
 				if (Enum.TryParse<WeaponTypes>(element.Name.LocalName, out weapon))
 				{
-					if (!foundElements.Contains(weapon))
+					if (weapon != WeaponTypes.Count)
 					{
-						foundElements.Add(weapon, element);
+						if (!foundElements.Contains(weapon))
+						{
+							foundElements.Add(weapon, element);
 
-						ParseWeaponElement(element, weapon);
+							ParseWeaponElement(element, weapon);
+						}
+						else
+						{
+							_errorCollection.AddRepeatedElement(element, foundElements.Get(weapon));
+						}
 					}
 					else
 					{
-						_errorCollection.AddRepeatedElement(element, foundElements.Get(weapon));
+						_errorCollection.AddInvalidElement(element);
 					}
 				}
 				//Invalid element.
@@ -239,15 +253,29 @@ namespace SchemeGen2.XmlParser
 
 				if (Enum.TryParse<WeaponSettings>(element.Name.LocalName, out weaponSetting))
 				{
-					if (!foundElements.Contains(weaponSetting))
+					if (weaponSetting != WeaponSettings.Count)
 					{
-						foundElements.Add(weaponSetting, element);
+						if (!foundElements.Contains(weaponSetting))
+						{
+							foundElements.Add(weaponSetting, element);
 
-						ParseWeaponSettingElement(element, weaponType, weaponSetting);
+							if (SchemeTypes.CanApplyWeaponSetting(weaponType, weaponSetting))
+							{
+								ParseWeaponSettingElement(element, weaponType, weaponSetting);
+							}
+							else
+							{
+								_errorCollection.AddSettingNotApplicableToWeapon(element, weaponType, weaponSetting);
+							}
+						}
+						else
+						{
+							_errorCollection.AddRepeatedElement(element, foundElements.Get(weaponSetting));
+						}
 					}
 					else
 					{
-						_errorCollection.AddRepeatedElement(element, foundElements.Get(weaponSetting));
+						_errorCollection.AddInvalidElement(element);
 					}
 				}
 				//Invalid element.
@@ -551,7 +579,7 @@ namespace SchemeGen2.XmlParser
 						break;
 
 					default:
-						Debug.Assert(false, "Invalid enum.");
+						_errorCollection.AddInvalidElement(element);
 						break;
 					}
 				}
@@ -578,8 +606,9 @@ namespace SchemeGen2.XmlParser
 				return null;
 			}
 
-			WeaponSettings weaponSetting;
-			if (!Enum.TryParse<WeaponSettings>(settingAttribute.Value, out weaponSetting))
+			WeaponSettings weaponSetting = WeaponSettings.Count;
+			Enum.TryParse<WeaponSettings>(settingAttribute.Value, out weaponSetting);
+			if (weaponSetting == WeaponSettings.Count)
 			{
 				_errorCollection.AddAttributeValueInvalidValue(weaponSettingGuaranteeElement, settingAttribute);
 				return null;

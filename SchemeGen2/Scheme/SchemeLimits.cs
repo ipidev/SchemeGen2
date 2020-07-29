@@ -120,6 +120,7 @@ namespace SchemeGen2
 			switch (weaponType)
 			{
 			case WeaponTypes.JetPack:
+			case WeaponTypes.Girder:
 				return new SettingLimits(0, 255);
 
 			case WeaponTypes.Mortar:

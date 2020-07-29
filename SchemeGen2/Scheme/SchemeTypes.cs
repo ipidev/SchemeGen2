@@ -118,8 +118,7 @@ namespace SchemeGen2
 		Armageddon,
 
 		Count,
-		Default,
-		NormalWeaponCount = Freeze,
+		Default
 	}
 
 	enum WeaponSettings
@@ -335,7 +334,7 @@ namespace SchemeGen2
 		/// <summary>
 		/// The number of non-super weapons in the scheme.
 		/// </summary>
-		public const int NumberOfNonSuperWeapons = (int)WeaponTypes.NormalWeaponCount;
+		public const int NumberOfNonSuperWeapons = (int)WeaponTypes.Freeze;
 
 		/// <summary>
 		/// The number of weapons in the scheme, including super weapons.
@@ -502,6 +501,9 @@ namespace SchemeGen2
 
 		public static bool CanApplyWeaponSetting(WeaponTypes weaponType, WeaponSettings weaponSetting)
 		{
+			if (weaponType == WeaponTypes.Default)
+				return true;
+
 			switch (weaponSetting)
 			{
 			case WeaponSettings.Ammo:

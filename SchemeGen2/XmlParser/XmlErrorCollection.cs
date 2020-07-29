@@ -162,6 +162,14 @@ namespace SchemeGen2.XmlParser
 			Add(errorString, element);
 		}
 
+		public void AddSettingNotApplicableToWeapon(XElement element, WeaponTypes weaponType, WeaponSettings weaponSetting)
+		{
+			string errorString = String.Format("Setting '{0}' cannot be applied to weapon '{1}'.",
+				weaponSetting.ToString(), weaponType.ToString());
+
+			Add(errorString, element);
+		}
+
 		public List<XmlError> Errors
 		{
 			get { return _errors; }
