@@ -108,16 +108,12 @@ namespace SchemeGen2
 			}
 		}
 
-		public byte[] GetBytes()
+		public void Serialise(System.IO.Stream stream)
 		{
-			byte[] bytes = new byte[(int)WeaponSettings.Count];
-
-			bytes[(int)WeaponSettings.Ammo] = Ammo.Value;
-			bytes[(int)WeaponSettings.Power] = Power.Value;
-			bytes[(int)WeaponSettings.Delay] = Delay.Value;
-			bytes[(int)WeaponSettings.Crate] = Crate.Value;
-
-			return bytes;
+			Ammo.Serialise(stream);
+			Power.Serialise(stream);
+			Delay.Serialise(stream);
+			Crate.Serialise(stream);
 		}
 
 		public override string ToString()

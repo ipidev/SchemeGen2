@@ -30,7 +30,7 @@ namespace SchemeGen2.Randomisation.ValueGenerators
             _totalWeight += weight;
         }
 
-		protected override byte InternalGenerateByte(Random rng)
+		protected override int InternalGenerateValue(Random rng)
         {
             double targetWeight = rng.NextDouble() * _totalWeight;
             double accumulatedWeight = 0.0;
@@ -41,7 +41,7 @@ namespace SchemeGen2.Randomisation.ValueGenerators
                 if (accumulatedWeight >= targetWeight)
                 {
                     if (selection.ValueGenerator != null)
-                        return selection.ValueGenerator.GenerateByte(rng);
+                        return selection.ValueGenerator.GenerateValue(rng);
                     else
                         return 0;
                 }
@@ -50,7 +50,7 @@ namespace SchemeGen2.Randomisation.ValueGenerators
             return 0;
         }
 
-        public override bool DoesValueRangeOverlap(byte? min, byte? max)
+        public override bool DoesValueRangeOverlap(int? min, int? max)
 		{
             foreach (WeightedSelection selection in _selections)
             {
@@ -61,7 +61,7 @@ namespace SchemeGen2.Randomisation.ValueGenerators
             return false;
 		}
 
-        public override void GuaranteeValueRange(byte? min, byte? max)
+        public override void GuaranteeValueRange(int? min, int? max)
         {
             //Reduce our selections down to ones that overlap the given range.
             List<WeightedSelection> selectionsWithinRange = new List<WeightedSelection>();

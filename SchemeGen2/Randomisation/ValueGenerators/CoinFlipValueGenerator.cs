@@ -11,7 +11,7 @@ namespace SchemeGen2.Randomisation.ValueGenerators
     /// </summary>
 	class CoinFlipValueGenerator : ValueGenerator
 	{
-		public CoinFlipValueGenerator(double headsChance, byte headsValue, byte tailsValue) :
+		public CoinFlipValueGenerator(double headsChance, int headsValue, int tailsValue) :
             base()
         {
             _headsChance = headsChance;
@@ -19,18 +19,18 @@ namespace SchemeGen2.Randomisation.ValueGenerators
             _tailsValue = tailsValue;
         }
 
-        protected override byte InternalGenerateByte(Random rng)
+        protected override int InternalGenerateValue(Random rng)
         {
             return rng.NextDouble() <= _headsChance ? _headsValue : _tailsValue;
         }
 
-        public override bool DoesValueRangeOverlap(byte? min, byte? max)
+        public override bool DoesValueRangeOverlap(int? min, int? max)
 		{
 			return (!min.HasValue || _headsValue >= min.Value || _tailsValue >= max.Value)
                 && (!max.HasValue || _headsValue <= max.Value || _tailsValue <= max.Value);
 		}
 
-        public override void GuaranteeValueRange(byte? min, byte? max)
+        public override void GuaranteeValueRange(int? min, int? max)
         {
             if (max.HasValue)
             {
@@ -71,7 +71,7 @@ namespace SchemeGen2.Randomisation.ValueGenerators
 		}
 
         double _headsChance;
-        byte _headsValue;
-        byte _tailsValue;
+        int _headsValue;
+        int _tailsValue;
 	}
 }

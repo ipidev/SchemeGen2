@@ -43,7 +43,7 @@ namespace SchemeGen2.Randomisation
 					Setting setting = scheme.Access(settingType);
 					Debug.Assert(setting != null);
 
-					setting.SetValue(valueGenerator.GenerateByte(rng), valueGenerator);
+					setting.SetValue(valueGenerator.GenerateValue(rng), valueGenerator);
 				}
 			}
 
@@ -65,7 +65,7 @@ namespace SchemeGen2.Randomisation
 
 						Setting setting = weapon.Access(weaponSetting);
 						Debug.Assert(setting != null);
-						setting.SetValue(valueGenerator.GenerateByte(rng), valueGenerator);
+						setting.SetValue(valueGenerator.GenerateValue(rng), valueGenerator);
 					}
 				}
 			}

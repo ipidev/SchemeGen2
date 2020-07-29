@@ -11,7 +11,7 @@ namespace SchemeGen2.Randomisation.ValueGenerators
     /// </summary>
 	class RangeValueGenerator : ValueGenerator
 	{
-        public RangeValueGenerator(byte min, byte max, int step = 1) :
+        public RangeValueGenerator(int min, int max, int step = 1) :
             base()
         {
             _min = min;
@@ -21,20 +21,20 @@ namespace SchemeGen2.Randomisation.ValueGenerators
 
         public int Step { get; set; }
 
-        protected override byte InternalGenerateByte(Random rng)
+        protected override int InternalGenerateValue(Random rng)
         {
             if (Step > 1)
             {
-                int numberOfSteps = ((int)_max - (int)_min) / Step;
-                return (byte)(_min + (Step * (byte)rng.Next(0, numberOfSteps)));
+                int numberOfSteps = (_max - _min) / Step;
+                return _min + (Step * rng.Next(0, numberOfSteps));
             }
             else
             {
-                return (byte)rng.Next((int)_min, (int)_max);
+                return rng.Next(_min, _max);
             }
         }
 
-        public override bool DoesValueRangeOverlap(byte? min, byte? max)
+        public override bool DoesValueRangeOverlap(int? min, int? max)
 		{
             if (!min.HasValue && !max.HasValue)
                 return true;
@@ -46,7 +46,7 @@ namespace SchemeGen2.Randomisation.ValueGenerators
 			return _min <= min.Value && _max >= max.Value;
 		}
 
-        public override void GuaranteeValueRange(byte? min, byte? max)
+        public override void GuaranteeValueRange(int? min, int? max)
         {
             if (min.HasValue && _min < min.Value)
             {
@@ -64,7 +64,7 @@ namespace SchemeGen2.Randomisation.ValueGenerators
 			return new RangeValueGenerator(_min, _max, Step);
 		}
 
-        byte _min;
-        byte _max;
+        int _min;
+        int _max;
 	}
 }

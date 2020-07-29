@@ -74,11 +74,10 @@ namespace SchemeGen2
 			{
 				Random rng = seed.HasValue ? new Random(seed.Value) : new Random();
 				Scheme testScheme = schemeGenerator.GenerateScheme(rng);
-				byte[] schemeBytes = testScheme.GetBytes();
 				
 				using (FileStream fs = new FileStream(outputPath, FileMode.Create, FileAccess.Write))
 				{
-					fs.Write(schemeBytes, 0, schemeBytes.Length);
+					testScheme.Serialise(fs);
 					fs.Close();
 				}
 			}

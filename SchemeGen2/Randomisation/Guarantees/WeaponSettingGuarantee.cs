@@ -18,7 +18,7 @@ namespace SchemeGen2.Randomisation.Guarantees
 		public WeaponSettings WeaponSetting { get; private set; }
 		public ValueGenerator MinimumWeaponCount { get; set; }
 		public ValueGenerator MaximumWeaponCount { get; set; }
-		public byte? MaximumWeaponCountForcedValue { get; set; }
+		public int? MaximumWeaponCountForcedValue { get; set; }
 		public ValueGenerator MinimumSettingValue { get; set; }
 		public ValueGenerator MaximumSettingValue { get; set; }
 		public WeaponCategoryFlags? CategoryInclusionFilter { get { return _categoryInclusionFilter; } }
@@ -29,16 +29,16 @@ namespace SchemeGen2.Randomisation.Guarantees
 		public override void ApplyGuarantee(Scheme scheme, Random rng)
 		{
 			if (MinimumWeaponCount != null)
-				_minimumWeaponCount = MinimumWeaponCount.GenerateByte(rng);
+				_minimumWeaponCount = MinimumWeaponCount.GenerateValue(rng);
 
 			if (MaximumWeaponCount != null)
-				_maximumWeaponCount = MaximumWeaponCount.GenerateByte(rng);
+				_maximumWeaponCount = MaximumWeaponCount.GenerateValue(rng);
 
 			if (MinimumSettingValue != null)
-				_minimumSettingValue = MinimumSettingValue.GenerateByte(rng);
+				_minimumSettingValue = MinimumSettingValue.GenerateValue(rng);
 
 			if (MaximumSettingValue != null)
-				_maximumSettingValue = MaximumSettingValue.GenerateByte(rng);
+				_maximumSettingValue = MaximumSettingValue.GenerateValue(rng);
 
 			if ((!_minimumWeaponCount.HasValue && !_maximumWeaponCount.HasValue) ||
 				(!_minimumSettingValue.HasValue && !_maximumSettingValue.HasValue))
@@ -102,7 +102,7 @@ namespace SchemeGen2.Randomisation.Guarantees
 			{
 				Setting settingToAlter = weaponsToAlter[i].Access(WeaponSetting);
 				settingToAlter.ValueGenerator.GuaranteeValueRange(_minimumSettingValue, _maximumSettingValue);
-				byte newValue = settingToAlter.ValueGenerator.GenerateByte(rng);
+				int newValue = settingToAlter.ValueGenerator.GenerateValue(rng);
 				settingToAlter.SetValue(newValue, settingToAlter.ValueGenerator);
 			}
 		}
@@ -110,22 +110,22 @@ namespace SchemeGen2.Randomisation.Guarantees
 		void HandleTooManyWeaponsMeetingGuarantee(List<Weapon> weaponsMatchingGuarantee, int weaponCountExcess, Random rng)
 		{
 			List<Weapon> weaponsBelowRange = null;
-			byte? belowMinimumSettingValue = null;
+			int? belowMinimumSettingValue = null;
 			if (_minimumSettingValue.HasValue)
 			{
-				int minimumValue = (int)_minimumSettingValue.Value;
-				belowMinimumSettingValue = (byte)(minimumValue > 0 ? minimumValue - 1 : 0);
+				int minimumValue = _minimumSettingValue.Value;
+				belowMinimumSettingValue = minimumValue > 0 ? minimumValue - 1 : 0;
 
 				List<Weapon> dummy;
 				FilterByValueRangeOverlap(weaponsMatchingGuarantee, 0, belowMinimumSettingValue, out weaponsBelowRange, out dummy);
 			}
 
 			List<Weapon> weaponsAboveRange = null;
-			byte? aboveMaximumSettingValue = null;
+			int? aboveMaximumSettingValue = null;
 			if (_maximumSettingValue.HasValue)
 			{
-				int maximumValue = (int)_maximumSettingValue.Value;
-				aboveMaximumSettingValue = (byte)(maximumValue < 255 ? maximumValue + 1 : 255);
+				int maximumValue = _maximumSettingValue.Value;
+				aboveMaximumSettingValue = maximumValue < 255 ? maximumValue + 1 : 255;
 
 				List<Weapon> dummy;
 				FilterByValueRangeOverlap(weaponsMatchingGuarantee, aboveMaximumSettingValue, 255, out weaponsAboveRange, out dummy);
@@ -219,7 +219,7 @@ namespace SchemeGen2.Randomisation.Guarantees
 					settingToAlter.ValueGenerator.GuaranteeValueRange(aboveMaximumSettingValue, 255);
 				}
 
-				byte newValue = settingToAlter.ValueGenerator.GenerateByte(rng);
+				int newValue = settingToAlter.ValueGenerator.GenerateValue(rng);
 				settingToAlter.SetValue(newValue, settingToAlter.ValueGenerator);
 			}
 		}
@@ -246,7 +246,7 @@ namespace SchemeGen2.Randomisation.Guarantees
 			}
 		}
 
-		void FilterByValueRangeOverlap(List<Weapon> allWeapons, byte? min, byte? max, out List<Weapon> weaponsWithinRange, out List<Weapon> weaponsNotWithinRange)
+		void FilterByValueRangeOverlap(List<Weapon> allWeapons, int? min, int? max, out List<Weapon> weaponsWithinRange, out List<Weapon> weaponsNotWithinRange)
 		{
 			weaponsWithinRange = new List<Weapon>();
 			weaponsNotWithinRange = new List<Weapon>();
@@ -282,8 +282,8 @@ namespace SchemeGen2.Randomisation.Guarantees
 		bool IsCurrentSettingCloserToMinimumValue(Weapon weapon)
 		{
 			Setting setting = weapon.Access(WeaponSetting);
-			int differenceBetweenMin = (int)setting.Value - (int)_minimumSettingValue.Value;
-			int differenceBetweenMax = (int)_maximumSettingValue.Value - (int)setting.Value;
+			int differenceBetweenMin = setting.Value - _minimumSettingValue.Value;
+			int differenceBetweenMax = _maximumSettingValue.Value - setting.Value;
 
 			Debug.Assert(differenceBetweenMin >= 0 && differenceBetweenMax >= 0);
 			return differenceBetweenMax > differenceBetweenMin;
@@ -299,9 +299,9 @@ namespace SchemeGen2.Randomisation.Guarantees
 		WeaponCategoryFlags? _categoryExclusionFilter;
 		WeaponCategoryMatchType _exclusionMatchType;
 
-		byte? _minimumWeaponCount;
-		byte? _maximumWeaponCount;
-		byte? _minimumSettingValue;
-		byte? _maximumSettingValue;
+		int? _minimumWeaponCount;
+		int? _maximumWeaponCount;
+		int? _minimumSettingValue;
+		int? _maximumSettingValue;
 	}
 }

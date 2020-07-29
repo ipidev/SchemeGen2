@@ -19,7 +19,7 @@ namespace SchemeGen2.Randomisation.Guarantees
 			if (_valueGenerator == null)
 				return;
 
-			int weaponCount = _valueGenerator.GenerateByte(rng);
+			int weaponCount = _valueGenerator.GenerateValue(rng);
 
 			for (int i = 0; i < (int)WeaponFunctionKeys.Count; ++i)
 			{

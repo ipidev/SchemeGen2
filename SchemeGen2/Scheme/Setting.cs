@@ -8,6 +8,13 @@ using SchemeGen2.Randomisation.ValueGenerators;
 
 namespace SchemeGen2
 {
+	enum SettingSize
+	{
+		Byte,
+		TwoBytes,
+		FourBytes
+	}
+
 	/// <summary>
 	/// A single byte value in a scheme.
 	/// </summary>
@@ -16,20 +23,21 @@ namespace SchemeGen2
 		//TODO: Probably don't need the range to be here.
 
 		public Setting()
-			: this(0x00, 0xFF)
+			: this(0, 255, SettingSize.Byte)
 		{
 		}
 
-		public Setting(byte minimumValue, byte maximumValue)
+		public Setting(int minimumValue, int maximumValue, SettingSize size)
 		{
 			MinimumValue = minimumValue;
 			MaximumValue = maximumValue;
+			Size = size;
 		}
 
 		/// <summary>
 		/// The current value of this setting.
 		/// </summary>
-		public byte Value { get; private set; }
+		public int Value { get; private set; }
 
 		/// <summary>
 		/// The value generator responsible for this setting's value.
@@ -39,15 +47,20 @@ namespace SchemeGen2
 		/// <summary>
 		/// The minimum valid value of this setting, inclusive.
 		/// </summary>
-		public byte MinimumValue { get; private set; }
+		public int MinimumValue { get; private set; }
 
 		/// <summary>
 		/// The maximum valid value of this setting, inclusive.
 		/// </summary>
-		public byte MaximumValue { get; private set; }
+		public int MaximumValue { get; private set; }
 
 		/// <summary>
-		/// Sets the range of valid values for this setting. Does not readjust the current value to suit.
+		/// The number of bytes that this setting occupies in the output file.
+		/// </summary>
+		public SettingSize Size { get; private set; }
+
+		/// <summary>
+		/// Sets the range of valid byte values for this setting. Does not readjust the current value to suit.
 		/// </summary>
 		/// <param name="min">The minimum valid value, inclusive.</param>
 		/// <param name="max">The maximum valid value, inclusive.</param>
@@ -56,6 +69,21 @@ namespace SchemeGen2
 			Debug.Assert(max >= min);
 			MinimumValue = min;
 			MaximumValue = max;
+			Size = SettingSize.Byte;
+		}
+
+		/// <summary>
+		/// Sets the range of valid values for this setting. Does not readjust the current value to suit.
+		/// </summary>
+		/// <param name="min">The minimum valid value, inclusive.</param>
+		/// <param name="max">The maximum valid value, inclusive.</param>
+		/// <param name="size">The number of bytes this setting occupies in the output file.</param>
+		public void SetRange(int min, int max, SettingSize size)
+		{
+			Debug.Assert(max >= min);
+			MinimumValue = min;
+			MaximumValue = max;
+			Size = size;
 		}
 
 		/// <summary>
@@ -63,7 +91,7 @@ namespace SchemeGen2
 		/// </summary>
 		public void SetRangeToBoolean()
 		{
-			SetRange(0x00, 0x01);
+			SetRange(0, 1);
 		}
 
 		/// <summary>
@@ -71,7 +99,7 @@ namespace SchemeGen2
 		/// </summary>
 		/// <param name="value">The new value.</param>
 		/// <param name="valueGenerator">The value generator that created this value, if applicable.</param>
-		public void SetValue(byte value, ValueGenerator valueGenerator = null)
+		public void SetValue(int value, ValueGenerator valueGenerator = null)
 		{
 			IsInRangeWithThrow(value);
 			Value = value;
@@ -83,7 +111,7 @@ namespace SchemeGen2
 		/// </summary>
 		/// <param name="value">The value to check.</param>
 		/// <returns>Returns true if the value is in range, false otherwise.</returns>
-		public bool IsInRange(byte value)
+		public bool IsInRange(int value)
 		{
 			return (value >= MinimumValue) && (value <= MaximumValue);
 		}
@@ -100,13 +128,41 @@ namespace SchemeGen2
 		/// <summary>
 		/// Throws an exception if the given value is out of range.
 		/// </summary>
-		protected void IsInRangeWithThrow(byte value)
+		protected void IsInRangeWithThrow(int value)
 		{
 			if (!IsInRange(value))
 			{
 				throw new ArgumentOutOfRangeException("value",
 					"The valid range for this setting is [" + MinimumValue.ToString() + " - " + MaximumValue.ToString() + "].");
 			}
+		}
+
+		public void Serialise(System.IO.Stream stream)
+		{
+			if (Size == SettingSize.Byte)
+			{
+				stream.WriteByte((byte)Value);
+				return;
+			}
+
+			byte[] bytes = null;
+			switch (Size)
+			{
+			case SettingSize.TwoBytes:
+				bytes = BitConverter.GetBytes((short)Value);
+				break;
+
+			case SettingSize.FourBytes:
+				bytes = BitConverter.GetBytes(Value);
+				break;
+			}
+
+			if (!BitConverter.IsLittleEndian)
+			{
+				Array.Reverse(bytes);
+			}
+
+			stream.Write(bytes, (int)stream.Position, bytes.Length);
 		}
 
 		public override string ToString()

@@ -11,24 +11,24 @@ namespace SchemeGen2.Randomisation.ValueGenerators
     /// </summary>
     class ConstantValueGenerator : ValueGenerator
     {
-        public ConstantValueGenerator(byte value) :
+        public ConstantValueGenerator(int value) :
             base()
         {
             _value = value;
         }
 
-        protected override byte InternalGenerateByte(Random rng)
+        protected override int InternalGenerateValue(Random rng)
         {
             return _value;
         }
 
-		public override bool DoesValueRangeOverlap(byte? min, byte? max)
+		public override bool DoesValueRangeOverlap(int? min, int? max)
 		{
 			return (!min.HasValue || _value >= min.Value)
                 && (!max.HasValue || _value <= max.Value);
 		}
 
-		public override void GuaranteeValueRange(byte? min, byte? max)
+		public override void GuaranteeValueRange(int? min, int? max)
         {
             if (min.HasValue && _value < min.Value)
             {
@@ -45,6 +45,6 @@ namespace SchemeGen2.Randomisation.ValueGenerators
 			return new ConstantValueGenerator(_value);
 		}
 
-		byte _value;
+		int _value;
     }
 }

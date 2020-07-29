@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -217,41 +218,23 @@ namespace SchemeGen2
 			return Weapons[(int)weapon];
 		}
 
-		public byte[] GetBytes()
+		/// <summary>
+		/// Outputs the scheme in the Worms Armageddon scheme format.
+		/// </summary>
+		/// <param name="stream"></param>
+		public void Serialise(System.IO.Stream stream)
 		{
-			byte[] bytes = new byte[SchemeFileLength];
-			SchemeFileMagicNumber.CopyTo(bytes, 0);
-
-			GetSettingsBytes().CopyTo(bytes, SchemeSettingsStartIndex);
-			GetWeaponSettingsBytes().CopyTo(bytes, SchemeWeaponsStartIndex);
-
-			return bytes;
-		}
-
-		byte[] GetSettingsBytes()
-		{
-			byte[] bytes = new byte[SchemeTypes.NumberOfNonWeaponSettings];
-
-			for (int i = 0; i < bytes.Length; ++i)
+			stream.Write(SchemeFileMagicNumber, 0, SchemeFileMagicNumber.Length);
+			
+			foreach (Setting setting in Settings)
 			{
-				bytes[i] = Settings[i].Value;
+				setting.Serialise(stream);
 			}
 
-			return bytes;
-		}
-
-		byte[] GetWeaponSettingsBytes()
-		{
-			byte[] bytes = new byte[SchemeTypes.NumberOfWeaponSettings];
-
-			for (int i = 0; i < SchemeTypes.NumberOfWeapons; ++i)
+			foreach (Weapon weapon in Weapons)
 			{
-				int baseByteIndex = i * (int)WeaponSettings.Count;
-
-			   Weapons[i].GetBytes().CopyTo(bytes, baseByteIndex);
+				weapon.Serialise(stream);
 			}
-
-			return bytes;
 		}
 
 		bool _useRubberWorm;
