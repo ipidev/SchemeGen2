@@ -24,6 +24,12 @@ namespace SchemeGen2.Randomisation.ValueGenerators
             return rng.NextDouble() <= _headsChance ? _headsValue : _tailsValue;
         }
 
+        public override bool IsValueRangeWithinLimits(SettingLimits settingLimits)
+		{
+			return settingLimits.Minimum <= _headsValue && _headsValue <= settingLimits.Maximum
+                && settingLimits.Minimum <= _tailsValue && _tailsValue <= settingLimits.Maximum;
+		}
+
         public override bool DoesValueRangeOverlap(int? min, int? max)
 		{
 			return (!min.HasValue || _headsValue >= min.Value || _tailsValue >= max.Value)

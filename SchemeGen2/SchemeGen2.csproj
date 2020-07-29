@@ -75,6 +75,7 @@
     <Compile Include="Randomisation\ValueGenerators\WeightedSelectorValueGenerator.cs" />
     <Compile Include="Randomisation\WeaponGenerator.cs" />
     <Compile Include="Scheme\Scheme.cs" />
+    <Compile Include="Scheme\SchemeLimits.cs" />
     <Compile Include="Scheme\Setting.cs" />
     <Compile Include="Scheme\SchemeTypes.cs" />
     <Compile Include="Scheme\Weapon.cs" />

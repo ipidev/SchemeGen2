@@ -50,6 +50,17 @@ namespace SchemeGen2.Randomisation.ValueGenerators
             return 0;
         }
 
+        public override bool IsValueRangeWithinLimits(SettingLimits settingLimits)
+		{
+			foreach (WeightedSelection selection in _selections)
+            {
+                if (selection.ValueGenerator != null && !selection.ValueGenerator.IsValueRangeWithinLimits(settingLimits))
+                    return false;
+            }
+
+            return true;
+		}
+
         public override bool DoesValueRangeOverlap(int? min, int? max)
 		{
             foreach (WeightedSelection selection in _selections)

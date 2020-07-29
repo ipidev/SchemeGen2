@@ -30,7 +30,7 @@ namespace SchemeGen2.Randomisation
 
 		public Scheme GenerateScheme(Random rng)
 		{
-			Scheme scheme = new Scheme(false);
+			Scheme scheme = new Scheme();
 
 			//Generate values for every setting.
 			for (int i = 0; i < _settingGenerators.Length; ++i)
@@ -65,6 +65,14 @@ namespace SchemeGen2.Randomisation
 
 						Setting setting = weapon.Access(weaponSetting);
 						Debug.Assert(setting != null);
+
+						//Check value generator range (range check is not done at XML parsing-time for default values).
+						if (!valueGenerator.IsValueRangeWithinLimits(setting.Limits))
+						{
+							throw new Exception(String.Format("Generatable values for setting '{0}' must be within the range [{1} - {2}].",
+								setting.Name, setting.Limits.Minimum, setting.Limits.Maximum));
+						}
+
 						setting.SetValue(valueGenerator.GenerateValue(rng), valueGenerator);
 					}
 				}

@@ -14,10 +14,10 @@ namespace SchemeGen2
 		public Weapon(WeaponTypes weaponType)
 		{
 			WeaponType = weaponType;
-			Ammo = new Setting();
-			Power = new Setting();
-			Delay = new Setting();
-			Crate = new Setting();
+			Ammo = new Setting(weaponType.ToString() + ".Ammo", SchemeLimits.GetWeaponSettingLimits(weaponType, WeaponSettings.Ammo));
+			Power = new Setting(weaponType.ToString() + ".Power", SchemeLimits.GetWeaponSettingLimits(weaponType, WeaponSettings.Power));
+			Delay = new Setting(weaponType.ToString() + ".Delay", SchemeLimits.GetWeaponSettingLimits(weaponType, WeaponSettings.Delay));
+			Crate = new Setting(weaponType.ToString() + ".Crate", SchemeLimits.GetWeaponSettingLimits(weaponType, WeaponSettings.Crate));
 		}
 
 		public WeaponTypes WeaponType { get; private set; }

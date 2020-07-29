@@ -505,15 +505,13 @@ namespace SchemeGen2
 			switch (weaponSetting)
 			{
 			case WeaponSettings.Ammo:
+			case WeaponSettings.Delay:
 				return true;
 
 			case WeaponSettings.Power:
 				return (!HasWeaponCategoryFlags(weaponType, WeaponCategoryFlags.SuperWeapon | WeaponCategoryFlags.Utility)
 					&& weaponType != WeaponTypes.Parachute && weaponType != WeaponTypes.Bungee  && weaponType != WeaponTypes.Teleport)
 					|| weaponType == WeaponTypes.JetPack;
-
-			case WeaponSettings.Delay:
-				return weaponType != WeaponTypes.DoubleDamage;
 
 			case WeaponSettings.Crate:
 				return !HasWeaponCategoryFlags(weaponType, WeaponCategoryFlags.SuperWeapon | WeaponCategoryFlags.Utility);

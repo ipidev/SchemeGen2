@@ -20,19 +20,17 @@ namespace SchemeGen2
 	/// </summary>
 	class Setting
 	{
-		//TODO: Probably don't need the range to be here.
-
-		public Setting()
-			: this(0, 255, SettingSize.Byte)
+		public Setting(string name, SettingLimits limits, SettingSize size = SettingSize.Byte)
 		{
-		}
-
-		public Setting(int minimumValue, int maximumValue, SettingSize size)
-		{
-			MinimumValue = minimumValue;
-			MaximumValue = maximumValue;
+			Name = name;
+			Limits = limits;
 			Size = size;
 		}
+
+		/// <summary>
+		/// The current value of this setting.
+		/// </summary>
+		public string Name { get; private set; }
 
 		/// <summary>
 		/// The current value of this setting.
@@ -40,19 +38,9 @@ namespace SchemeGen2
 		public int Value { get; private set; }
 
 		/// <summary>
-		/// The value generator responsible for this setting's value.
+		/// The minimum and maximum value that this setting can take.
 		/// </summary>
-		public ValueGenerator ValueGenerator { get; private set; }
-
-		/// <summary>
-		/// The minimum valid value of this setting, inclusive.
-		/// </summary>
-		public int MinimumValue { get; private set; }
-
-		/// <summary>
-		/// The maximum valid value of this setting, inclusive.
-		/// </summary>
-		public int MaximumValue { get; private set; }
+		public SettingLimits Limits { get; private set; }
 
 		/// <summary>
 		/// The number of bytes that this setting occupies in the output file.
@@ -60,39 +48,9 @@ namespace SchemeGen2
 		public SettingSize Size { get; private set; }
 
 		/// <summary>
-		/// Sets the range of valid byte values for this setting. Does not readjust the current value to suit.
+		/// The value generator responsible for this setting's value.
 		/// </summary>
-		/// <param name="min">The minimum valid value, inclusive.</param>
-		/// <param name="max">The maximum valid value, inclusive.</param>
-		public void SetRange(byte min, byte max)
-		{
-			Debug.Assert(max >= min);
-			MinimumValue = min;
-			MaximumValue = max;
-			Size = SettingSize.Byte;
-		}
-
-		/// <summary>
-		/// Sets the range of valid values for this setting. Does not readjust the current value to suit.
-		/// </summary>
-		/// <param name="min">The minimum valid value, inclusive.</param>
-		/// <param name="max">The maximum valid value, inclusive.</param>
-		/// <param name="size">The number of bytes this setting occupies in the output file.</param>
-		public void SetRange(int min, int max, SettingSize size)
-		{
-			Debug.Assert(max >= min);
-			MinimumValue = min;
-			MaximumValue = max;
-			Size = size;
-		}
-
-		/// <summary>
-		/// Sets the range of valid values to represent boolean (0x00 or 0x01).
-		/// </summary>
-		public void SetRangeToBoolean()
-		{
-			SetRange(0, 1);
-		}
+		public ValueGenerator ValueGenerator { get; private set; }
 
 		/// <summary>
 		/// Sets the current value of this setting.
@@ -101,40 +59,13 @@ namespace SchemeGen2
 		/// <param name="valueGenerator">The value generator that created this value, if applicable.</param>
 		public void SetValue(int value, ValueGenerator valueGenerator = null)
 		{
-			IsInRangeWithThrow(value);
+			if (Limits != null && !Limits.IsInRange(value))
+			{
+				throw new ArgumentOutOfRangeException("value", value, "Value for setting '" + Name + "' is out of range.");
+			}
+
 			Value = value;
 			ValueGenerator = valueGenerator;
-		}
-
-		/// <summary>
-		/// Checks if the given value is within the valid range for this setting.
-		/// </summary>
-		/// <param name="value">The value to check.</param>
-		/// <returns>Returns true if the value is in range, false otherwise.</returns>
-		public bool IsInRange(int value)
-		{
-			return (value >= MinimumValue) && (value <= MaximumValue);
-		}
-
-		/// <summary>
-		/// Checks if the current value for this setting is within its valid range.
-		/// </summary>
-		/// <returns>Returns true if the value is in range, false otherwise.</returns>
-		public bool IsInRange()
-		{
-			return IsInRange(Value);
-		}
-
-		/// <summary>
-		/// Throws an exception if the given value is out of range.
-		/// </summary>
-		protected void IsInRangeWithThrow(int value)
-		{
-			if (!IsInRange(value))
-			{
-				throw new ArgumentOutOfRangeException("value",
-					"The valid range for this setting is [" + MinimumValue.ToString() + " - " + MaximumValue.ToString() + "].");
-			}
 		}
 
 		public void Serialise(System.IO.Stream stream)
@@ -167,7 +98,7 @@ namespace SchemeGen2
 
 		public override string ToString()
 		{
-			return String.Format("Value: {0}, Range: [{1} - {2}]", Value, MinimumValue, MaximumValue);
+			return String.Format("{0} - Value: {1}", Name, Value);
 		}
 	}
 }

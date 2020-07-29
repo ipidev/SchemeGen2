@@ -34,6 +34,11 @@ namespace SchemeGen2.Randomisation.ValueGenerators
             }
         }
 
+        public override bool IsValueRangeWithinLimits(SettingLimits settingLimits)
+		{
+			return _min >= settingLimits.Minimum && _max <= settingLimits.Maximum;
+		}
+
         public override bool DoesValueRangeOverlap(int? min, int? max)
 		{
             if (!min.HasValue && !max.HasValue)
@@ -64,7 +69,7 @@ namespace SchemeGen2.Randomisation.ValueGenerators
 			return new RangeValueGenerator(_min, _max, Step);
 		}
 
-        int _min;
+		int _min;
         int _max;
 	}
 }

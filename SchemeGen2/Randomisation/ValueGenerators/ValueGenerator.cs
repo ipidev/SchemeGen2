@@ -41,6 +41,11 @@ namespace SchemeGen2.Randomisation.ValueGenerators
         protected abstract int InternalGenerateValue(Random rng);
 
         /// <summary>
+        /// When overridden in a deriving type, returns if the value generator's output range is within the given limits.
+        /// </summary>
+        public abstract bool IsValueRangeWithinLimits(SettingLimits settingLimits);
+
+        /// <summary>
         /// When overridden in a deriving type, returns if the value generator's output range overlaps with the given range.
         /// </summary>
         public abstract bool DoesValueRangeOverlap(int? min, int? max);

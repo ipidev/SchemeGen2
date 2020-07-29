@@ -184,7 +184,7 @@ namespace SchemeGen2.XmlParser
 		void ParseSettingElement(XElement settingElement, SettingTypes settingType)
 		{
 			//Create the value generator.
-			ValueGenerator valueGenerator = CreateValueGenerator(settingElement);
+			ValueGenerator valueGenerator = CreateValueGenerator(settingElement, SchemeLimits.GetSettingLimits(settingType));
 
 			//Pass the new value generator to the scheme generator.
 			Debug.Assert(_schemeGenerator != null);
@@ -261,7 +261,7 @@ namespace SchemeGen2.XmlParser
 		void ParseWeaponSettingElement(XElement weaponSettingElement, WeaponTypes weaponType, WeaponSettings weaponSetting)
 		{
 			//Create the value generator.
-			ValueGenerator valueGenerator = CreateValueGenerator(weaponSettingElement);
+			ValueGenerator valueGenerator = CreateValueGenerator(weaponSettingElement, SchemeLimits.GetWeaponSettingLimits(weaponType, weaponSetting));
 
 			//Pass the new value generator to the scheme generator.
 			Debug.Assert(_schemeGenerator != null);
@@ -276,31 +276,7 @@ namespace SchemeGen2.XmlParser
 			}
 		}
 
-		void SetValue(XElement element, XAttribute attribute, Setting setting)
-		{
-			Debug.Assert(setting != null);
-
-			//Check the attribute's value is of the right type and in range.
-			int intValue;
-
-			if (Int32.TryParse(attribute.Value, out intValue))
-			{
-				if (intValue >= (int)setting.MinimumValue && intValue <= (int)setting.MaximumValue)
-				{
-					setting.SetValue((byte)intValue);
-				}
-				else
-				{
-					_errorCollection.AddAttributeValueOutOfRange(element, attribute, setting);
-				}
-			}
-			else
-			{
-				_errorCollection.AddAttributeValueNonNumber(element, attribute);
-			}
-		}
-
-		ValueGenerator CreateValueGenerator(XElement settingElement)
+		ValueGenerator CreateValueGenerator(XElement settingElement, SettingLimits settingLimits = null)
 		{
 			ValueGenerator outValueGenerator = null;
 			bool hasCreatedValueGenerator = false;
@@ -344,15 +320,20 @@ namespace SchemeGen2.XmlParser
 						break;
 
 					case ValueGeneratorTypes.WeightedSelector:
-						outValueGenerator = CreateWeightedSelectorValueGenerator(element);
+						outValueGenerator = CreateWeightedSelectorValueGenerator(element, settingLimits);
 						break;
 
 					default:
-						Debug.Assert(false, "Invalid enum.");
+						_errorCollection.AddInvalidElement(element);
 						break;
 					}
 
-					hasCreatedValueGenerator = (valueGeneratorType != ValueGeneratorTypes.Count);
+					hasCreatedValueGenerator = outValueGenerator != null || valueGeneratorType == ValueGeneratorTypes.Null;
+
+					if (outValueGenerator != null && settingLimits != null && !outValueGenerator.IsValueRangeWithinLimits(settingLimits))
+					{
+						_errorCollection.AddSettingOutsideLimits(element, settingLimits);
+					}
 				}
 				//Invalid element.
 				else
@@ -510,7 +491,7 @@ namespace SchemeGen2.XmlParser
 			return null;
 		}
 
-		WeightedSelectorValueGenerator CreateWeightedSelectorValueGenerator(XElement weightedSelectorValueElement)
+		WeightedSelectorValueGenerator CreateWeightedSelectorValueGenerator(XElement weightedSelectorValueElement, SettingLimits settingLimits)
 		{
 			WeightedSelectorValueGenerator weightedSelectorValueGenerator = new WeightedSelectorValueGenerator();
 
@@ -527,7 +508,7 @@ namespace SchemeGen2.XmlParser
 						TryParseDoubleAttribute(element, weightAttribute, out weight);
 					}
 
-					ValueGenerator valueGenerator = CreateValueGenerator(element);
+					ValueGenerator valueGenerator = CreateValueGenerator(element, settingLimits);
 					if (valueGenerator != null)
 					{
 						weightedSelectorValueGenerator.AddSelection(valueGenerator, weight);
@@ -605,6 +586,8 @@ namespace SchemeGen2.XmlParser
 			}
 
 			WeaponSettingGuarantee weaponSettingGuarantee = new WeaponSettingGuarantee(weaponSetting);
+			SettingLimits weaponCountSettingLimits = new SettingLimits(0, 64);
+			SettingLimits settingValueSettingLimits = new SettingLimits(0, 255);
 
 			//Iterate through all elements.
 			FoundElements foundElements = new FoundElements();
@@ -619,7 +602,7 @@ namespace SchemeGen2.XmlParser
 					{
 						foundElements.Add(ElementTypes.MinimumWeaponCount, element);
 						
-						weaponSettingGuarantee.MinimumWeaponCount = CreateValueGenerator(element);
+						weaponSettingGuarantee.MinimumWeaponCount = CreateValueGenerator(element, weaponCountSettingLimits);
 					}
 					else
 					{
@@ -633,7 +616,7 @@ namespace SchemeGen2.XmlParser
 					{
 						foundElements.Add(ElementTypes.MaximumWeaponCount, element);
 						
-						ParseMaximumWeaponCountElement(element, weaponSettingGuarantee);
+						ParseMaximumWeaponCountElement(element, weaponSettingGuarantee, weaponCountSettingLimits);
 					}
 					else
 					{
@@ -647,7 +630,7 @@ namespace SchemeGen2.XmlParser
 					{
 						foundElements.Add(ElementTypes.MinimumSettingValue, element);
 						
-						weaponSettingGuarantee.MinimumSettingValue = CreateValueGenerator(element);
+						weaponSettingGuarantee.MinimumSettingValue = CreateValueGenerator(element, settingValueSettingLimits);
 					}
 					else
 					{
@@ -661,7 +644,7 @@ namespace SchemeGen2.XmlParser
 					{
 						foundElements.Add(ElementTypes.MaximumSettingValue, element);
 						
-						weaponSettingGuarantee.MaximumSettingValue = CreateValueGenerator(element);
+						weaponSettingGuarantee.MaximumSettingValue = CreateValueGenerator(element, settingValueSettingLimits);
 					}
 					else
 					{
@@ -752,9 +735,9 @@ namespace SchemeGen2.XmlParser
 			}
 		}
 
-		void ParseMaximumWeaponCountElement(XElement maximumWeaponCountElement, WeaponSettingGuarantee weaponSettingGuarantee)
+		void ParseMaximumWeaponCountElement(XElement maximumWeaponCountElement, WeaponSettingGuarantee weaponSettingGuarantee, SettingLimits weaponCountSettingLimits)
 		{
-			weaponSettingGuarantee.MaximumWeaponCount = CreateValueGenerator(maximumWeaponCountElement);
+			weaponSettingGuarantee.MaximumWeaponCount = CreateValueGenerator(maximumWeaponCountElement, weaponCountSettingLimits);
 
 			//Parse optional attributes.
 			IEnumerable<XAttribute> attributes = maximumWeaponCountElement.Attributes();
