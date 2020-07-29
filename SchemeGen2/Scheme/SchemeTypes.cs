@@ -323,8 +323,8 @@ namespace SchemeGen2
 
 	static class SchemeTypes
 	{
-		public const byte False = 0x00;
-		public const byte True = 0x01;
+		public const int False = 0;
+		public const int True = 1;
 
 		/// <summary>
 		/// The number of game settings in the scheme that don't apply to weapons.

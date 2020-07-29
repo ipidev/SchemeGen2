@@ -379,8 +379,8 @@ namespace SchemeGen2.XmlParser
 			XAttribute valueAttribute = constantValueElement.Attribute("value");
 			if (valueAttribute != null)
 			{
-				byte value;
-				if (TryParseByteAttribute(constantValueElement, valueAttribute, out value))
+				int value;
+				if (TryParseIntegerAttribute(constantValueElement, valueAttribute, out value))
 				{
 					return new ConstantValueGenerator(value);
 				}
@@ -395,15 +395,15 @@ namespace SchemeGen2.XmlParser
 
 		RangeValueGenerator CreateRangeValueGenerator(XElement rangeValueElement)
 		{
-			byte? min = null;
-			byte? max = null;
+			int? min = null;
+			int? max = null;
 
 			//Get min
 			XAttribute minAttribute = rangeValueElement.Attribute("min");
 			if (minAttribute != null)
 			{
-				byte value;
-				if (TryParseByteAttribute(rangeValueElement, minAttribute, out value))
+				int value;
+				if (TryParseIntegerAttribute(rangeValueElement, minAttribute, out value))
 				{
 					min = value;
 				}
@@ -417,8 +417,8 @@ namespace SchemeGen2.XmlParser
 			XAttribute maxAttribute = rangeValueElement.Attribute("max");
 			if (maxAttribute != null)
 			{
-				byte value;
-				if (TryParseByteAttribute(rangeValueElement, maxAttribute, out value))
+				int value;
+				if (TryParseIntegerAttribute(rangeValueElement, maxAttribute, out value))
 				{
 					max = value;
 				}
@@ -437,10 +437,10 @@ namespace SchemeGen2.XmlParser
 			XAttribute stepAttribute = rangeValueElement.Attribute("step");
 			if (stepAttribute != null)
 			{
-				byte value;
-				if (TryParseByteAttribute(rangeValueElement, stepAttribute, out value))
+				int value;
+				if (TryParseIntegerAttribute(rangeValueElement, stepAttribute, out value))
 				{
-					rangeValueGenerator.Step = (int)value;
+					rangeValueGenerator.Step = value;
 				}
 			}
 
@@ -471,15 +471,15 @@ namespace SchemeGen2.XmlParser
 		CoinFlipValueGenerator CreateCoinFlipValueGenerator(XElement coinFlipValueElement)
 		{
 			double chance = 0.5;
-			byte? headsValue = null;
-			byte? tailsValue = null;
+			int? headsValue = null;
+			int? tailsValue = null;
 
 			//Get headsValue
 			XAttribute headsValueAttribute = coinFlipValueElement.Attribute("headsValue");
 			if (headsValueAttribute != null)
 			{
-				byte value;
-				if (TryParseByteAttribute(coinFlipValueElement, headsValueAttribute, out value))
+				int value;
+				if (TryParseIntegerAttribute(coinFlipValueElement, headsValueAttribute, out value))
 				{
 					headsValue = value;
 				}
@@ -493,8 +493,8 @@ namespace SchemeGen2.XmlParser
 			XAttribute tailsValueAttribute = coinFlipValueElement.Attribute("tailsValue");
 			if (tailsValueAttribute != null)
 			{
-				byte value;
-				if (TryParseByteAttribute(coinFlipValueElement, tailsValueAttribute, out value))
+				int value;
+				if (TryParseIntegerAttribute(coinFlipValueElement, tailsValueAttribute, out value))
 				{
 					tailsValue = value;
 				}
@@ -774,10 +774,10 @@ namespace SchemeGen2.XmlParser
 			{
 				if (attribute.Name == "forceExcessWeaponsToValue")
 				{
-					byte byteValue;
-					if (TryParseByteAttribute(maximumWeaponCountElement, attribute, out byteValue))
+					int intValue;
+					if (TryParseIntegerAttribute(maximumWeaponCountElement, attribute, out intValue))
 					{
-						weaponSettingGuarantee.MaximumWeaponCountForcedValue = byteValue;
+						weaponSettingGuarantee.MaximumWeaponCountForcedValue = intValue;
 					}
 				}
 				else
@@ -787,13 +787,10 @@ namespace SchemeGen2.XmlParser
 			}
 		}
 
-		bool TryParseByteAttribute(XElement element, XAttribute attribute, byte minValue, byte maxValue, out byte byteValue)
+		bool TryParseIntegerAttribute(XElement element, XAttribute attribute, int minValue, int maxValue, out int intValue)
 		{
 			//Check the attribute's value is of the right type and in range.
-			bool hasParsedValue = false;
-			int intValue;
-
-			hasParsedValue = Int32.TryParse(attribute.Value, out intValue);
+			bool hasParsedValue = hasParsedValue = Int32.TryParse(attribute.Value, out intValue);
 			if (!hasParsedValue)
 			{
 				//Allow boolean strings.
@@ -813,7 +810,6 @@ namespace SchemeGen2.XmlParser
 			{
 				if (intValue >= (int)minValue && intValue <= (int)maxValue)
 				{
-					byteValue = (byte)intValue;
 					return true;
 				}
 				else
@@ -826,14 +822,13 @@ namespace SchemeGen2.XmlParser
 				_errorCollection.AddAttributeValueNonNumber(element, attribute);
 			}
 
-			//Failed to get byte value.
-			byteValue = 0xFF;
+			//Failed to get value.
 			return false;
 		}
 
-		bool TryParseByteAttribute(XElement element, XAttribute attribute, out byte byteValue)
+		bool TryParseIntegerAttribute(XElement element, XAttribute attribute, out int intValue)
 		{
-			return TryParseByteAttribute(element, attribute, Byte.MinValue, Byte.MaxValue, out byteValue);
+			return TryParseIntegerAttribute(element, attribute, Int32.MinValue, Int32.MaxValue, out intValue);
 		}
 
 		bool TryParseDoubleAttribute(XElement element, XAttribute attribute, double minValue, double maxValue, out double doubleValue)
@@ -855,7 +850,7 @@ namespace SchemeGen2.XmlParser
 				_errorCollection.AddAttributeValueNonNumber(element, attribute);
 			}
 
-			//Failed to get byte value.
+			//Failed to get value.
 			doubleValue = Double.NaN;
 			return false;
 		}
