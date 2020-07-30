@@ -22,6 +22,7 @@ namespace SchemeGen2.XmlParser
 		MaximumSettingValue,
 		InclusionFilter,
 		ExclusionFilter,
+		ExtendedOptions,
 
 		Count
 	}

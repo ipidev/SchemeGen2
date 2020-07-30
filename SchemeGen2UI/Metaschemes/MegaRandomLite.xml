@@ -1295,4 +1295,243 @@
 			</Delay>
 		</Armageddon>
 	</Weapons>
+	<ExtendedOptions version="0">
+		<ConstantWind>
+			<Boolean chance="0.5" />
+		</ConstantWind>
+		<Wind>
+			<Range min="-32768" max="32767" />
+		</Wind>
+		<WindBias>
+			<Range min="0" max="255" />
+		</WindBias>
+		<Gravity>
+			<Range min="1" max="13107200" />
+		</Gravity>
+		<Friction>
+			<Range min="0" max="4095" />
+		</Friction>
+		<RopeKnocking>
+			<Range min="0" max="255" />
+		</RopeKnocking>
+		<BloodLevel>
+			<Range min="0" max="255" />
+		</BloodLevel>
+		<UnrestrictRope>
+			<Boolean chance="0.5" />
+		</UnrestrictRope>
+		<AutoPlaceWormsByAlly>
+			<Boolean chance="0.5" />
+		</AutoPlaceWormsByAlly>
+		<NoCrateProbability>
+			<Range min="0" max="100" />
+		</NoCrateProbability>
+		<MaximumCrateCount>
+			<Range min="0" max="65535" />
+		</MaximumCrateCount>
+		<SuddenDeathDisablesWormSelect>
+			<Boolean chance="0.5" />
+		</SuddenDeathDisablesWormSelect>
+		<SuddenDeathWormDamagePerTurn>
+			<Boolean chance="0.5" />
+		</SuddenDeathWormDamagePerTurn>
+		<AlliedPhasedWorms>
+			<Range min="0" max="3" />
+		</AlliedPhasedWorms>
+		<EnemyPhasedWorms>
+			<Range min="0" max="3" />
+		</EnemyPhasedWorms>
+		<CircularAim>
+			<Boolean chance="0.5" />
+		</CircularAim>
+		<AntiLockAim>
+			<Boolean chance="0.5" />
+		</AntiLockAim>
+		<AntiLockPower>
+			<Boolean chance="0.5" />
+		</AntiLockPower>
+		<WormSelectionDoesntEndHotSeat>
+			<Boolean chance="0.5" />
+		</WormSelectionDoesntEndHotSeat>
+		<WormSelectionNeverCancelled>
+			<Boolean chance="0.5" />
+		</WormSelectionNeverCancelled>
+		<BattyRope>
+			<Boolean chance="0.5" />
+		</BattyRope>
+		<RopeRollDrops>
+			<Range min="0" max="2" />
+		</RopeRollDrops>
+		<XImpactLossOfControl>
+			<CoinFlip headsValue="0" tailsValue="255" />
+		</XImpactLossOfControl>
+		<KeepControlAfterBumpingHead>
+			<Boolean chance="0.5" />
+		</KeepControlAfterBumpingHead>
+		<KeepControlAfterSkimming>
+			<Range min="0" max="2" />
+		</KeepControlAfterSkimming>
+		<FallDamageTriggeredByExplosions>
+			<Boolean chance="0.5" />
+		</FallDamageTriggeredByExplosions>
+		<ExplosionsPushAllObjects>
+			<Boolean chance="0.5" />
+		</ExplosionsPushAllObjects>
+		<UndeterminedCrates>
+			<Boolean chance="0.5" />
+		</UndeterminedCrates>
+		<UndeterminedFuses>
+			<Boolean chance="0.5" />
+		</UndeterminedFuses>
+		<PauseTimerWhileFiring>
+			<Boolean chance="0.5" />
+		</PauseTimerWhileFiring>
+		<LossOfControlDoesntEndTurn>
+			<Boolean chance="0.5" />
+		</LossOfControlDoesntEndTurn>
+		<WeaponUseDoesntEndTurn>
+			<Boolean chance="0.5" />
+		</WeaponUseDoesntEndTurn>
+		<WeaponUseDoesntEndTurnDoesntBlockWeapons>
+			<Boolean chance="0.5" />
+		</WeaponUseDoesntEndTurnDoesntBlockWeapons>
+		<PnuematicDrillImpartsVelocity>
+			<Boolean chance="0.5" />
+		</PnuematicDrillImpartsVelocity>
+		<GirderRadiusAssist>
+			<Boolean chance="0.5" />
+		</GirderRadiusAssist>
+		<PetrolTurnDecay>
+			<Range min="1" max="65535" />
+		</PetrolTurnDecay>
+		<PetrolTouchDecay>
+			<Range min="1" max="255" />
+		</PetrolTouchDecay>
+		<MaximumFlameletCount>
+			<Range min="1" max="65535" />
+		</MaximumFlameletCount>
+		<MaximumProjectileSpeed>
+			<Range min="0" max="2147483647" />
+		</MaximumProjectileSpeed>
+		<MaximumRopeSpeed>
+			<Range min="0" max="2147483647" />
+		</MaximumRopeSpeed>
+		<MaximumJetPackSpeed>
+			<Range min="0" max="2147483647" />
+		</MaximumJetPackSpeed>
+		<GameEngineSpeed>
+			<Range min="4096" max="8388608" />
+		</GameEngineSpeed>
+		<IndianRopeGlitch>
+			<Boolean chance="0.5" />
+		</IndianRopeGlitch>
+		<HerdDoublingGlitch>
+			<Boolean chance="0.5" />
+		</HerdDoublingGlitch>
+		<JetPackBungeeGlitch>
+			<Boolean chance="0.5" />
+		</JetPackBungeeGlitch>
+		<AngleCheatGlitch>
+			<Boolean chance="0.5" />
+		</AngleCheatGlitch>
+		<GlideGlitch>
+			<Boolean chance="0.5" />
+		</GlideGlitch>
+		<Skipwalking>
+			<WeightedSelector>
+				<Selection weight="2">
+					<Boolean chance="0.5" />
+				</Selection>
+				<Selection weight="1">
+					<Constant value="255" />
+				</Selection>
+			</WeightedSelector>
+		</Skipwalking>
+		<BlockRoofing>
+			<Range min="0" max="2" />
+		</BlockRoofing>
+		<FloatingWeaponGlitch>
+			<Boolean chance="0.5" />
+		</FloatingWeaponGlitch>
+		<RubberWormBounciness>
+			<Range min="0" max="65536" />
+		</RubberWormBounciness>
+		<RubberWormAirViscosity>
+			<Range min="0" max="16384" />
+		</RubberWormAirViscosity>
+		<RubberWormAirViscosityAppliesToWorms>
+			<Boolean chance="0.5" />
+		</RubberWormAirViscosityAppliesToWorms>
+		<RubberWormWindInfluence>
+			<Range min="0" max="65536" />
+		</RubberWormWindInfluence>
+		<RubberWormWindInfluenceAppliesToWorms>
+			<Boolean chance="0.5" />
+		</RubberWormWindInfluenceAppliesToWorms>
+		<RubberWormGravityType>
+			<WeightedSelector>
+				<Selection weight="3">
+					<Range min="0" max="1" />
+				</Selection>
+				<Selection weight="1">
+					<Range min="2" max="3" />
+				</Selection>
+			</WeightedSelector>
+		</RubberWormGravityType>
+		<RubberWormGravityStrength>
+			<Range min="-1073741824" max="1073741824" />
+		</RubberWormGravityStrength>
+		<RubberWormCrateRate>
+			<Range min="0" max="15" />
+		</RubberWormCrateRate>
+		<RubberWormCrateShower>
+			<Boolean chance="0.5" />
+		</RubberWormCrateShower>
+		<RubberWormAntiSink>
+			<Boolean chance="0.5" />
+		</RubberWormAntiSink>
+		<RubberWormRememberWeapons>
+			<Boolean chance="0.5" />
+		</RubberWormRememberWeapons>
+		<RubberWormExtendedFuses>
+			<Boolean chance="0.5" />
+		</RubberWormExtendedFuses>
+		<RubberWormAntiLockAim>
+			<Boolean chance="0.5" />
+		</RubberWormAntiLockAim>
+		<TerrainOverlapPhasingGlitch>
+			<Boolean chance="0.5" />
+		</TerrainOverlapPhasingGlitch>
+		<FractionalRoundTimer>
+			<Boolean chance="0.5" />
+		</FractionalRoundTimer>
+		<AutomaticEndOfTurnRetreat>
+			<Boolean chance="0.5" />
+		</AutomaticEndOfTurnRetreat>
+		<HealthCratesCurePoison>
+			<WeightedSelector>
+				<Selection weight="3">
+					<Range min="0" max="2" />
+				</Selection>
+				<Selection weight="1">
+					<Constant value="255" />
+				</Selection>
+			</WeightedSelector>
+		</HealthCratesCurePoison>
+		<RubberWormKaosMod>
+			<Range min="0" max="5" />
+		</RubberWormKaosMod>
+		<SheepHeavensGate>
+			<Range min="1" max="7" />
+		</SheepHeavensGate>
+		<ConserveInstantUtilities>
+			<Boolean chance="0.5" />
+		</ConserveInstantUtilities>
+		<ExpediteInstantUtilities>
+			<Boolean chance="0.5" />
+		</ExpediteInstantUtilities>
+		<DoubleTimeStackLimit>
+			<Range min="0" max="255" />
+		</DoubleTimeStackLimit>
+	</ExtendedOptions>
 </Metascheme>

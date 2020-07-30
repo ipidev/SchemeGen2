@@ -127,6 +127,19 @@ namespace SchemeGen2.XmlParser
 						_errorCollection.AddRepeatedElement(element, foundElements.Get(ElementTypes.Weapons));
 					}
 				}
+				//Handle extended options element.
+				else if (element.Name.LocalName == ElementTypes.ExtendedOptions.ToString())
+				{
+					if (!foundElements.Contains(ElementTypes.ExtendedOptions))
+					{
+						foundElements.Add(ElementTypes.ExtendedOptions, element);
+						ParseExtendedOptionsElement(element);
+					}
+					else
+					{
+						_errorCollection.AddRepeatedElement(element, foundElements.Get(ElementTypes.ExtendedOptions));
+					}
+				}
 				//Handle guarantees element.
 				else if (element.Name.LocalName == ElementTypes.Guarantees.ToString())
 				{
@@ -301,6 +314,75 @@ namespace SchemeGen2.XmlParser
 			else
 			{
 				_schemeGenerator.SetDefault(weaponSetting, valueGenerator);
+			}
+		}
+
+		void ParseExtendedOptionsElement(XElement extendedOptionsElement)
+		{
+			//Get version.
+			XAttribute versionAttribute = extendedOptionsElement.Attribute("version");
+			if (versionAttribute != null)
+			{
+				if (TryParseIntegerAttribute(extendedOptionsElement, versionAttribute, 0, SchemeTypes.MaximumExtendedOptionDataVersion, out int value))
+				{
+					_schemeGenerator.ExtendedOptionsDataVersion = value;
+				}
+				else
+				{
+					_errorCollection.AddAttributeValueNonNumber(extendedOptionsElement, versionAttribute);
+				}
+			}
+			else
+			{
+				_errorCollection.AddAttributeNotFound("version", extendedOptionsElement);
+			}
+
+			FoundElements foundElements = new FoundElements();
+
+			//Iterate through all elements.
+			IEnumerable<XElement> elements = extendedOptionsElement.Elements();
+			foreach (XElement element in elements)
+			{
+				//Handle setting element.
+				ExtendedOptionTypes extendedOptionType;
+				if (Enum.TryParse<ExtendedOptionTypes>(element.Name.LocalName, out extendedOptionType))
+				{
+					if (extendedOptionType != ExtendedOptionTypes.DataVersion && extendedOptionType != ExtendedOptionTypes.Count)
+					{
+						if (!foundElements.Contains(extendedOptionType))
+						{
+							foundElements.Add(extendedOptionType, element);
+
+							ParseExtendedOptionElement(element, extendedOptionType);
+						}
+						else
+						{
+							_errorCollection.AddRepeatedElement(element, foundElements.Get(extendedOptionType));
+						}
+					}
+					else
+					{
+						_errorCollection.AddInvalidElement(element);
+					}
+				}
+				//Invalid element.
+				else
+				{
+					_errorCollection.AddInvalidElement(element);
+				}
+			}
+		}
+
+		void ParseExtendedOptionElement(XElement extendedOptionElement, ExtendedOptionTypes extendedOptionType)
+		{
+			if ((int)extendedOptionType <= SchemeTypes.GetExtendedOptionsSettingsCount(_schemeGenerator.ExtendedOptionsDataVersion))
+			{
+				ValueGenerator valueGenerator = CreateValueGenerator(extendedOptionElement, SchemeLimits.GetExtendedOptionLimits(extendedOptionType));
+				_schemeGenerator.Set(extendedOptionType, valueGenerator);
+			}
+			else
+			{
+				_errorCollection.AddExtendedOptionNotAvailable(extendedOptionElement, extendedOptionType, _schemeGenerator.ExtendedOptionsDataVersion);
 			}
 		}
 

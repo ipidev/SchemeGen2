@@ -18,6 +18,7 @@ namespace SchemeGen2.XmlParser
 			_weaponTypes = new Dictionary<WeaponTypes, XElement>();
 			_weaponSettings = new Dictionary<WeaponSettings, XElement>();
 			_elementTypes = new Dictionary<ElementTypes, XElement>();
+			_extendedOptionTypes = new Dictionary<ExtendedOptionTypes, XElement>();
 		}
 
 		public bool Contains(SettingTypes setting)
@@ -40,6 +41,11 @@ namespace SchemeGen2.XmlParser
 			return _elementTypes.ContainsKey(element);
 		}
 
+		public bool Contains(ExtendedOptionTypes extendedOptionType)
+		{
+			return _extendedOptionTypes.ContainsKey(extendedOptionType);
+		}
+
 		public void Add(SettingTypes setting, XElement element)
 		{
 			_settingTypes.Add(setting, element);
@@ -58,6 +64,11 @@ namespace SchemeGen2.XmlParser
 		public void Add(ElementTypes elementType, XElement element)
 		{
 			_elementTypes.Add(elementType, element);
+		}
+
+		public void Add(ExtendedOptionTypes extendedOptionType, XElement element)
+		{
+			_extendedOptionTypes.Add(extendedOptionType, element);
 		}
 
 		public XElement Get(SettingTypes setting)
@@ -80,9 +91,15 @@ namespace SchemeGen2.XmlParser
 			return _elementTypes[element];
 		}
 
+		public XElement Get(ExtendedOptionTypes extendedOptionType)
+		{
+			return _extendedOptionTypes[extendedOptionType];
+		}
+
 		Dictionary<SettingTypes, XElement> _settingTypes;
 		Dictionary<WeaponTypes, XElement> _weaponTypes;
 		Dictionary<WeaponSettings, XElement> _weaponSettings;
 		Dictionary<ElementTypes, XElement> _elementTypes;
+		Dictionary<ExtendedOptionTypes, XElement> _extendedOptionTypes;
 	}
 }

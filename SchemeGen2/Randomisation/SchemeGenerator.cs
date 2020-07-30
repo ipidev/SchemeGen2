@@ -25,15 +25,19 @@ namespace SchemeGen2.Randomisation
 				_weaponGenerators[i] = new WeaponGenerator();
 			}
 
+			_extendedOptionGenerators = new ValueGenerator[SchemeTypes.NumberOfExtendedOptions];
+			ExtendedOptionsDataVersion = 0;
+
 			_guarantees = new List<Guarantee>();
 		}
 
-		public Scheme GenerateScheme(Random rng)
+		public Scheme GenerateScheme(Random rng, SchemeVersion version)
 		{
-			Scheme scheme = new Scheme();
+			Scheme scheme = new Scheme(version, ExtendedOptionsDataVersion);
 
 			//Generate values for every setting.
-			for (int i = 0; i < _settingGenerators.Length; ++i)
+			int settingsCount = Math.Min(scheme.Settings.Length, _settingGenerators.Length);
+			for (int i = 0; i < settingsCount; ++i)
 			{
 				ValueGenerator valueGenerator = _settingGenerators[i];
 
@@ -48,7 +52,8 @@ namespace SchemeGen2.Randomisation
 			}
 
 			//Generate values for every weapon.
-			for (int i = 0; i < _weaponGenerators.Length; ++i)
+			int weaponsCount = Math.Min(scheme.Weapons.Length, _weaponGenerators.Length);
+			for (int i = 0; i < weaponsCount; ++i)
 			{
 				WeaponGenerator weaponGenerator = _weaponGenerators[i];
 
@@ -69,9 +74,27 @@ namespace SchemeGen2.Randomisation
 						//Check value generator range (range check is not done at XML parsing-time for default values).
 						if (!valueGenerator.IsValueRangeWithinLimits(setting.Limits))
 						{
-							throw new Exception(String.Format("Generatable values for setting '{0}' must be within the range [{1} - {2}].",
-								setting.Name, setting.Limits.Minimum, setting.Limits.Maximum));
+							throw new Exception(String.Format("Generatable values for setting '{0}' must be within the range(s): {1}.",
+								setting.Name, setting.Limits.ToString()));
 						}
+
+						setting.SetValue(valueGenerator.GenerateValue(rng), valueGenerator);
+					}
+				}
+			}
+
+			//Generate values for every extended option.
+			if (version >= SchemeVersion.Armageddon3)
+			{
+				int optionsCount = Math.Min(scheme.ExtendedOptions.Length, _extendedOptionGenerators.Length);
+				for (int i = 0; i < optionsCount; ++i)
+				{
+					ValueGenerator valueGenerator = _extendedOptionGenerators[i];
+					if (valueGenerator != null)
+					{
+						ExtendedOptionTypes extendedOption = (ExtendedOptionTypes)i;
+						Setting setting = scheme.Access(extendedOption);
+						Debug.Assert(setting != null);
 
 						setting.SetValue(valueGenerator.GenerateValue(rng), valueGenerator);
 					}
@@ -131,6 +154,16 @@ namespace SchemeGen2.Randomisation
 		}
 
 		/// <summary>
+		/// Sets the given extended option's value generator.
+		/// </summary>
+		public void Set(ExtendedOptionTypes extendedOption, ValueGenerator valueGenerator)
+		{
+			Debug.Assert(extendedOption < ExtendedOptionTypes.Count);
+
+			_extendedOptionGenerators[(int)extendedOption] = valueGenerator;
+		}
+
+		/// <summary>
 		/// Adds the given guarantee.
 		/// </summary>
 		public void AddGuarantee(Guarantee guarantee)
@@ -143,6 +176,10 @@ namespace SchemeGen2.Randomisation
 
 		ValueGenerator[] _settingGenerators;
 		WeaponGenerator[] _weaponGenerators;
+
+		ValueGenerator[] _extendedOptionGenerators;
+		public int ExtendedOptionsDataVersion { get; set; }
+
 		List<Guarantee> _guarantees;
 	}
 }

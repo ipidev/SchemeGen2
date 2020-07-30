@@ -9,16 +9,66 @@ namespace SchemeGen2
 {
 	class SettingLimits
 	{
-		public SettingLimits(int minimum, int maximum)
+		public SettingLimits()
 		{
-			Minimum = minimum;
-			Maximum = maximum;
+			Ranges = new List<Tuple<int, int>>();
 		}
 
-		public int Minimum { get; set; }
-		public int Maximum { get; set; }
+		public SettingLimits(int minimum, int maximum)
+			: this()
+		{
+			Ranges.Add(new Tuple<int, int>(minimum, maximum));
+		}
 
-		public bool IsInRange(int value) { return Minimum <= value && value <= Maximum; }
+		public SettingLimits(int min1, int max1, int min2, int max2)
+			: this()
+		{
+			Ranges.Add(new Tuple<int, int>(min1, max1));
+			Ranges.Add(new Tuple<int, int>(min2, max2));
+		}
+
+		public List<Tuple<int, int>> Ranges { get; private set; }
+
+		public bool IsInRange(int value)
+		{
+			foreach (Tuple<int, int> range in Ranges)
+			{
+				if (range.Item1 <= value && value <= range.Item2)
+					return true;
+			}
+
+			return false;
+		}
+
+		public bool IsInRange(int min, int max)
+		{
+			foreach (Tuple<int, int> range in Ranges)
+			{
+				if (range.Item1 <= min && max <= range.Item2)
+					return true;
+			}
+
+			return false;
+		}
+
+		public override string ToString()
+		{
+			string output = "";
+
+			for (int i = 0; i < Ranges.Count; ++i)
+			{
+				if (i < Ranges.Count - 1)
+				{
+					output += String.Format("[{0} - {1}], ", Ranges[i].Item1, Ranges[i].Item2);
+				}
+				else
+				{
+					output += String.Format("[{0} - {1}]", Ranges[i].Item1, Ranges[i].Item2);
+				}
+			}
+
+			return output;
+		}
 	}
 
 	class WeaponLimits
@@ -52,6 +102,11 @@ namespace SchemeGen2
 					Crate = InitialiseWeaponCrateLimit((WeaponTypes)i)
 				};
 			}
+
+			for (int i = 0; i < (int)ExtendedOptionTypes.Count; ++i)
+			{
+				_extendedOptionLimits[i] = InitialiseExtendedOptionLimit((ExtendedOptionTypes)i);
+			}
 		}
 
 		static SettingLimits InitialiseSettingLimit(SettingTypes settingType)
@@ -83,14 +138,14 @@ namespace SchemeGen2
 
 			//Enum-based properties.
 			case SettingTypes.StockpilingMode:
-				return new SettingLimits(0, (int)StockpilingModes.Count);
+				return new SettingLimits(0, (int)StockpilingModes.Count - 1);
 
 			case SettingTypes.WormSelect:
-				return new SettingLimits(0, (int)WormSelectModes.Count);
+				return new SettingLimits(0, (int)WormSelectModes.Count - 1);
 			
 			//All quartary properties.
 			case SettingTypes.SuddenDeathEvent:
-				return new SettingLimits(0, (int)SuddenDeathEvents.Count);
+				return new SettingLimits(0, (int)SuddenDeathEvents.Count - 1);
 
 			//Everything else has full byte range.
 			default:
@@ -135,6 +190,8 @@ namespace SchemeGen2
 				return new SettingLimits(0, 9);
 
 			case WeaponTypes.BattleAxe:
+				return new SettingLimits(0, 4, 241, 255);
+
 			case WeaponTypes.NinjaRope:
 				return new SettingLimits(0, 4);
 
@@ -165,6 +222,151 @@ namespace SchemeGen2
 			{
 				return new SettingLimits(0, 0);
 			}
+		}
+
+		static SettingLimits InitialiseExtendedOptionLimit(ExtendedOptionTypes extendedOption)
+		{
+			switch (extendedOption)
+			{
+			case ExtendedOptionTypes.DataVersion:
+				return new SettingLimits(0, 0);
+
+			//Boolean properties.
+			case ExtendedOptionTypes.ConstantWind:
+			case ExtendedOptionTypes.UnrestrictRope:
+			case ExtendedOptionTypes.AutoPlaceWormsByAlly:
+			case ExtendedOptionTypes.SuddenDeathDisablesWormSelect:
+			case ExtendedOptionTypes.CircularAim:
+			case ExtendedOptionTypes.AntiLockAim:
+			case ExtendedOptionTypes.AntiLockPower:
+			case ExtendedOptionTypes.WormSelectionDoesntEndHotSeat:
+			case ExtendedOptionTypes.WormSelectionNeverCancelled:
+			case ExtendedOptionTypes.BattyRope:
+			case ExtendedOptionTypes.KeepControlAfterBumpingHead:
+			case ExtendedOptionTypes.FallDamageTriggeredByExplosions:
+			case ExtendedOptionTypes.PauseTimerWhileFiring:
+			case ExtendedOptionTypes.LossOfControlDoesntEndTurn:
+			case ExtendedOptionTypes.WeaponUseDoesntEndTurn:
+			case ExtendedOptionTypes.WeaponUseDoesntEndTurnDoesntBlockWeapons:
+			case ExtendedOptionTypes.GirderRadiusAssist:
+			case ExtendedOptionTypes.JetPackBungeeGlitch:
+			case ExtendedOptionTypes.AngleCheatGlitch:
+			case ExtendedOptionTypes.GlideGlitch:
+			case ExtendedOptionTypes.FloatingWeaponGlitch:
+			case ExtendedOptionTypes.RubberWormAirViscosityAppliesToWorms:
+			case ExtendedOptionTypes.RubberWormWindInfluenceAppliesToWorms:
+			case ExtendedOptionTypes.RubberWormCrateShower:
+			case ExtendedOptionTypes.RubberWormAntiSink:
+			case ExtendedOptionTypes.RubberWormRememberWeapons:
+			case ExtendedOptionTypes.RubberWormExtendedFuses:
+			case ExtendedOptionTypes.RubberWormAntiLockAim:
+			case ExtendedOptionTypes.FractionalRoundTimer:
+			case ExtendedOptionTypes.AutomaticEndOfTurnRetreat:
+			case ExtendedOptionTypes.ConserveInstantUtilities:
+			case ExtendedOptionTypes.ExpediteInstantUtilities:
+				return new SettingLimits(0, 1);
+
+			//Tri-state properties.
+			case ExtendedOptionTypes.ExplosionsPushAllObjects:
+			case ExtendedOptionTypes.UndeterminedCrates:
+			case ExtendedOptionTypes.UndeterminedFuses:
+			case ExtendedOptionTypes.PnuematicDrillImpartsVelocity:
+			case ExtendedOptionTypes.IndianRopeGlitch:
+			case ExtendedOptionTypes.HerdDoublingGlitch:
+			case ExtendedOptionTypes.TerrainOverlapPhasingGlitch:
+				return new SettingLimits((int)ExtendedOptionsTriState.False, (int)ExtendedOptionsTriState.True,
+					(int)ExtendedOptionsTriState.Default, (int)ExtendedOptionsTriState.Default);
+
+			//Byte properties.
+			case ExtendedOptionTypes.WindBias:
+			case ExtendedOptionTypes.RopeKnocking:
+			case ExtendedOptionTypes.BloodLevel:
+			case ExtendedOptionTypes.SuddenDeathWormDamagePerTurn:
+			case ExtendedOptionTypes.RubberWormCrateRate:
+			case ExtendedOptionTypes.DoubleTimeStackLimit:
+				return new SettingLimits(Byte.MinValue, Byte.MaxValue);
+
+			//Integer-wide properties.
+			case ExtendedOptionTypes.Wind:
+				return new SettingLimits(Int16.MinValue, Int16.MaxValue);
+
+			case ExtendedOptionTypes.MaximumCrateCount:
+			case ExtendedOptionTypes.PetrolTurnDecay:
+				return new SettingLimits(UInt16.MinValue, UInt16.MaxValue);
+
+			//Enum properties.
+			case ExtendedOptionTypes.AlliedPhasedWorms:
+			case ExtendedOptionTypes.EnemyPhasedWorms:
+				return new SettingLimits(0, (int)PhasedWormsModes.Count - 1);
+
+			case ExtendedOptionTypes.RopeRollDrops:
+				return new SettingLimits(0, (int)RopeRollDropModes.Count - 1);
+
+			case ExtendedOptionTypes.XImpactLossOfControl:
+				return new SettingLimits((int)XImpactLossOfControlModes.LossOfControl, (int)XImpactLossOfControlModes.LossOfControl,
+					(int)XImpactLossOfControlModes.NoLossOfControl, (int)XImpactLossOfControlModes.NoLossOfControl);
+
+			case ExtendedOptionTypes.KeepControlAfterSkimming:
+				return new SettingLimits(0, (int)KeepControlAfterSkimmingModes.Count - 1);
+
+			case ExtendedOptionTypes.Skipwalking:
+				return new SettingLimits(0, (int)SkipwalkingModes.Faciliated,
+					(int)SkipwalkingModes.Disabled, (int)SkipwalkingModes.Disabled);
+
+			case ExtendedOptionTypes.BlockRoofing:
+				return new SettingLimits(0, (int)BlockRoofingModes.Count - 1);
+
+			case ExtendedOptionTypes.RubberWormGravityType:
+				return new SettingLimits(0, (int)RubberWormGravityTypes.Count - 1);
+
+			case ExtendedOptionTypes.HealthCratesCurePoison:
+				return new SettingLimits(0, (int)HealthCratesCurePoisonModes.Allies,
+					(int)HealthCratesCurePoisonModes.None, (int)HealthCratesCurePoisonModes.None);
+
+			case ExtendedOptionTypes.RubberWormKaosMod:
+				return new SettingLimits(0, (int)RubberWormKaosMods.Count - 1);
+
+			//Speed properties.
+			case ExtendedOptionTypes.MaximumProjectileSpeed:
+			case ExtendedOptionTypes.MaximumRopeSpeed:
+			case ExtendedOptionTypes.MaximumJetPackSpeed:
+				return new SettingLimits(0, 0x7FFFFFFF);
+
+			//Other properties.
+			case ExtendedOptionTypes.Gravity:
+				return new SettingLimits(0x01, 0xC80000);
+
+			case ExtendedOptionTypes.Friction:
+				return new SettingLimits(0, 0x28CCC);
+
+			case ExtendedOptionTypes.NoCrateProbability:
+				return new SettingLimits(0, 100, 255, 255);
+
+			case ExtendedOptionTypes.PetrolTouchDecay:
+				return new SettingLimits(1, Byte.MaxValue);
+
+			case ExtendedOptionTypes.MaximumFlameletCount:
+				return new SettingLimits(1, UInt16.MaxValue);
+
+			case ExtendedOptionTypes.GameEngineSpeed:
+				return new SettingLimits(0x1000, 0x800000);
+
+			case ExtendedOptionTypes.RubberWormBounciness:
+			case ExtendedOptionTypes.RubberWormWindInfluence:
+				return new SettingLimits(0, 0x10000);
+
+			case ExtendedOptionTypes.RubberWormAirViscosity:
+				return new SettingLimits(0, 0x4000);
+
+			case ExtendedOptionTypes.RubberWormGravityStrength:
+				return new SettingLimits(-0x40000000, 0x40000000);
+
+			case ExtendedOptionTypes.SheepHeavensGate:
+				return new SettingLimits(1, 7);
+			}
+
+			Debug.Fail("InitialiseExtendedOptionLimit - Invalid extended option " + extendedOption.ToString());
+			return null;
 		}
 
 		public static SettingLimits GetSettingLimits(SettingTypes settingType)
@@ -206,7 +408,14 @@ namespace SchemeGen2
 			return null;
 		}
 
+		public static SettingLimits GetExtendedOptionLimits(ExtendedOptionTypes extendedOption)
+		{
+			Debug.Assert(extendedOption < ExtendedOptionTypes.Count);
+			return extendedOption < ExtendedOptionTypes.Count ? _extendedOptionLimits[(int)extendedOption] : null;
+		}
+
 		static SettingLimits[] _settingLimits = new SettingLimits[(int)SettingTypes.Count];
 		static WeaponLimits[] _weaponLimits = new WeaponLimits[(int)WeaponTypes.Count];
+		static SettingLimits[] _extendedOptionLimits = new SettingLimits[(int)ExtendedOptionTypes.Count];
 	}
 }

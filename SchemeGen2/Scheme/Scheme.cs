@@ -18,8 +18,10 @@ namespace SchemeGen2
 		public const int SchemeWeaponsStartIndex = SchemeSettingsStartIndex + SchemeTypes.NumberOfNonWeaponSettings;
 		public const int SchemeFileLength = SchemeWeaponsStartIndex + SchemeTypes.NumberOfWeaponSettings;
 
-		public Scheme(bool setUpDefaults = true)
+		public Scheme(SchemeVersion version, int extendedOptionsDataVersion = 0, bool setUpDefaults = true)
 		{
+			Version = version;
+			
 			Settings = new Setting[SchemeTypes.NumberOfNonWeaponSettings];
 			for (int i = 0; i < Settings.Length; ++i)
 			{
@@ -27,13 +29,27 @@ namespace SchemeGen2
 				Settings[i] = new Setting(settingType.ToString(), SchemeLimits.GetSettingLimits(settingType));
 			}
 
-			Weapons = new Weapon[SchemeTypes.NumberOfWeapons];
+			int weaponsCount = version >= SchemeVersion.Armageddon2 ? SchemeTypes.NumberOfWeapons : SchemeTypes.NumberOfNonSuperWeapons;
+			Weapons = new Weapon[weaponsCount];
 			for (int i = 0; i < Weapons.Length; ++i)
 			{
 				Weapons[i] = new Weapon((WeaponTypes)i);
 			}
 
-			Access(SettingTypes.Version).SetValue(2);
+			if (version >= SchemeVersion.Armageddon3)
+			{
+				int optionsCount = SchemeTypes.GetExtendedOptionsSettingsCount(extendedOptionsDataVersion);
+				ExtendedOptions = new Setting[optionsCount];
+				for (int i = 0; i < ExtendedOptions.Length; ++i)
+				{
+					ExtendedOptionTypes extendedOption = (ExtendedOptionTypes)i;
+					ExtendedOptions[i] = new Setting(extendedOption.ToString(), SchemeLimits.GetExtendedOptionLimits(extendedOption), SchemeTypes.GetExtendedOptionSettingSize(extendedOption));
+				}
+
+				Access(ExtendedOptionTypes.DataVersion).SetValue(extendedOptionsDataVersion);
+			}
+
+			Access(SettingTypes.Version).SetValue(SchemeTypes.GetSchemeVersionNumber(version));
 			Access(SettingTypes.BountyMode).SetValue(SchemeGeneratorMagicNumber);
 
 			if (setUpDefaults)
@@ -42,8 +58,10 @@ namespace SchemeGen2
 			}
 		}
 
+		public SchemeVersion Version { get; private set; }
 		public Setting[] Settings { get; private set; }
 		public Weapon[] Weapons { get; private set; }
+		public Setting[] ExtendedOptions { get; private set; }
 
 		///////////////////////////////////////////////////////////////////////
 		// Initialisation
@@ -84,6 +102,45 @@ namespace SchemeGen2
 			Access(SettingTypes.NumberOfRounds).SetValue        (1);
 			Access(SettingTypes.TeamWeapons).SetValue           (SchemeTypes.True);
 			Access(SettingTypes.SuperWeapons).SetValue          (SchemeTypes.True);
+
+			if (Version < SchemeVersion.Armageddon3)
+				return;
+
+			//Set extended option non-zero defaults.
+			Access(ExtendedOptionTypes.Wind).SetValue							(100);
+			Access(ExtendedOptionTypes.WindBias).SetValue						(15);
+			Access(ExtendedOptionTypes.Gravity).SetValue						(0x3D70);
+			Access(ExtendedOptionTypes.Friction).SetValue						(0xF5C2);
+			Access(ExtendedOptionTypes.RopeKnocking).SetValue					(255);
+			Access(ExtendedOptionTypes.BloodLevel).SetValue						(255);
+			Access(ExtendedOptionTypes.NoCrateProbability).SetValue				(255);
+			Access(ExtendedOptionTypes.MaximumCrateCount).SetValue				(5);
+			Access(ExtendedOptionTypes.SuddenDeathDisablesWormSelect).SetValue	(SchemeTypes.True);
+			Access(ExtendedOptionTypes.SuddenDeathWormDamagePerTurn).SetValue	(5);
+			Access(ExtendedOptionTypes.ExplosionsPushAllObjects).SetValue		((int)ExtendedOptionsTriState.Default);
+			Access(ExtendedOptionTypes.UndeterminedCrates).SetValue				((int)ExtendedOptionsTriState.Default);
+			Access(ExtendedOptionTypes.UndeterminedFuses).SetValue				((int)ExtendedOptionsTriState.Default);
+			Access(ExtendedOptionTypes.PauseTimerWhileFiring).SetValue			(SchemeTypes.True);
+			Access(ExtendedOptionTypes.PnuematicDrillImpartsVelocity).SetValue	((int)ExtendedOptionsTriState.Default);
+			Access(ExtendedOptionTypes.PetrolTurnDecay).SetValue				(0x3332);
+			Access(ExtendedOptionTypes.PetrolTouchDecay).SetValue				(30);
+			Access(ExtendedOptionTypes.MaximumFlameletCount).SetValue			(200);
+			Access(ExtendedOptionTypes.MaximumProjectileSpeed).SetValue			(0x200000);
+			Access(ExtendedOptionTypes.MaximumRopeSpeed).SetValue				(0x200000);
+			Access(ExtendedOptionTypes.MaximumJetPackSpeed).SetValue			(0x200000);
+			Access(ExtendedOptionTypes.GameEngineSpeed).SetValue				(0x10000);
+			Access(ExtendedOptionTypes.IndianRopeGlitch).SetValue				((int)ExtendedOptionsTriState.Default);
+			Access(ExtendedOptionTypes.HerdDoublingGlitch).SetValue				((int)ExtendedOptionsTriState.Default);
+			Access(ExtendedOptionTypes.JetPackBungeeGlitch).SetValue			(SchemeTypes.True);
+			Access(ExtendedOptionTypes.HerdDoublingGlitch).SetValue				(SchemeTypes.True);
+			Access(ExtendedOptionTypes.AngleCheatGlitch).SetValue				(SchemeTypes.True);
+			Access(ExtendedOptionTypes.GlideGlitch).SetValue					(SchemeTypes.True);
+			Access(ExtendedOptionTypes.FloatingWeaponGlitch).SetValue			(SchemeTypes.True);
+			Access(ExtendedOptionTypes.RubberWormGravityStrength).SetValue		(0x10000);
+			Access(ExtendedOptionTypes.TerrainOverlapPhasingGlitch).SetValue	((int)ExtendedOptionsTriState.Default);
+			Access(ExtendedOptionTypes.HealthCratesCurePoison).SetValue			((int)HealthCratesCurePoisonModes.Team);
+			Access(ExtendedOptionTypes.SheepHeavensGate).SetValue				(7);
+			Access(ExtendedOptionTypes.DoubleTimeStackLimit).SetValue			(1);
 		}
 
 		///////////////////////////////////////////////////////////////////////
@@ -108,6 +165,15 @@ namespace SchemeGen2
 		}
 
 		/// <summary>
+		/// Gets the given extended option by reference.
+		/// </summary>
+		public Setting Access(ExtendedOptionTypes extendedOption)
+		{
+			Debug.Assert(extendedOption < ExtendedOptionTypes.Count);
+			return ExtendedOptions[(int)extendedOption];
+		}
+
+		/// <summary>
 		/// Outputs the scheme in the Worms Armageddon scheme format.
 		/// </summary>
 		/// <param name="stream"></param>
@@ -123,6 +189,21 @@ namespace SchemeGen2
 			foreach (Weapon weapon in Weapons)
 			{
 				weapon.Serialise(stream);
+			}
+
+			if (ExtendedOptions != null)
+			{
+				foreach (Setting extendedOption in ExtendedOptions)
+				{
+					extendedOption.Serialise(stream);
+				}
+			}
+
+			if (Version == SchemeVersion.WorldParty)
+			{
+				stream.Write(new byte[3], 0, 3);
+				stream.Write(SchemeFileMagicNumber, 0, SchemeFileMagicNumber.Length);
+				stream.WriteByte(1);
 			}
 		}
 	}

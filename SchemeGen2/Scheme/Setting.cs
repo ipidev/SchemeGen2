@@ -93,7 +93,7 @@ namespace SchemeGen2
 				Array.Reverse(bytes);
 			}
 
-			stream.Write(bytes, (int)stream.Position, bytes.Length);
+			stream.Write(bytes, 0, bytes.Length);
 		}
 
 		public override string ToString()

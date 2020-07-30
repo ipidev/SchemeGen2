@@ -73,7 +73,7 @@ namespace SchemeGen2
 			try
 			{
 				Random rng = seed.HasValue ? new Random(seed.Value) : new Random();
-				Scheme testScheme = schemeGenerator.GenerateScheme(rng);
+				Scheme testScheme = schemeGenerator.GenerateScheme(rng, SchemeVersion.Armageddon3);
 				
 				using (FileStream fs = new FileStream(outputPath, FileMode.Create, FileAccess.Write))
 				{

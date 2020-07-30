@@ -6,6 +6,14 @@ using System.Threading.Tasks;
 
 namespace SchemeGen2
 {
+	enum SchemeVersion
+	{
+		Armageddon1,
+		WorldParty,
+		Armageddon2,
+		Armageddon3
+	}
+
 	enum SettingTypes
 	{
 		Version,
@@ -321,6 +329,180 @@ namespace SchemeGen2
 		Count
 	}
 
+	enum ExtendedOptionTypes
+	{
+		DataVersion,
+		ConstantWind,
+		Wind,
+		WindBias,
+		Gravity,
+		Friction,
+		RopeKnocking,
+		BloodLevel,
+		UnrestrictRope,
+		AutoPlaceWormsByAlly,
+		NoCrateProbability,
+		MaximumCrateCount,
+		SuddenDeathDisablesWormSelect,
+		SuddenDeathWormDamagePerTurn,
+		AlliedPhasedWorms,
+		EnemyPhasedWorms,
+		CircularAim,
+		AntiLockAim,
+		AntiLockPower,
+		WormSelectionDoesntEndHotSeat,
+		WormSelectionNeverCancelled,
+		BattyRope,
+		RopeRollDrops,
+		XImpactLossOfControl,
+		KeepControlAfterBumpingHead,
+		KeepControlAfterSkimming,
+		FallDamageTriggeredByExplosions,
+		ExplosionsPushAllObjects,
+		UndeterminedCrates,
+		UndeterminedFuses,
+		PauseTimerWhileFiring,
+		LossOfControlDoesntEndTurn,
+		WeaponUseDoesntEndTurn,
+		WeaponUseDoesntEndTurnDoesntBlockWeapons,
+		PnuematicDrillImpartsVelocity,
+		GirderRadiusAssist,
+		PetrolTurnDecay,
+		PetrolTouchDecay,
+		MaximumFlameletCount,
+		MaximumProjectileSpeed,
+		MaximumRopeSpeed,
+		MaximumJetPackSpeed,
+		GameEngineSpeed,
+		IndianRopeGlitch,
+		HerdDoublingGlitch,
+		JetPackBungeeGlitch,
+		AngleCheatGlitch,
+		GlideGlitch,
+		Skipwalking,
+		BlockRoofing,
+		FloatingWeaponGlitch,
+		RubberWormBounciness,
+		RubberWormAirViscosity,
+		RubberWormAirViscosityAppliesToWorms,
+		RubberWormWindInfluence,
+		RubberWormWindInfluenceAppliesToWorms,
+		RubberWormGravityType,
+		RubberWormGravityStrength,
+		RubberWormCrateRate,
+		RubberWormCrateShower,
+		RubberWormAntiSink,
+		RubberWormRememberWeapons,
+		RubberWormExtendedFuses,
+		RubberWormAntiLockAim,
+		TerrainOverlapPhasingGlitch,
+		FractionalRoundTimer,
+		AutomaticEndOfTurnRetreat,
+		HealthCratesCurePoison,
+		RubberWormKaosMod,
+		SheepHeavensGate,
+		ConserveInstantUtilities,
+		ExpediteInstantUtilities,
+		DoubleTimeStackLimit,
+
+		Count
+	}
+
+	enum ExtendedOptionsTriState : byte
+	{
+		False,
+		True,
+		Default = 0x80
+	}
+
+	enum PhasedWormsModes : byte
+	{
+		Off,
+		Worms,
+		WormsWeapons,
+		WormsWeaponsDamage,
+
+		Count
+	}
+
+	enum RopeRollDropModes : byte
+	{
+		Disabled,
+		AsFromRope,
+		AsFromRopeOrJump,
+
+		Count
+	}
+
+	enum XImpactLossOfControlModes : byte
+	{
+		NoLossOfControl = 0xFF,
+		LossOfControl = 0x00
+	}
+
+	enum KeepControlAfterSkimmingModes : byte
+	{
+		LoseControl,
+		KeepControl,
+		KeepControlAndRope,
+		
+		Count
+	}
+
+	enum SkipwalkingModes : byte
+	{
+		Disabled = 0xFF,
+		Possible = 0,
+		Faciliated
+	}
+
+	enum BlockRoofingModes : byte
+	{
+		Allowed,
+		BlockAbove,
+		BlockEverywhere,
+		
+		Count
+	}
+
+	enum RubberWormGravityTypes : byte
+	{
+		Unmodified,
+		Standard,
+		ConstantBlackHole,
+		LinearBlackHole,
+		
+		Count
+	}
+
+	enum HealthCratesCurePoisonModes : byte
+	{
+		None = 0xFF,
+		Collector = 0,
+		Team,
+		Allies
+	}
+
+	enum RubberWormKaosMods : byte
+	{
+		Standard,
+		KaosMod1,
+		KaosMod2,
+		KaosMod3,
+		KaosMod4,
+		KaosMod5,
+		
+		Count
+	}
+
+	[Flags]
+	enum SheepHeavensGate : byte
+	{
+		SheepFromCrateExplosion = 0x01,
+		ExtendedFuseTime = 0x02,
+		IncreasedCrateProbabilities = 0x04
+	}
+
 	static class SchemeTypes
 	{
 		public const int False = 0;
@@ -345,6 +527,11 @@ namespace SchemeGen2
 		/// The total number of individual weapon parameters, including super weapons.
 		/// </summary>
 		public const int NumberOfWeaponSettings = NumberOfWeapons * (int)WeaponSettings.Count;
+
+		/// <summary>
+		/// The number of settings for most recent version of the extended scheme options.
+		/// </summary>
+		public const int NumberOfExtendedOptions = (int)ExtendedOptionTypes.Count;
 
 		private static readonly WeaponCategoryFlags[] WeaponCategoryFlagsArray = 
 		{
@@ -430,6 +617,16 @@ namespace SchemeGen2
 			new WeaponTypes[] { WeaponTypes.MadCow,			WeaponTypes.OldWoman,		WeaponTypes.ConcreteDonkey,	WeaponTypes.NuclearTest,	WeaponTypes.Armageddon },
 			new WeaponTypes[] { /* Skip Go */				/* Surrender */				WeaponTypes.SelectWorm,		WeaponTypes.Freeze,			WeaponTypes.MagicBullet },
 		};
+
+		private static readonly int[] ExtendedOptionSettingsCounts =
+		{
+			(int)ExtendedOptionTypes.DoubleTimeStackLimit + 1
+		};
+
+		/// <summary>
+		/// The maximum extended option data version that is supported.
+		/// </summary>
+		public static readonly int MaximumExtendedOptionDataVersion = ExtendedOptionSettingsCounts.Length - 1;
 
 		public static bool IsTeamWeapon(WeaponTypes weaponType)
 		{
@@ -520,6 +717,61 @@ namespace SchemeGen2
 			}
 
 			return false;
+		}
+
+		public static int GetSchemeVersionNumber(SchemeVersion version)
+		{
+			switch (version)
+			{
+			case SchemeVersion.Armageddon1:
+			case SchemeVersion.WorldParty:
+				return 1;
+
+			case SchemeVersion.Armageddon2:
+				return 2;
+
+			case SchemeVersion.Armageddon3:
+				return 3;
+			}
+
+			return -1;
+		}
+
+		public static int GetExtendedOptionsSettingsCount(int version)
+		{
+			if (version < 0 || version >= ExtendedOptionSettingsCounts.Length)
+			{
+				throw new ArgumentOutOfRangeException("version", version, "Version is invalid or not supported.");
+			}
+
+			return ExtendedOptionSettingsCounts[version];
+		}
+
+		public static SettingSize GetExtendedOptionSettingSize(ExtendedOptionTypes extendedOption)
+		{
+			switch(extendedOption)
+			{
+			case ExtendedOptionTypes.Wind:
+			case ExtendedOptionTypes.MaximumCrateCount:
+			case ExtendedOptionTypes.PetrolTurnDecay:
+			case ExtendedOptionTypes.MaximumFlameletCount:
+				return SettingSize.TwoBytes;
+
+			case ExtendedOptionTypes.DataVersion:
+			case ExtendedOptionTypes.Gravity:
+			case ExtendedOptionTypes.Friction:
+			case ExtendedOptionTypes.MaximumProjectileSpeed:
+			case ExtendedOptionTypes.MaximumRopeSpeed:
+			case ExtendedOptionTypes.MaximumJetPackSpeed:
+			case ExtendedOptionTypes.GameEngineSpeed:
+			case ExtendedOptionTypes.RubberWormBounciness:
+			case ExtendedOptionTypes.RubberWormAirViscosity:
+			case ExtendedOptionTypes.RubberWormWindInfluence:
+			case ExtendedOptionTypes.RubberWormGravityStrength:
+				return SettingSize.FourBytes;
+			}
+
+			return SettingSize.Byte;
 		}
 	}
 }

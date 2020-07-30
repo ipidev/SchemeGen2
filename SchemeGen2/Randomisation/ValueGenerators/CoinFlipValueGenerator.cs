@@ -26,8 +26,7 @@ namespace SchemeGen2.Randomisation.ValueGenerators
 
         public override bool IsValueRangeWithinLimits(SettingLimits settingLimits)
 		{
-			return settingLimits.Minimum <= _headsValue && _headsValue <= settingLimits.Maximum
-                && settingLimits.Minimum <= _tailsValue && _tailsValue <= settingLimits.Maximum;
+			return settingLimits.IsInRange(_headsValue) && settingLimits.IsInRange(_tailsValue);
 		}
 
         public override bool DoesValueRangeOverlap(int? min, int? max)
