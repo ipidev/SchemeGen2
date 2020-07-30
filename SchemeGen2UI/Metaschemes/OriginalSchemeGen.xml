@@ -2,14 +2,8 @@
 	<Information>
 		<DisplayName>Original SchemeGen</DisplayName>
 		<AuthorName>ipi</AuthorName>
-		<Description>Mirrors the behaviour of the original SchemeGen.</Description>
+		<Description>Mirrors the behaviour of the original SchemeGen. Only uses extended options that were provided by the RubberWorm plugin.</Description>
 	</Information>
-	<!-- rubber 0.333 -->
-	<!-- sdet 0.25 -->
-	<!-- rope? 0.333 -->
-	<!-- speed? 0.333 -->
-	<!-- wormfx 0.333 -->
-	<!-- god worms 0.111 -->
 	<Settings>
 		<HotSeatDelay>
 			<Range min="0" max="10" />
@@ -212,6 +206,138 @@
 			</Power>
 		</JetPack>
 	</Weapons>
+	<ExtendedOptions version="0">
+		<!-- Bounciness -->
+		<RubberWormBounciness>
+			<WeightedSelector>
+				<Selection>
+					<Constant value="0" />
+				</Selection>
+				<Selection>
+					<Range min="0" max="65024" step="256" />
+				</Selection>
+			</WeightedSelector>
+		</RubberWormBounciness>
+		<!-- Shot Doesn't End Turn -->
+		<WeaponUseDoesntEndTurn>
+			<Boolean chance="0.25" />
+		</WeaponUseDoesntEndTurn>
+		<RubberWormRememberWeapons>
+			<!-- TODO: Always true with WeaponUseDoesntEndTurn set -->
+			<Constant value="False" />
+		</RubberWormRememberWeapons>
+		<LossOfControlDoesntEndTurn>
+			<!-- TODO: Always true with WeaponUseDoesntEndTurn set -->
+			<Boolean chance="0.5" />
+		</LossOfControlDoesntEndTurn>
+		<PauseTimerWhileFiring>
+			<!-- TODO: Always true with WeaponUseDoesntEndTurn set -->
+			<Constant value="False" />
+		</PauseTimerWhileFiring>
+		<!-- Other Mole Squadron flags -->
+		<UnrestrictRope>
+			<Boolean chance="0.5" />
+		</UnrestrictRope>
+		<RubberWormExtendedFuses>
+			<Boolean chance="0.5" />
+		</RubberWormExtendedFuses>
+		<ExplosionsPushAllObjects>
+			<!-- Original version had a typo that always enabled this. -->
+			<Boolean chance="0.5" />
+		</ExplosionsPushAllObjects>
+		<!-- Rope Speed Limit -->
+		<MaximumRopeSpeed>
+			<WeightedSelector>
+				<Selection weight="2">
+					<Constant value="1048576" />
+				</Selection>
+				<Selection weight="1">
+					<Constant value="0" />
+				</Selection>
+				<Selection weight="1">
+					<Range min="4096" max="786432" step="4096" />
+				</Selection>
+			</WeightedSelector>
+		</MaximumRopeSpeed>
+		<!-- Gravity -->
+		<!-- Original generator had 1/5th chance of generating no gravity "ZeroG" scheme -->
+		<RubberWormGravityStrength>
+			<Range min="5120" max="28000" step="5120" />
+		</RubberWormGravityStrength>
+		<!-- Crate Spawning -->
+		<RubberWormCrateRate>
+			<!-- TODO: Always zero when "ZeroG" is on. -->
+			<WeightedSelector>
+				<Selection>
+					<Constant value="0" />
+				</Selection>
+				<Selection>
+					<Range min="0" max="10" />
+				</Selection>
+			</WeightedSelector>
+		</RubberWormCrateRate>
+		<MaximumCrateCount>
+			<!-- TODO: Always zero when "ZeroG" is on. -->
+			<Range min="1" max="100" />
+		</MaximumCrateCount>
+		<!-- Anti-Sink -->
+		<RubberWormAntiSink>
+			<Boolean chance="0.5" />
+		</RubberWormAntiSink>
+		<!-- Air Viscosity -->
+		<RubberWormAirViscosity>
+			<!-- TODO: Always zero when "ZeroG" is on. -->
+			<WeightedSelector>
+				<Selection>
+					<Constant value="0" />
+				</Selection>
+				<Selection>
+					<Range min="0" max="6400" step="40" />
+				</Selection>
+			</WeightedSelector>
+		</RubberWormAirViscosity>
+		<RubberWormAirViscosityAppliesToWorms>
+			<Boolean chance="0.5" />
+		</RubberWormAirViscosityAppliesToWorms>
+		<!-- Wind Influence -->
+		<RubberWormWindInfluence>
+			<!-- TODO: Always zero when "ZeroG" is on. -->
+			<WeightedSelector>
+				<Selection>
+					<Constant value="0" />
+				</Selection>
+				<Selection>
+					<Range min="0" max="65536" step="256" />
+				</Selection>
+			</WeightedSelector>
+		</RubberWormWindInfluence>
+		<RubberWormWindInfluenceAppliesToWorms>
+			<Boolean chance="0.5" />
+		</RubberWormWindInfluenceAppliesToWorms>
+		<!-- RubberWorm Select Worm -->
+		<BattyRope>
+			<Boolean chance="0.333" />
+		</BattyRope>
+		<GameEngineSpeed>
+			<CoinFlip headsValue="65536" tailsValue="98304" headsChance="0.666" />
+		</GameEngineSpeed>
+		<!-- RubberWorm Earthquake -->
+		<RubberWormAntiLockAim>
+			<Boolean chance="0.5" />
+		</RubberWormAntiLockAim>
+		<CircularAim>
+			<Boolean chance="0.5" />
+		</CircularAim>
+		<AntiLockPower>
+			<Boolean chance="0.5" />
+		</AntiLockPower>
+		<WeaponUseDoesntEndTurnDoesntBlockWeapons>
+			<Boolean chance="0.5" />
+		</WeaponUseDoesntEndTurnDoesntBlockWeapons>
+		<RubberWormKaosMod>
+			<Range min="0" max="5" />
+		</RubberWormKaosMod>
+	</ExtendedOptions>
 	<Guarantees>
 		<GodWormsIndyTerrainExclusivity />
 	</Guarantees>

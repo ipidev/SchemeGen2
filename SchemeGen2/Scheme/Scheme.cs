@@ -126,8 +126,8 @@ namespace SchemeGen2
 			Access(ExtendedOptionTypes.PetrolTouchDecay).SetValue				(30);
 			Access(ExtendedOptionTypes.MaximumFlameletCount).SetValue			(200);
 			Access(ExtendedOptionTypes.MaximumProjectileSpeed).SetValue			(0x200000);
-			Access(ExtendedOptionTypes.MaximumRopeSpeed).SetValue				(0x200000);
-			Access(ExtendedOptionTypes.MaximumJetPackSpeed).SetValue			(0x200000);
+			Access(ExtendedOptionTypes.MaximumRopeSpeed).SetValue				(0x100000);
+			Access(ExtendedOptionTypes.MaximumJetPackSpeed).SetValue			(0x50000);
 			Access(ExtendedOptionTypes.GameEngineSpeed).SetValue				(0x10000);
 			Access(ExtendedOptionTypes.IndianRopeGlitch).SetValue				((int)ExtendedOptionsTriState.Default);
 			Access(ExtendedOptionTypes.HerdDoublingGlitch).SetValue				((int)ExtendedOptionsTriState.Default);
