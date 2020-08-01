@@ -97,7 +97,7 @@
 			<Boolean chance="0.5" />
 		</AquaSheep>
 		<SheepHeaven>
-			<Boolean chance="0.5" />
+			<Boolean chance="0.25" />
 		</SheepHeaven>
 		<IndestructibleTerrain>
 			<Boolean chance="0.25" />
@@ -130,8 +130,8 @@
 					<Selection>
 						<Constant value="0" />
 					</Selection>
-					<Selection>
-						<Range min="0" max="2" />
+					<Selection weight="1.5">
+						<Range min="0" max="3" />
 					</Selection>
 					<Selection>
 						<Range min="0" max="10" />
@@ -140,14 +140,17 @@
 			</Ammo>
 			<Delay>
 				<WeightedSelector>
-					<Selection weight="2">
+					<Selection weight="3">
 						<Constant value="0" />
 					</Selection>
-					<Selection>
+					<Selection weight="2">
+						<Range min="0" max="5" />
+					</Selection>
+					<Selection weight="1.5">
 						<Range min="0" max="10" />
 					</Selection>
-					<Selection>
-						<Range min="0" max="20" />
+					<Selection weight="1">
+						<Range min="0" max="15" />
 					</Selection>
 				</WeightedSelector>
 			</Delay>
@@ -331,7 +334,7 @@
 			<Ammo>
 				<WeightedSelector>
 					<Selection>
-						<CoinFlip headsValue="1" tailsValue="0" headsChance="0.333" />
+						<CoinFlip headsValue="1" tailsValue="0" headsChance="0.5" />
 					</Selection>
 					<Selection>
 						<Range min="0" max="5" />
@@ -346,7 +349,7 @@
 			<Ammo>
 				<WeightedSelector>
 					<Selection>
-						<CoinFlip headsValue="1" tailsValue="0" headsChance="0.333" />
+						<CoinFlip headsValue="1" tailsValue="0" headsChance="0.5" />
 					</Selection>
 					<Selection>
 						<Range min="0" max="5" />
@@ -361,7 +364,7 @@
 			<Ammo>
 				<WeightedSelector>
 					<Selection>
-						<CoinFlip headsValue="1" tailsValue="0" headsChance="0.333" />
+						<CoinFlip headsValue="1" tailsValue="0" headsChance="0.5" />
 					</Selection>
 					<Selection>
 						<Range min="0" max="5" />
@@ -373,7 +376,7 @@
 			<Ammo>
 				<WeightedSelector>
 					<Selection>
-						<CoinFlip headsValue="1" tailsValue="0" headsChance="0.333" />
+						<CoinFlip headsValue="1" tailsValue="0" headsChance="0.5" />
 					</Selection>
 					<Selection>
 						<Range min="0" max="5" />
@@ -385,7 +388,7 @@
 			<Ammo>
 				<WeightedSelector>
 					<Selection>
-						<CoinFlip headsValue="1" tailsValue="0" headsChance="0.333" />
+						<CoinFlip headsValue="1" tailsValue="0" headsChance="0.5" />
 					</Selection>
 					<Selection>
 						<Range min="0" max="5" />
@@ -509,7 +512,7 @@
 			<Boolean chance="0.8" />
 		</UnrestrictRope>
 		<AutoPlaceWormsByAlly>
-			<Boolean chance="0.5" />
+			<Boolean chance="0.2" />
 		</AutoPlaceWormsByAlly>
 		<NoCrateProbability>
 			<WeightedSelector>
@@ -784,7 +787,7 @@
 				<Category name="SuperWeapon" />
 			</ExclusionFilter>
 			<MinimumWeaponCount>
-				<Range min="3" max="15" />
+				<Range min="5" max="20" />
 			</MinimumWeaponCount>
 			<MaximumSettingValue>
 				<Constant value="0" />
@@ -799,7 +802,7 @@
 				<Category name="SuperWeapon" />
 			</ExclusionFilter>
 			<MinimumWeaponCount>
-				<Range min="1" max="3" />
+				<Range min="2" max="4" />
 			</MinimumWeaponCount>
 			<MinimumSettingValue>
 				<Constant value="10" />
@@ -814,7 +817,7 @@
 				<Category name="SuperWeapon" />
 			</ExclusionFilter>
 			<MinimumWeaponCount>
-				<Range min="1" max="3" />
+				<Range min="2" max="5" />
 			</MinimumWeaponCount>
 			<MaximumSettingValue>
 				<Constant value="0" />
@@ -895,19 +898,19 @@
 				<Category name="Traversal" />
 			</InclusionFilter>
 			<MinimumWeaponCount>
-				<Range min="1" max="3" />
+				<Range min="1" max="4" />
 			</MinimumWeaponCount>
 			<MinimumSettingValue>
 				<Range min="1" max="3" />
 			</MinimumSettingValue>
 		</WeaponSetting>
-		<!-- Ensure one traversal weapon has zero delay  -->
+		<!-- Ensure some traversal weapons have zero delay  -->
 		<WeaponSetting setting="Delay">
 			<InclusionFilter>
 				<Category name="Traversal" />
 			</InclusionFilter>
 			<MinimumWeaponCount>
-				<Constant value="1" />
+				<Range min="1" max="3" />
 			</MinimumWeaponCount>
 			<MaximumSettingValue>
 				<Constant value="0" />

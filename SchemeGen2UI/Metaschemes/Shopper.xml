@@ -123,11 +123,17 @@
 			<Power>
 				<Constant value="4" />
 			</Power>
+			<Delay>
+				<Null />
+			</Delay>
 		</NinjaRope>
 		<Parachute>
 			<Ammo>
 				<Constant value="10" />
 			</Ammo>
+			<Delay>
+				<Null />
+			</Delay>
 		</Parachute>
 		<!-- Disable other traversal options -->
 		<Girder>
