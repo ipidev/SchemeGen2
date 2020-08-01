@@ -35,7 +35,7 @@
 			System.Windows.Forms.Label metaschemeAuthorLabelLabel;
 			System.Windows.Forms.Label metaschemeNameLabelLabel;
 			System.Windows.Forms.Label useGenericNameLabel;
-			System.Windows.Forms.Label extendedSchemeOptionsLabel;
+			System.Windows.Forms.Label schemeVersionLabel;
 			System.Windows.Forms.Label randomSeedLabel;
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
 			this.metaschemeDescriptionTextBox = new System.Windows.Forms.TextBox();
@@ -56,7 +56,7 @@
 			this.generationTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
 			this.generationLeftPanel = new System.Windows.Forms.Panel();
 			this.randomSeedTextBox = new System.Windows.Forms.TextBox();
-			this.extendedSchemeOptionsComboBox = new System.Windows.Forms.ComboBox();
+			this.schemeVersionComboBox = new System.Windows.Forms.ComboBox();
 			this.useGenericNameCheckBox = new System.Windows.Forms.CheckBox();
 			this.generationRightPanel = new System.Windows.Forms.Panel();
 			numberOfSchemesLabel = new System.Windows.Forms.Label();
@@ -65,7 +65,7 @@
 			metaschemeAuthorLabelLabel = new System.Windows.Forms.Label();
 			metaschemeNameLabelLabel = new System.Windows.Forms.Label();
 			useGenericNameLabel = new System.Windows.Forms.Label();
-			extendedSchemeOptionsLabel = new System.Windows.Forms.Label();
+			schemeVersionLabel = new System.Windows.Forms.Label();
 			randomSeedLabel = new System.Windows.Forms.Label();
 			metaschemesRightPanel.SuspendLayout();
 			this.listBoxContextMenuStrip.SuspendLayout();
@@ -82,7 +82,7 @@
 			// numberOfSchemesLabel
 			// 
 			numberOfSchemesLabel.AutoSize = true;
-			numberOfSchemesLabel.Location = new System.Drawing.Point(0, 2);
+			numberOfSchemesLabel.Location = new System.Drawing.Point(0, 32);
 			numberOfSchemesLabel.Name = "numberOfSchemesLabel";
 			numberOfSchemesLabel.Size = new System.Drawing.Size(113, 13);
 			numberOfSchemesLabel.TabIndex = 2;
@@ -166,25 +166,25 @@
 			// useGenericNameLabel
 			// 
 			useGenericNameLabel.AutoSize = true;
-			useGenericNameLabel.Location = new System.Drawing.Point(0, 53);
+			useGenericNameLabel.Location = new System.Drawing.Point(0, 56);
 			useGenericNameLabel.Name = "useGenericNameLabel";
 			useGenericNameLabel.Size = new System.Drawing.Size(119, 13);
 			useGenericNameLabel.TabIndex = 5;
 			useGenericNameLabel.Text = "Use Generic Filenames:";
 			// 
-			// extendedSchemeOptionsLabel
+			// schemeVersionLabel
 			// 
-			extendedSchemeOptionsLabel.AutoSize = true;
-			extendedSchemeOptionsLabel.Location = new System.Drawing.Point(0, 29);
-			extendedSchemeOptionsLabel.Name = "extendedSchemeOptionsLabel";
-			extendedSchemeOptionsLabel.Size = new System.Drawing.Size(136, 13);
-			extendedSchemeOptionsLabel.TabIndex = 6;
-			extendedSchemeOptionsLabel.Text = "Extended Scheme Options:";
+			schemeVersionLabel.AutoSize = true;
+			schemeVersionLabel.Location = new System.Drawing.Point(0, 6);
+			schemeVersionLabel.Name = "schemeVersionLabel";
+			schemeVersionLabel.Size = new System.Drawing.Size(87, 13);
+			schemeVersionLabel.TabIndex = 6;
+			schemeVersionLabel.Text = "Scheme Version:";
 			// 
 			// randomSeedLabel
 			// 
 			randomSeedLabel.AutoSize = true;
-			randomSeedLabel.Location = new System.Drawing.Point(0, 75);
+			randomSeedLabel.Location = new System.Drawing.Point(0, 79);
 			randomSeedLabel.Name = "randomSeedLabel";
 			randomSeedLabel.Size = new System.Drawing.Size(78, 13);
 			randomSeedLabel.TabIndex = 8;
@@ -229,7 +229,7 @@
 			// 
 			// numberOfSchemesUpDown
 			// 
-			this.numberOfSchemesUpDown.Location = new System.Drawing.Point(139, 0);
+			this.numberOfSchemesUpDown.Location = new System.Drawing.Point(125, 30);
 			this.numberOfSchemesUpDown.Maximum = new decimal(new int[] {
             99,
             0,
@@ -359,8 +359,8 @@
 			// 
 			this.generationLeftPanel.Controls.Add(this.randomSeedTextBox);
 			this.generationLeftPanel.Controls.Add(randomSeedLabel);
-			this.generationLeftPanel.Controls.Add(this.extendedSchemeOptionsComboBox);
-			this.generationLeftPanel.Controls.Add(extendedSchemeOptionsLabel);
+			this.generationLeftPanel.Controls.Add(this.schemeVersionComboBox);
+			this.generationLeftPanel.Controls.Add(schemeVersionLabel);
 			this.generationLeftPanel.Controls.Add(useGenericNameLabel);
 			this.generationLeftPanel.Controls.Add(this.useGenericNameCheckBox);
 			this.generationLeftPanel.Controls.Add(numberOfSchemesLabel);
@@ -373,28 +373,29 @@
 			// 
 			// randomSeedTextBox
 			// 
-			this.randomSeedTextBox.Location = new System.Drawing.Point(139, 74);
+			this.randomSeedTextBox.Location = new System.Drawing.Point(125, 76);
 			this.randomSeedTextBox.Name = "randomSeedTextBox";
-			this.randomSeedTextBox.Size = new System.Drawing.Size(88, 20);
+			this.randomSeedTextBox.Size = new System.Drawing.Size(99, 20);
 			this.randomSeedTextBox.TabIndex = 9;
 			// 
-			// extendedSchemeOptionsComboBox
+			// schemeVersionComboBox
 			// 
-			this.extendedSchemeOptionsComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.extendedSchemeOptionsComboBox.FormattingEnabled = true;
-			this.extendedSchemeOptionsComboBox.Items.AddRange(new object[] {
-            "Use",
-            "Ignore",
-            "Random"});
-			this.extendedSchemeOptionsComboBox.Location = new System.Drawing.Point(139, 26);
-			this.extendedSchemeOptionsComboBox.Name = "extendedSchemeOptionsComboBox";
-			this.extendedSchemeOptionsComboBox.Size = new System.Drawing.Size(88, 21);
-			this.extendedSchemeOptionsComboBox.TabIndex = 7;
+			this.schemeVersionComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.schemeVersionComboBox.FormattingEnabled = true;
+			this.schemeVersionComboBox.Items.AddRange(new object[] {
+            "Armageddon v1",
+            "Armageddon v2",
+            "Armageddon v3",
+            "World Party"});
+			this.schemeVersionComboBox.Location = new System.Drawing.Point(125, 3);
+			this.schemeVersionComboBox.Name = "schemeVersionComboBox";
+			this.schemeVersionComboBox.Size = new System.Drawing.Size(99, 21);
+			this.schemeVersionComboBox.TabIndex = 7;
 			// 
 			// useGenericNameCheckBox
 			// 
 			this.useGenericNameCheckBox.AutoSize = true;
-			this.useGenericNameCheckBox.Location = new System.Drawing.Point(139, 53);
+			this.useGenericNameCheckBox.Location = new System.Drawing.Point(125, 56);
 			this.useGenericNameCheckBox.Name = "useGenericNameCheckBox";
 			this.useGenericNameCheckBox.Size = new System.Drawing.Size(15, 14);
 			this.useGenericNameCheckBox.TabIndex = 4;
@@ -421,7 +422,7 @@
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MinimumSize = new System.Drawing.Size(500, 300);
 			this.Name = "MainForm";
-			this.Text = "WA Random Scheme Generator";
+			this.Text = "Ultimate Random Scheme Generator";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
 			metaschemesRightPanel.ResumeLayout(false);
 			metaschemesRightPanel.PerformLayout();
@@ -460,7 +461,7 @@
 		private System.Windows.Forms.Label metaschemeAuthorLabel;
 		private System.Windows.Forms.TextBox metaschemeDescriptionTextBox;
 		private System.Windows.Forms.CheckBox useGenericNameCheckBox;
-		private System.Windows.Forms.ComboBox extendedSchemeOptionsComboBox;
+		private System.Windows.Forms.ComboBox schemeVersionComboBox;
 		private System.Windows.Forms.TextBox randomSeedTextBox;
 	}
 }

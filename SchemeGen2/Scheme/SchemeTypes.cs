@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SchemeGen2
 {
-	enum SchemeVersion
+	public enum SchemeVersion
 	{
 		Armageddon1,
 		WorldParty,

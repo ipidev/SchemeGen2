@@ -11,12 +11,19 @@ namespace SchemeGen2
 {
 	public static class SchemeGen2
 	{
-		public static bool Generate(string inputPath, string outputPath = null, int? seed = null, TextWriter errorTextWriter = null)
+		public static bool Generate(string inputPath, SchemeVersion schemeVersion, string outputPath = null, int? seed = null, TextWriter errorTextWriter = null)
 		{
 			if (!File.Exists(inputPath))
 			{
 				if (errorTextWriter != null)
 					errorTextWriter.WriteLine("File {0} does not exist.", inputPath);
+				return false;
+			}
+
+			if (schemeVersion < SchemeVersion.Armageddon1 || schemeVersion > SchemeVersion.Armageddon3)
+			{
+				if (errorTextWriter != null)
+					errorTextWriter.WriteLine("Invalid scheme version {0}.", schemeVersion);
 				return false;
 			}
 
@@ -73,7 +80,7 @@ namespace SchemeGen2
 			try
 			{
 				Random rng = seed.HasValue ? new Random(seed.Value) : new Random();
-				Scheme testScheme = schemeGenerator.GenerateScheme(rng, SchemeVersion.Armageddon3);
+				Scheme testScheme = schemeGenerator.GenerateScheme(rng, schemeVersion);
 				
 				using (FileStream fs = new FileStream(outputPath, FileMode.Create, FileAccess.Write))
 				{

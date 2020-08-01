@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using SchemeGen2;
 using SchemeGen2UI.Properties;
 using System;
 using System.Collections.Generic;
@@ -31,7 +32,7 @@ namespace SchemeGen2UI
 
 			PopulateMetaschemesListBox();
 
-			extendedSchemeOptionsComboBox.Text = "Use";
+			schemeVersionComboBox.Text = schemeVersionComboBox.Items[2].ToString();
 		}
 
 		MessageLog _currentMessageLog = null;
@@ -138,6 +139,7 @@ namespace SchemeGen2UI
 			MetaschemeFileInfo[] metaschemeFileInfos = metaschemesListBox.SelectedItems.Cast<MetaschemeFileInfo>().ToArray();
 
 			int? randomSeed = GetRandomSeed();
+			bool isUsingSetSeed = randomSeed.HasValue;
 			Random rng = randomSeed.HasValue ? new Random(randomSeed.Value) : new Random();
 			StringWriter stringWriter = new StringWriter();
 
@@ -161,16 +163,21 @@ namespace SchemeGen2UI
 				if (metaschemeFileInfo == null)
 					continue;
 
-				bool shouldUseExtendedSchemeOptions = ShouldUseExtendedSchemeOptions(rng);
-				string outputPath = GetNewMetaschemeFilePath(metaschemeFileInfo, useGenericNameCheckBox.Checked, i);
+				string outputPath = GetNewMetaschemeFilePath(metaschemeFileInfo, useGenericNameCheckBox.Checked, i / metaschemeFileInfos.Length);
 
 				try
 				{
-					SchemeGen2.SchemeGen2.Generate(metaschemeFileInfo.FullPath, outputPath, randomSeed, stringWriter);
+					SchemeGen2.SchemeGen2.Generate(metaschemeFileInfo.FullPath, GetSchemeVersion(), outputPath, randomSeed, stringWriter);
 				}
 				catch (Exception ex)
 				{
 					stringWriter.WriteLine("Exception occurred while writing to file {0}: {1}\r\nStack:\r\n{2}", outputPath, ex.Message, ex.StackTrace);
+				}
+
+				//Ensure next scheme doesn't use the same seed.
+				if (!isUsingSetSeed)
+				{
+					randomSeed = rng.Next();
 				}
 			}
 
@@ -231,18 +238,24 @@ namespace SchemeGen2UI
 			return randomSeedTextBox.Text.GetHashCode();
 		}
 
-		bool ShouldUseExtendedSchemeOptions(Random rng)
+		SchemeVersion GetSchemeVersion()
 		{
-			switch (extendedSchemeOptionsComboBox.SelectedIndex)
+			switch (schemeVersionComboBox.SelectedIndex)
 			{
 			case 0:
-				return true;
+				return SchemeVersion.Armageddon1;
+
+			case 1:
+				return SchemeVersion.Armageddon2;
 
 			case 2:
-				return rng.NextDouble() >= 0.5;
+				return SchemeVersion.Armageddon3;
+
+			case 3:
+				return SchemeVersion.WorldParty;
 			}
 
-			return false;
+			return SchemeVersion.Armageddon3;
 		}
 	}
 }

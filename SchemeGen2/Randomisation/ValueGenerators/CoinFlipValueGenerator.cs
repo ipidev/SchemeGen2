@@ -31,7 +31,7 @@ namespace SchemeGen2.Randomisation.ValueGenerators
 
         public override bool DoesValueRangeOverlap(int? min, int? max)
 		{
-			return (!min.HasValue || _headsValue >= min.Value || _tailsValue >= max.Value)
+			return (!min.HasValue || _headsValue >= min.Value || _tailsValue >= min.Value)
                 && (!max.HasValue || _headsValue <= max.Value || _tailsValue <= max.Value);
 		}
 
