@@ -270,7 +270,7 @@ namespace SchemeGen2
 			case ExtendedOptionTypes.ExplosionsPushAllObjects:
 			case ExtendedOptionTypes.UndeterminedCrates:
 			case ExtendedOptionTypes.UndeterminedFuses:
-			case ExtendedOptionTypes.PnuematicDrillImpartsVelocity:
+			case ExtendedOptionTypes.PneumaticDrillImpartsVelocity:
 			case ExtendedOptionTypes.IndianRopeGlitch:
 			case ExtendedOptionTypes.HerdDoublingGlitch:
 			case ExtendedOptionTypes.TerrainOverlapPhasingGlitch:

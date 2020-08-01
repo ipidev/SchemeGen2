@@ -121,7 +121,7 @@ namespace SchemeGen2
 			Access(ExtendedOptionTypes.UndeterminedCrates).SetValue				((int)ExtendedOptionsTriState.Default);
 			Access(ExtendedOptionTypes.UndeterminedFuses).SetValue				((int)ExtendedOptionsTriState.Default);
 			Access(ExtendedOptionTypes.PauseTimerWhileFiring).SetValue			(SchemeTypes.True);
-			Access(ExtendedOptionTypes.PnuematicDrillImpartsVelocity).SetValue	((int)ExtendedOptionsTriState.Default);
+			Access(ExtendedOptionTypes.PneumaticDrillImpartsVelocity).SetValue	((int)ExtendedOptionsTriState.Default);
 			Access(ExtendedOptionTypes.PetrolTurnDecay).SetValue				(0x3332);
 			Access(ExtendedOptionTypes.PetrolTouchDecay).SetValue				(30);
 			Access(ExtendedOptionTypes.MaximumFlameletCount).SetValue			(200);

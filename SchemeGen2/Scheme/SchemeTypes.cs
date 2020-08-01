@@ -365,7 +365,7 @@ namespace SchemeGen2
 		LossOfControlDoesntEndTurn,
 		WeaponUseDoesntEndTurn,
 		WeaponUseDoesntEndTurnDoesntBlockWeapons,
-		PnuematicDrillImpartsVelocity,
+		PneumaticDrillImpartsVelocity,
 		GirderRadiusAssist,
 		PetrolTurnDecay,
 		PetrolTouchDecay,
