@@ -1,6 +1,6 @@
 <Metascheme>
 	<Information>
-		<DisplayName>Triple Trouble</DisplayName>
+		<DisplayName>Quadruple Quarrel</DisplayName>
 		<AuthorName>ipi</AuthorName>
 		<Description>Players start with an infinite supply of three randomly-selected weapons, and Team17-style traversal options.</Description>
 	</Information>
@@ -337,7 +337,7 @@
 				<Category name="Damaging" />
 			</InclusionFilter>
 			<MaximumWeaponCount forceExcessWeaponsToValue="0">
-				<Constant value="3" />
+				<Constant value="4" />
 			</MaximumWeaponCount>
 			<MinimumSettingValue>
 				<Constant value="1" />

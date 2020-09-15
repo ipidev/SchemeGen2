@@ -140,7 +140,7 @@
     <Content Include="Metaschemes\SillyStandard.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Metaschemes\TripleTrouble.xml">
+    <Content Include="Metaschemes\QuadrupleQuarrel.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Metaschemes\Shopper.xml">
