@@ -1,254 +1,210 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace SchemeGen2
 {
-    class Scheme
-    {
-        //Scheme file-specific constants.
-        const byte WormsSchemeVersion = 0x02;
-        static readonly byte[] SchemeFileMagicNumber = { 0x53, 0x43, 0x48, 0x4D };
-        const byte SchemeGeneratorMagicNumber = 0x17;
+	class Scheme
+	{
+		//Scheme file-specific constants.
+		static readonly byte[] SchemeFileMagicNumber = { 0x53, 0x43, 0x48, 0x4D };
+		const byte SchemeGeneratorMagicNumber = 0x17;
 
-        public const int SchemeSettingsStartIndex = 4; //SchemeFileMagicNumber.Length;
-        public const int SchemeWeaponsStartIndex = SchemeSettingsStartIndex + SchemeTypes.NumberOfNonWeaponSettings;
-        public const int SchemeFileLength = SchemeWeaponsStartIndex + SchemeTypes.NumberOfWeaponSettings;
+		public const int SchemeSettingsStartIndex = 4;
+		public const int SchemeWeaponsStartIndex = SchemeSettingsStartIndex + SchemeTypes.NumberOfNonWeaponSettings;
+		public const int SchemeFileLength = SchemeWeaponsStartIndex + SchemeTypes.NumberOfWeaponSettings;
 
-        public Scheme(bool useRubberWorm)
-            : this(useRubberWorm, true)
-        {
-        }
+		public Scheme(SchemeVersion version, int extendedOptionsDataVersion = 0, bool setUpDefaults = true)
+		{
+			Version = version;
+			
+			Settings = new Setting[SchemeTypes.NumberOfNonWeaponSettings];
+			for (int i = 0; i < Settings.Length; ++i)
+			{
+				SettingTypes settingType = (SettingTypes)i;
+				Settings[i] = new Setting(settingType.ToString(), SchemeLimits.GetSettingLimits(settingType));
+			}
 
-        public Scheme(bool useRubberWorm, bool setUpDefaults)
-        {
-            _settings = new Setting[SchemeTypes.NumberOfNonWeaponSettings];
-            _weapons = new Weapon[SchemeTypes.NumberOfWeapons];
-            _useRubberWorm = useRubberWorm;
+			int weaponsCount = version >= SchemeVersion.Armageddon2 ? SchemeTypes.NumberOfWeapons : SchemeTypes.NumberOfNonSuperWeapons;
+			Weapons = new Weapon[weaponsCount];
+			for (int i = 0; i < Weapons.Length; ++i)
+			{
+				Weapons[i] = new Weapon((WeaponTypes)i);
+			}
 
-            Initialise();
+			if (version >= SchemeVersion.Armageddon3)
+			{
+				int optionsCount = SchemeTypes.GetExtendedOptionsSettingsCount(extendedOptionsDataVersion);
+				ExtendedOptions = new Setting[optionsCount];
+				for (int i = 0; i < ExtendedOptions.Length; ++i)
+				{
+					ExtendedOptionTypes extendedOption = (ExtendedOptionTypes)i;
+					ExtendedOptions[i] = new Setting(extendedOption.ToString(), SchemeLimits.GetExtendedOptionLimits(extendedOption), SchemeTypes.GetExtendedOptionSettingSize(extendedOption));
+				}
 
-            if (setUpDefaults)
-            {
-                SetUpDefaults();
-            }
-        }
+				Access(ExtendedOptionTypes.DataVersion).SetValue(extendedOptionsDataVersion);
+			}
 
-        ///////////////////////////////////////////////////////////////////////
-        // Initialisation
+			Access(SettingTypes.Version).SetValue(SchemeTypes.GetSchemeVersionNumber(version));
+			Access(SettingTypes.BountyMode).SetValue(SchemeGeneratorMagicNumber);
 
-        public void Initialise()
-        {
-            for (int i = 0; i < _settings.Length; ++i)
-            {
-                InitialiseSetting((SettingTypes)i, ref _settings[i]);
-            }
+			if (setUpDefaults)
+			{
+				SetUpDefaults();
+			}
+		}
 
-            for (int i = 0; i < _weapons.Length; ++i)
-            {
-                InitialiseWeapon((WeaponTypes)i, ref _weapons[i]);
-            }
-        }
+		public SchemeVersion Version { get; private set; }
+		public Setting[] Settings { get; private set; }
+		public Weapon[] Weapons { get; private set; }
+		public Setting[] ExtendedOptions { get; private set; }
 
-        public void InitialiseSetting(SettingTypes settingType, ref Setting setting)
-        {
-            setting = new Setting();
+		///////////////////////////////////////////////////////////////////////
+		// Initialisation
 
-            switch (settingType)
-            {
-            case SettingTypes.Version:
-                setting.SetRange(WormsSchemeVersion, WormsSchemeVersion);
-                setting.Value = WormsSchemeVersion;
-                break;
+		public void SetUpDefaults()
+		{
+			for (int i = 0; i < (int)WeaponTypes.Count; ++i)
+			{
+				WeaponTypes weaponType = (WeaponTypes)i;
+				if (SchemeTypes.CanApplyWeaponSetting(weaponType, WeaponSettings.Power) &&
+					weaponType != WeaponTypes.JetPack)
+				{
+					Access(weaponType).Power.SetValue(2);
+				}
+			}
 
-            case SettingTypes.BountyMode:
-                setting.SetRange(SchemeGeneratorMagicNumber, SchemeGeneratorMagicNumber);
-                setting.Value = SchemeGeneratorMagicNumber;
-                break;
+			//Most of these are taken from Intermediate.
+			Access(SettingTypes.HotSeatDelay).SetValue          (5);
+			Access(SettingTypes.RetreatTime).SetValue           (3);
+			Access(SettingTypes.RopeRetreatTime).SetValue       (5);
+			Access(SettingTypes.DisplayTotalRoundTime).SetValue (SchemeTypes.False);
+			Access(SettingTypes.AutomaticReplays).SetValue      (SchemeTypes.True);
+			Access(SettingTypes.FallDamage).SetValue            (SchemeTypes.True);
+			Access(SettingTypes.ArtilleryMode).SetValue         (SchemeTypes.False);
+			Access(SettingTypes.StockpilingMode).SetValue       ((byte)StockpilingModes.Off);
+			Access(SettingTypes.WormSelect).SetValue            ((byte)WormSelectModes.Off);
+			Access(SettingTypes.SuddenDeathEvent).SetValue      ((byte)SuddenDeathEvents.OneHitPoint);
+			Access(SettingTypes.WaterRiseRate).SetValue         (0x02);
+			Access(SettingTypes.DonorCards).SetValue            (SchemeTypes.False);
+			Access(SettingTypes.HealthCrateEnergy).SetValue     (25);
+			Access(SettingTypes.HazardousObjectTypes).SetValue  (0x05);
+			Access(SettingTypes.MineDelay).SetValue             (3);
+			Access(SettingTypes.DudMines).SetValue              (SchemeTypes.True);
+			Access(SettingTypes.InitialWormPlacement).SetValue  (SchemeTypes.False);
+			Access(SettingTypes.InitialWormEnergy).SetValue     (100);
+			Access(SettingTypes.TurnTime).SetValue              (45);
+			Access(SettingTypes.RoundTime).SetValue             (15);
+			Access(SettingTypes.NumberOfRounds).SetValue        (1);
+			Access(SettingTypes.TeamWeapons).SetValue           (SchemeTypes.True);
+			Access(SettingTypes.SuperWeapons).SetValue          (SchemeTypes.True);
 
-            //Boolean properties.
-            case SettingTypes.DisplayTotalRoundTime:
-            case SettingTypes.AutomaticReplays:
-            case SettingTypes.ArtilleryMode:
-            case SettingTypes.DonorCards:
-            case SettingTypes.DudMines:
-            case SettingTypes.WormPlacement:
-            case SettingTypes.Blood:
-            case SettingTypes.AquaSheep:
-            case SettingTypes.SheepHeaven:
-            case SettingTypes.GodWorms:
-            case SettingTypes.IndestructibleTerrain:
-            case SettingTypes.UpgradedGrenade:
-            case SettingTypes.UpgradedShotgun:
-            case SettingTypes.UpgradedCluster:
-            case SettingTypes.UpgradedLongbow:
-            case SettingTypes.TeamWeapons:
-            case SettingTypes.SuperWeapons:
-                setting.SetRangeToBoolean();
-                break;
+			if (Version < SchemeVersion.Armageddon3)
+				return;
 
-            //All ternary properties.
-            case SettingTypes.StockpilingMode:
-            case SettingTypes.WormSelect:
-                setting.SetRange(0x00, 0x02);
-                break;
-            
-            //All quartary properties.
-            case SettingTypes.SuddenDeathEvent:
-                setting.SetRange(0x00, 0x03);
-                break;
+			//Set extended option non-zero defaults.
+			Access(ExtendedOptionTypes.Wind).SetValue							(100);
+			Access(ExtendedOptionTypes.WindBias).SetValue						(15);
+			Access(ExtendedOptionTypes.Gravity).SetValue						(0x3D70);
+			Access(ExtendedOptionTypes.Friction).SetValue						(0xF5C2);
+			Access(ExtendedOptionTypes.RopeKnocking).SetValue					(255);
+			Access(ExtendedOptionTypes.BloodLevel).SetValue						(255);
+			Access(ExtendedOptionTypes.NoCrateProbability).SetValue				(255);
+			Access(ExtendedOptionTypes.MaximumCrateCount).SetValue				(5);
+			Access(ExtendedOptionTypes.SuddenDeathDisablesWormSelect).SetValue	(SchemeTypes.True);
+			Access(ExtendedOptionTypes.SuddenDeathWormDamagePerTurn).SetValue	(5);
+			Access(ExtendedOptionTypes.ExplosionsPushAllObjects).SetValue		((int)ExtendedOptionsTriState.Default);
+			Access(ExtendedOptionTypes.UndeterminedCrates).SetValue				((int)ExtendedOptionsTriState.Default);
+			Access(ExtendedOptionTypes.UndeterminedFuses).SetValue				((int)ExtendedOptionsTriState.Default);
+			Access(ExtendedOptionTypes.PauseTimerWhileFiring).SetValue			(SchemeTypes.True);
+			Access(ExtendedOptionTypes.PneumaticDrillImpartsVelocity).SetValue	((int)ExtendedOptionsTriState.Default);
+			Access(ExtendedOptionTypes.PetrolTurnDecay).SetValue				(0x3332);
+			Access(ExtendedOptionTypes.PetrolTouchDecay).SetValue				(30);
+			Access(ExtendedOptionTypes.MaximumFlameletCount).SetValue			(200);
+			Access(ExtendedOptionTypes.MaximumProjectileSpeed).SetValue			(0x200000);
+			Access(ExtendedOptionTypes.MaximumRopeSpeed).SetValue				(0x100000);
+			Access(ExtendedOptionTypes.MaximumJetPackSpeed).SetValue			(0x50000);
+			Access(ExtendedOptionTypes.GameEngineSpeed).SetValue				(0x10000);
+			Access(ExtendedOptionTypes.IndianRopeGlitch).SetValue				((int)ExtendedOptionsTriState.Default);
+			Access(ExtendedOptionTypes.HerdDoublingGlitch).SetValue				((int)ExtendedOptionsTriState.Default);
+			Access(ExtendedOptionTypes.JetPackBungeeGlitch).SetValue			(SchemeTypes.True);
+			Access(ExtendedOptionTypes.HerdDoublingGlitch).SetValue				(SchemeTypes.True);
+			Access(ExtendedOptionTypes.AngleCheatGlitch).SetValue				(SchemeTypes.True);
+			Access(ExtendedOptionTypes.GlideGlitch).SetValue					(SchemeTypes.True);
+			Access(ExtendedOptionTypes.FloatingWeaponGlitch).SetValue			(SchemeTypes.True);
+			Access(ExtendedOptionTypes.RubberWormGravityStrength).SetValue		(0x10000);
+			Access(ExtendedOptionTypes.TerrainOverlapPhasingGlitch).SetValue	((int)ExtendedOptionsTriState.Default);
+			Access(ExtendedOptionTypes.HealthCratesCurePoison).SetValue			((int)HealthCratesCurePoisonModes.Team);
+			Access(ExtendedOptionTypes.SheepHeavensGate).SetValue				(7);
+			Access(ExtendedOptionTypes.DoubleTimeStackLimit).SetValue			(1);
+		}
 
-            //Everything else has full byte range.
-            default:
-                //Nothing.
-                break;
-            }
-        }
-    
-        public void InitialiseWeapon(WeaponTypes weaponType, ref Weapon weapon)
-        {
-            weapon = new Weapon(SchemeTypes.IsSuperWeapon(weaponType));
+		///////////////////////////////////////////////////////////////////////
+		// Accessors
 
-            InitialiseWeaponPowerSettings(weaponType, ref weapon);
-            InitialiseWeaponCrateSettings(weaponType, ref weapon);
-        }
+		/// <summary>
+		/// Gets the given setting by reference.
+		/// </summary>
+		public Setting Access(SettingTypes setting)
+		{
+			Debug.Assert(setting < SettingTypes.Count);
+			return Settings[(int)setting];
+		}
 
-        public void InitialiseWeaponPowerSettings(WeaponTypes weaponType, ref Weapon weapon)
-        {
-            if (SchemeTypes.IsSuperWeapon(weaponType) || SchemeTypes.IsUtility(weaponType))
-            {
-                //TODO: Jetpack with RubberWorm active.
-                weapon.Power.SetRange(0x00, 0x00);
-            }
-            else
-            {
-                //TODO: Account for more than just 1-5 settings.
-                weapon.Power.SetRange(0x00, 0x04);
-                weapon.Power.Value = 0x02;
-            }
-        }
+		/// <summary>
+		/// Gets the given weapon by reference.
+		/// </summary>
+		public Weapon Access(WeaponTypes weapon)
+		{
+			Debug.Assert(weapon < WeaponTypes.Count);
+			return Weapons[(int)weapon];
+		}
 
-        public void InitialiseWeaponCrateSettings(WeaponTypes weaponType, ref Weapon weapon)
-        {
-            if (SchemeTypes.IsSuperWeapon(weaponType))
-            {
-                RubberWormSettings rubberWormSetting;
+		/// <summary>
+		/// Gets the given extended option by reference.
+		/// </summary>
+		public Setting Access(ExtendedOptionTypes extendedOption)
+		{
+			Debug.Assert(extendedOption < ExtendedOptionTypes.Count);
+			return ExtendedOptions[(int)extendedOption];
+		}
 
-                if (_useRubberWorm && SchemeTypes.WeaponTypeToRubberWormSetting(weaponType, out rubberWormSetting))
-                {
-                    switch (rubberWormSetting)
-                    {
-                    case RubberWormSettings.AntiWormSink:
-                    case RubberWormSettings.SelectWormAnyTime:
-                        weapon.Crate.SetRangeToBoolean();
-                        break;
+		/// <summary>
+		/// Outputs the scheme in the Worms Armageddon scheme format.
+		/// </summary>
+		/// <param name="stream"></param>
+		public void Serialise(System.IO.Stream stream)
+		{
+			stream.Write(SchemeFileMagicNumber, 0, SchemeFileMagicNumber.Length);
+			
+			foreach (Setting setting in Settings)
+			{
+				setting.Serialise(stream);
+			}
 
-                    //Everything else has full byte range.
-                    default:
-                        //Nothing.
-                        break;
-                    }
-                }
-                //If not using RubberWorm, the only valid crate setting is 0 for super weapons.
-                else
-                {
-                    weapon.Crate.SetRange(0x00, 0x00);
-                }
-            }
-            else if (SchemeTypes.IsUtility(weaponType))
-            {
-                weapon.Crate.SetRange(0x00, 0x00);
-            }
-            
-            //TODO: What are the valid ranges for other weapons?
-        }
+			foreach (Weapon weapon in Weapons)
+			{
+				weapon.Serialise(stream);
+			}
 
-        public void SetUpDefaults()
-        {
-            //Most of these are taken from Intermediate.
-            Access(SettingTypes.HotSeatDelay).Value             = 5;
-            Access(SettingTypes.RetreatTime).Value              = 3;
-            Access(SettingTypes.RopeRetreatTime).Value          = 5;
-            Access(SettingTypes.DisplayTotalRoundTime).Value    = SchemeTypes.False;
-            Access(SettingTypes.AutomaticReplays).Value         = SchemeTypes.False;
-            Access(SettingTypes.FallDamage).Value               = SchemeTypes.True;
-            Access(SettingTypes.ArtilleryMode).Value            = SchemeTypes.False;
-            Access(SettingTypes.StockpilingMode).Value          = (byte)StockpilingModes.Off;
-            Access(SettingTypes.WormSelect).Value               = (byte)WormSelectModes.Off;
-            Access(SettingTypes.SuddenDeathEvent).Value         = (byte)SuddenDeathEvents.Nothing;
-            Access(SettingTypes.WaterRiseRate).Value            = 0;
-            Access(SettingTypes.MineDelay).Value                = 3;
-            Access(SettingTypes.InitialWormEnergy).Value        = 100;
-            Access(SettingTypes.TurnTime).Value                 = 45;
-            Access(SettingTypes.RoundTime).Value                = 15;
-            Access(SettingTypes.NumberOfRounds).Value           = 1;
-            Access(SettingTypes.TeamWeapons).Value              = SchemeTypes.False;
-            Access(SettingTypes.SuperWeapons).Value             = SchemeTypes.True;
-        }
+			if (ExtendedOptions != null)
+			{
+				foreach (Setting extendedOption in ExtendedOptions)
+				{
+					extendedOption.Serialise(stream);
+				}
+			}
 
-        ///////////////////////////////////////////////////////////////////////
-        // Accessors
-
-        /// <summary>
-        /// Gets the given setting by reference.
-        /// </summary>
-        public Setting Access(SettingTypes setting)
-        {
-            Debug.Assert(setting < SettingTypes.Count);
-            return _settings[(int)setting];
-        }
-
-        /// <summary>
-        /// Gets the given weapon by reference.
-        /// </summary>
-        public Weapon Access(WeaponTypes weapon)
-        {
-            Debug.Assert(weapon < WeaponTypes.Count);
-            return _weapons[(int)weapon];
-        }
-
-        public byte[] GetBytes()
-        {
-            byte[] bytes = new byte[SchemeFileLength];
-            SchemeFileMagicNumber.CopyTo(bytes, 0);
-
-            GetSettingsBytes().CopyTo(bytes, SchemeSettingsStartIndex);
-            GetWeaponSettingsBytes().CopyTo(bytes, SchemeWeaponsStartIndex);
-
-            return bytes;
-        }
-
-        byte[] GetSettingsBytes()
-        {
-            byte[] bytes = new byte[SchemeTypes.NumberOfNonWeaponSettings];
-
-            for (int i = 0; i < bytes.Length; ++i)
-            {
-                bytes[i] = _settings[i].Value;
-            }
-
-            return bytes;
-        }
-
-        byte[] GetWeaponSettingsBytes()
-        {
-            byte[] bytes = new byte[SchemeTypes.NumberOfWeaponSettings];
-
-            for (int i = 0; i < SchemeTypes.NumberOfWeapons; ++i)
-            {
-                int baseByteIndex = i * (int)WeaponSettings.Count;
-
-               _weapons[i].GetBytes().CopyTo(bytes, baseByteIndex);
-            }
-
-            return bytes;
-        }
-
-        Setting[] _settings;
-        Weapon[] _weapons;
-        bool _useRubberWorm;
-    }
+			if (Version == SchemeVersion.WorldParty)
+			{
+				stream.Write(new byte[3], 0, 3);
+				stream.Write(SchemeFileMagicNumber, 0, SchemeFileMagicNumber.Length);
+				stream.WriteByte(1);
+			}
+		}
+	}
 }

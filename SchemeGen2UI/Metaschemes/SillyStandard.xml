@@ -1,0 +1,920 @@
+<Metascheme>
+	<Information>
+		<DisplayName>Silly Standard</DisplayName>
+		<AuthorName>ipi</AuthorName>
+		<Description>Generates an Intermediate-like scheme with most physics/gameplay/RubberWorm options being possible to select.</Description>
+	</Information>
+	
+	<Settings>
+		<HotSeatDelay>
+			<Range min="0" max="10" />
+		</HotSeatDelay>
+		<RetreatTime>
+			<Range min="0" max="10" />
+		</RetreatTime>
+		<RopeRetreatTime>
+			<Range min="0" max="10" />
+		</RopeRetreatTime>
+		<DisplayTotalRoundTime>
+			<Boolean chance="0.5" />
+		</DisplayTotalRoundTime>
+		<AutomaticReplays>
+			<Boolean chance="0.5" />
+		</AutomaticReplays>
+		<FallDamage>
+			<Range min="0" max="255" />
+		</FallDamage>
+		<StockpilingMode>
+			<Constant value="0" />
+		</StockpilingMode>
+		<WormSelect>
+			<WeightedSelector>
+				<Selection>
+					<Constant value="0" />
+				</Selection>
+				<Selection>
+					<Range min="0" max="2" />
+				</Selection>
+			</WeightedSelector>
+		</WormSelect>
+		<SuddenDeathEvent>
+			<Range min="1" max="3" />
+		</SuddenDeathEvent>
+		<WaterRiseRate>
+			<WeightedSelector>
+				<Selection>
+					<Range min="1" max="3" />
+				</Selection>
+				<Selection>
+					<Range min="0" max="7" />
+				</Selection>
+			</WeightedSelector>
+		</WaterRiseRate>
+		<WeaponCrateProbability>
+			<Range min="0" max="100" />
+		</WeaponCrateProbability>
+		<DonorCards>
+			<Constant value="False" />
+		</DonorCards>
+		<HealthCrateProbability>
+			<Range min="0" max="100" />
+		</HealthCrateProbability>
+		<HealthCrateEnergy>
+			<Range min="0" max="255" />
+		</HealthCrateEnergy>
+		<UtilityCrateProbability>
+			<Range min="0" max="100" />
+		</UtilityCrateProbability>
+		<HazardousObjectTypes>
+			<Range min="0" max="60" />
+		</HazardousObjectTypes>
+		<InitialWormPlacement>
+			<Constant value="False" />
+		</InitialWormPlacement>
+		<InitialWormEnergy>
+			<WeightedSelector>
+				<Selection>
+					<Range min="50" max="150" />
+				</Selection>
+				<Selection>
+					<Range min="1" max="255" />
+				</Selection>
+			</WeightedSelector>
+		</InitialWormEnergy>
+		<TurnTime>
+			<Range min="15" max="60" />
+		</TurnTime>
+		<RoundTime>
+			<Range min="0" max="15" />
+		</RoundTime>
+		<NumberOfRounds>
+			<Constant value="1" />
+		</NumberOfRounds>
+		<Blood>
+			<Boolean chance="0.5" />
+		</Blood>
+		<AquaSheep>
+			<Boolean chance="0.5" />
+		</AquaSheep>
+		<SheepHeaven>
+			<Boolean chance="0.25" />
+		</SheepHeaven>
+		<IndestructibleTerrain>
+			<Boolean chance="0.25" />
+		</IndestructibleTerrain>
+		<UpgradedGrenade>
+			<Boolean chance="0.25" />
+		</UpgradedGrenade>
+		<UpgradedShotgun>
+			<Boolean chance="0.25" />
+		</UpgradedShotgun>
+		<UpgradedCluster>
+			<Boolean chance="0.25" />
+		</UpgradedCluster>
+		<UpgradedLongbow>
+			<Boolean chance="0.25" />
+		</UpgradedLongbow>
+		<TeamWeapons>
+			<Constant value="False" />
+		</TeamWeapons>
+		<SuperWeapons>
+			<Constant value="True" />
+		</SuperWeapons>
+	</Settings>
+	
+	<Weapons>
+		<!-- Setup delay/crate rates for all weapons -->
+		<Default>
+			<Ammo>
+				<WeightedSelector>
+					<Selection>
+						<Constant value="0" />
+					</Selection>
+					<Selection weight="1.5">
+						<Range min="0" max="3" />
+					</Selection>
+					<Selection>
+						<Range min="0" max="10" />
+					</Selection>
+				</WeightedSelector>
+			</Ammo>
+			<Delay>
+				<WeightedSelector>
+					<Selection weight="3">
+						<Constant value="0" />
+					</Selection>
+					<Selection weight="2">
+						<Range min="0" max="5" />
+					</Selection>
+					<Selection weight="1.5">
+						<Range min="0" max="10" />
+					</Selection>
+					<Selection weight="1">
+						<Range min="0" max="15" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="5" />
+			</Crate>
+		</Default>
+		<!-- Setup weapon powers -->
+		<Bazooka>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</Bazooka>
+		<HomingMissile>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</HomingMissile>
+		<Mortar>
+			<Power>
+				<Range min="0" max="14" />
+			</Power>
+		</Mortar>
+		<Grenade>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</Grenade>
+		<ClusterBomb>
+			<Power>
+				<Range min="0" max="14" />
+			</Power>
+		</ClusterBomb>
+		<Skunk>
+			<Power>
+				<Range min="0" max="9" />
+			</Power>
+		</Skunk>
+		<PetrolBomb>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</PetrolBomb>
+		<BananaBomb>
+			<Power>
+				<Range min="0" max="14" />
+			</Power>
+		</BananaBomb>
+		<Handgun>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</Handgun>
+		<Shotgun>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</Shotgun>
+		<Uzi>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</Uzi>
+		<Minigun>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</Minigun>
+		<Longbow>
+			<Power>
+				<Range min="0" max="9" />
+			</Power>
+		</Longbow>
+		<AirStrike>
+			<Power>
+				<Range min="0" max="14" />
+			</Power>
+		</AirStrike>
+		<NapalmStrike>
+			<Power>
+				<Range min="0" max="14" />
+			</Power>
+		</NapalmStrike>
+		<Mine>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</Mine>
+		<FirePunch>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</FirePunch>
+		<DragonBall>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</DragonBall>
+		<Kamikaze>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</Kamikaze>
+		<Prod>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</Prod>
+		<BattleAxe>
+			<Power>
+				<Range min="0" max="4" />
+			</Power>
+		</BattleAxe>
+		<BlowTorch>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</BlowTorch>
+		<PneumaticDrill>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</PneumaticDrill>
+		<Dynamite>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</Dynamite>
+		<Sheep>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</Sheep>
+		<BaseballBat>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</BaseballBat>
+		<FlameThrower>
+			<Power>
+				<Range min="0" max="14" />
+			</Power>
+		</FlameThrower>
+		<HomingPigeon>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</HomingPigeon>
+		<MadCow>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</MadCow>
+		<HolyHandGrenade>
+			<Power>
+				<Range min="0" max="2" />
+			</Power>
+		</HolyHandGrenade>
+		<OldWoman>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</OldWoman>
+		<SheepLauncher>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</SheepLauncher>
+		<SuperSheep>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</SuperSheep>
+		<MoleBomb>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</MoleBomb>
+		<!-- Setup different stats for traversal weapons -->
+		<Girder>
+			<Ammo>
+				<WeightedSelector>
+					<Selection>
+						<CoinFlip headsValue="1" tailsValue="0" headsChance="0.5" />
+					</Selection>
+					<Selection>
+						<Range min="0" max="5" />
+					</Selection>
+				</WeightedSelector>
+			</Ammo>
+			<Power>
+				<Range min="0" max="255" />
+			</Power>
+		</Girder>
+		<NinjaRope>
+			<Ammo>
+				<WeightedSelector>
+					<Selection>
+						<CoinFlip headsValue="1" tailsValue="0" headsChance="0.5" />
+					</Selection>
+					<Selection>
+						<Range min="0" max="5" />
+					</Selection>
+				</WeightedSelector>
+			</Ammo>
+			<Power>
+				<Range min="0" max="4" />
+			</Power>
+		</NinjaRope>
+		<Parachute>
+			<Ammo>
+				<WeightedSelector>
+					<Selection>
+						<CoinFlip headsValue="1" tailsValue="0" headsChance="0.5" />
+					</Selection>
+					<Selection>
+						<Range min="0" max="5" />
+					</Selection>
+				</WeightedSelector>
+			</Ammo>
+		</Parachute>
+		<Bungee>
+			<Ammo>
+				<WeightedSelector>
+					<Selection>
+						<CoinFlip headsValue="1" tailsValue="0" headsChance="0.5" />
+					</Selection>
+					<Selection>
+						<Range min="0" max="5" />
+					</Selection>
+				</WeightedSelector>
+			</Ammo>
+		</Bungee>
+		<Teleport>
+			<Ammo>
+				<WeightedSelector>
+					<Selection>
+						<CoinFlip headsValue="1" tailsValue="0" headsChance="0.5" />
+					</Selection>
+					<Selection>
+						<Range min="0" max="5" />
+					</Selection>
+				</WeightedSelector>
+			</Ammo>
+		</Teleport>
+		<JetPack>
+			<Ammo>
+				<WeightedSelector>
+					<Selection>
+						<CoinFlip headsValue="1" tailsValue="0" headsChance="0.333" />
+					</Selection>
+					<Selection>
+						<Range min="0" max="5" />
+					</Selection>
+				</WeightedSelector>
+			</Ammo>
+			<Power>
+				<WeightedSelector>
+					<Selection>
+						<Constant value="0" />
+					</Selection>
+					<Selection>
+						<Range min="0" max="255" />
+					</Selection>
+				</WeightedSelector>
+			</Power>
+		</JetPack>
+		<!-- Sometimes enable double damage at a later point -->
+		<DoubleDamage>
+			<Ammo>
+				<WeightedSelector>
+					<Selection weight="3">
+						<Constant value="0" />
+					</Selection>
+					<Selection>
+						<Range min="0" max="5" />
+					</Selection>
+				</WeightedSelector>
+			</Ammo>
+			<Delay>
+				<Range min="0" max="20" />
+			</Delay>
+		</DoubleDamage>
+		<!-- Setup bespoke delays for some super weapons -->
+		<NuclearTest>
+			<Delay>
+				<Range min="5" max="30" />
+			</Delay>
+		</NuclearTest>
+		<ConcreteDonkey>
+			<Delay>
+				<Range min="5" max="30" />
+			</Delay>
+		</ConcreteDonkey>
+		<Armageddon>
+			<Delay>
+				<Range min="5" max="30" />
+			</Delay>
+		</Armageddon>
+	</Weapons>
+	
+	<ExtendedOptions version="0">
+		<!-- Physics -->
+		<Wind>
+			<WeightedSelector>
+				<Selection weight="1">
+					<Constant value="0" />
+				</Selection>
+				<Selection weight="2">
+					<Range min="50" max="150" step="50" />
+				</Selection>
+				<Selection weight="2">
+					<Range min="-200" max="500" step="50" />
+				</Selection>
+			</WeightedSelector>
+		</Wind>
+		<WindBias>
+			<Range min="0" max="32" />
+		</WindBias>
+		<Gravity>
+			<WeightedSelector>
+				<Selection weight="2">
+					<Constant value="15728" />
+				</Selection>
+				<Selection weight="1.5">
+					<Range min="11796" max="19660" step="1966" />
+				</Selection>
+				<Selection weight="1.5">
+					<Range min="1966" max="15728" step="1966" />
+				</Selection>
+				<Selection weight="1">
+					<Range min="15728" max="62912" step="1966" />
+				</Selection>
+			</WeightedSelector>
+		</Gravity>
+		<Friction>
+			<WeightedSelector>
+				<Selection>
+					<Constant value="62914" />
+				</Selection>
+				<Selection>
+					<Range min="62914" max="65100" step="437" />
+				</Selection>
+				<Selection>
+					<Range min="14402" max="62914" step="6064" />
+				</Selection>
+				<Selection>
+					<Constant value="0" />
+				</Selection>
+			</WeightedSelector>
+		</Friction>
+		<RopeKnocking>
+			<Range min="0" max="255" />
+		</RopeKnocking>
+		<BloodLevel>
+			<Range min="0" max="255" />
+		</BloodLevel>
+		<UnrestrictRope>
+			<Boolean chance="0.8" />
+		</UnrestrictRope>
+		<AutoPlaceWormsByAlly>
+			<Boolean chance="0.2" />
+		</AutoPlaceWormsByAlly>
+		<NoCrateProbability>
+			<WeightedSelector>
+				<Selection>
+					<Constant value="255" />
+				</Selection>
+				<Selection>
+					<Range min="0" max="100" />
+				</Selection>
+			</WeightedSelector>
+		</NoCrateProbability>
+		<MaximumCrateCount>
+			<Constant value="20" />
+		</MaximumCrateCount>
+		<SuddenDeathDisablesWormSelect>
+			<Boolean chance="0.75" />
+		</SuddenDeathDisablesWormSelect>
+		<SuddenDeathWormDamagePerTurn>
+			<WeightedSelector>
+				<Selection value="2">
+					<Range min="1" max="30" />
+				</Selection>
+				<Selection value="1">
+					<Range min="1" max="255" />
+				</Selection>
+			</WeightedSelector>
+		</SuddenDeathWormDamagePerTurn>
+		<AlliedPhasedWorms>
+			<Boolean chance="0.333" />
+		</AlliedPhasedWorms>
+		<EnemyPhasedWorms>
+			<Boolean chance="0.333" />
+		</EnemyPhasedWorms>
+		<CircularAim>
+			<Boolean chance="0.333" />
+		</CircularAim>
+		<AntiLockAim>
+			<Boolean chance="0.333" />
+		</AntiLockAim>
+		<AntiLockPower>
+			<Boolean chance="0.333" />
+		</AntiLockPower>
+		<WormSelectionDoesntEndHotSeat>
+			<Boolean chance="0.5" />
+		</WormSelectionDoesntEndHotSeat>
+		<WormSelectionNeverCancelled>
+			<Boolean chance="0.2" />
+		</WormSelectionNeverCancelled>
+		<BattyRope>
+			<Boolean chance="0.5" />
+		</BattyRope>
+		<RopeRollDrops>
+			<Constant value="2" />
+		</RopeRollDrops>
+		<XImpactLossOfControl>
+			<Constant value="255" />
+		</XImpactLossOfControl>
+		<KeepControlAfterBumpingHead>
+			<Constant value="True" />
+		</KeepControlAfterBumpingHead>
+		<KeepControlAfterSkimming>
+			<Constant value="2" />
+		</KeepControlAfterSkimming>
+		<FallDamageTriggeredByExplosions>
+			<Boolean chance="0.25" />
+		</FallDamageTriggeredByExplosions>
+		<ExplosionsPushAllObjects>
+			<Boolean chance="0.5" />
+		</ExplosionsPushAllObjects>
+		<PneumaticDrillImpartsVelocity>
+			<Boolean chance="0.5" />
+		</PneumaticDrillImpartsVelocity>
+		<GirderRadiusAssist>
+			<Constant value="True" />
+		</GirderRadiusAssist>
+		<PetrolTurnDecay>
+			<Range min="1" max="26211" />
+		</PetrolTurnDecay>
+		<PetrolTouchDecay>
+			<Range min="5" max="50" />
+		</PetrolTouchDecay>
+		<MaximumFlameletCount>
+			<Constant value="500" />
+		</MaximumFlameletCount>
+		<MaximumProjectileSpeed>
+			<WeightedSelector>
+				<Selection>
+					<Constant value="2097152" />
+				</Selection>
+				<Selection>
+					<Range min="0" max="2097152" />
+				</Selection>
+				<Selection>
+					<Range min="2097152" max="2147483647" />
+				</Selection>
+			</WeightedSelector>
+		</MaximumProjectileSpeed>
+		<MaximumRopeSpeed>
+			<WeightedSelector>
+				<Selection>
+					<Constant value="1048576" />
+				</Selection>
+				<Selection>
+					<Range min="0" max="1048576" />
+				</Selection>
+				<Selection>
+					<Range min="1048576" max="2147483647" />
+				</Selection>
+			</WeightedSelector>
+		</MaximumRopeSpeed>
+		<MaximumJetPackSpeed>
+			<WeightedSelector>
+				<Selection>
+					<Constant value="327680" />
+				</Selection>
+				<Selection>
+					<Range min="0" max="327680" />
+				</Selection>
+				<Selection>
+					<Range min="327680" max="2147483647" />
+				</Selection>
+			</WeightedSelector>
+		</MaximumJetPackSpeed>
+		<GameEngineSpeed>
+			<WeightedSelector>
+				<Selection value="2">
+					<Constant value="65536" />
+				</Selection>
+				<Selection>
+					<Range min="49152" max="81920" step="8192" />
+				</Selection>
+				<Selection>
+					<Range min="32768" max="163840" step="16384" />
+				</Selection>
+			</WeightedSelector>
+		</GameEngineSpeed>
+		<SheepHeavensGate>
+			<Constant value="3" />
+		</SheepHeavensGate>
+		<ConserveInstantUtilities>
+			<Constant value="True" />
+		</ConserveInstantUtilities>
+		<DoubleTimeStackLimit>
+			<Constant value="0" />
+		</DoubleTimeStackLimit>
+		<!-- Glitches -->
+		<IndianRopeGlitch>
+			<Constant value="False" />
+		</IndianRopeGlitch>
+		<HerdDoublingGlitch>
+			<Constant value="False" />
+		</HerdDoublingGlitch>
+		<JetPackBungeeGlitch>
+			<Constant value="False" />
+		</JetPackBungeeGlitch>
+		<AngleCheatGlitch>
+			<Constant value="False" />
+		</AngleCheatGlitch>
+		<Skipwalking>
+			<Constant value="255" />
+		</Skipwalking>
+		<BlockRoofing>
+			<Constant value="2" />
+		</BlockRoofing>
+		<FloatingWeaponGlitch>
+			<Constant value="False" />
+		</FloatingWeaponGlitch>
+		<TerrainOverlapPhasingGlitch>
+			<Constant value="False" />
+		</TerrainOverlapPhasingGlitch>
+		<!-- RubberWorm -->
+		<RubberWormBounciness>
+			<WeightedSelector>
+				<Selection value="2">
+					<Constant value="0" />
+				</Selection>
+				<Selection>
+					<Range min="0" max="62259" />
+				</Selection>
+			</WeightedSelector>
+		</RubberWormBounciness>
+		<RubberWormAirViscosity>
+			<WeightedSelector>
+				<Selection value="2">
+					<Constant value="0" />
+				</Selection>
+				<Selection>
+					<Range min="0" max="4096" />
+				</Selection>
+				<Selection>
+					<Range min="0" max="16384" />
+				</Selection>
+			</WeightedSelector>
+		</RubberWormAirViscosity>
+		<RubberWormAirViscosityAppliesToWorms>
+			<Boolean chance="0.25" />
+		</RubberWormAirViscosityAppliesToWorms>
+		<RubberWormWindInfluence>
+			<WeightedSelector>
+				<Selection value="2">
+					<Constant value="0" />
+				</Selection>
+				<Selection>
+					<Range min="0" max="16384" />
+				</Selection>
+				<Selection>
+					<Range min="0" max="65536" />
+				</Selection>
+			</WeightedSelector>
+		</RubberWormWindInfluence>
+		<RubberWormWindInfluenceAppliesToWorms>
+			<Boolean chance="0.25" />
+		</RubberWormWindInfluenceAppliesToWorms>
+		<RubberWormCrateRate>
+			<WeightedSelector>
+				<Selection weight="2">
+					<Constant value="0" />
+				</Selection>
+				<Selection>
+					<Range min="0" max="5" />
+				</Selection>
+			</WeightedSelector>
+		</RubberWormCrateRate>
+		<RubberWormCrateShower>
+			<Boolean chance="0.1" />
+		</RubberWormCrateShower>
+		<RubberWormAntiSink>
+			<Boolean chance="0.25" />
+		</RubberWormAntiSink>
+		<RubberWormRememberWeapons>
+			<Constant value="True" />
+		</RubberWormRememberWeapons>
+		<RubberWormExtendedFuses>
+			<Constant value="True" />
+		</RubberWormExtendedFuses>
+		<RubberWormKaosMod>
+			<Range min="0" max="5" />
+		</RubberWormKaosMod>
+	</ExtendedOptions>
+	
+	<Guarantees>
+		<!-- Limit the number of super weapons with infinite ammo -->
+		<WeaponSetting setting="Ammo">
+			<InclusionFilter>
+				<Category name="SuperWeapon" />
+			</InclusionFilter>
+			<MaximumWeaponCount forceExcessWeaponsToValue="1">
+				<Range min="0" max="3" />
+			</MaximumWeaponCount>
+			<MinimumSettingValue>
+				<Constant value="10" />
+			</MinimumSettingValue>
+		</WeaponSetting>
+		<!-- Limit the number of super weapons with starting ammo -->
+		<WeaponSetting setting="Ammo">
+			<InclusionFilter>
+				<Category name="SuperWeapon" />
+			</InclusionFilter>
+			<MaximumWeaponCount forceExcessWeaponsToValue="0">
+				<Range min="0" max="10" />
+			</MaximumWeaponCount>
+			<MinimumSettingValue>
+				<Constant value="1" />
+			</MinimumSettingValue>
+		</WeaponSetting>
+		<!-- Ensure some regular weapons are obtainable from the start -->
+		<WeaponSetting setting="Delay">
+			<InclusionFilter>
+				<Category name="Damaging" />
+			</InclusionFilter>
+			<ExclusionFilter>
+				<Category name="SuperWeapon" />
+			</ExclusionFilter>
+			<MinimumWeaponCount>
+				<Range min="5" max="20" />
+			</MinimumWeaponCount>
+			<MaximumSettingValue>
+				<Constant value="0" />
+			</MaximumSettingValue>
+		</WeaponSetting>
+		<!-- Ensure some launched weapons have infinite ammo  -->
+		<WeaponSetting setting="Ammo">
+			<InclusionFilter>
+				<Category name="Launched" />
+			</InclusionFilter>
+			<ExclusionFilter>
+				<Category name="SuperWeapon" />
+			</ExclusionFilter>
+			<MinimumWeaponCount>
+				<Range min="2" max="4" />
+			</MinimumWeaponCount>
+			<MinimumSettingValue>
+				<Constant value="10" />
+			</MinimumSettingValue>
+		</WeaponSetting>
+		<!-- Ensure some launched weapons have zero delay -->
+		<WeaponSetting setting="Delay">
+			<InclusionFilter>
+				<Category name="Launched" />
+			</InclusionFilter>
+			<ExclusionFilter>
+				<Category name="SuperWeapon" />
+			</ExclusionFilter>
+			<MinimumWeaponCount>
+				<Range min="2" max="5" />
+			</MinimumWeaponCount>
+			<MaximumSettingValue>
+				<Constant value="0" />
+			</MaximumSettingValue>
+		</WeaponSetting>
+		<!-- Ensure some melee weapons have infinite ammo  -->
+		<WeaponSetting setting="Ammo">
+			<InclusionFilter>
+				<Category name="Melee" />
+			</InclusionFilter>
+			<ExclusionFilter>
+				<Category name="SuperWeapon" />
+			</ExclusionFilter>
+			<MinimumWeaponCount>
+				<Range min="1" max="2" />
+			</MinimumWeaponCount>
+			<MinimumSettingValue>
+				<Constant value="10" />
+			</MinimumSettingValue>
+		</WeaponSetting>
+		<!-- Occasionally force some firearm weapons to have infinite ammo  -->
+		<WeaponSetting setting="Ammo">
+			<InclusionFilter>
+				<Category name="Firearm" />
+			</InclusionFilter>
+			<MinimumWeaponCount>
+				<Range min="0" max="2" />
+			</MinimumWeaponCount>
+			<MinimumSettingValue>
+				<Constant value="10" />
+			</MinimumSettingValue>
+		</WeaponSetting>
+		<!-- Ensure one cluster weapon appears  -->
+		<WeaponSetting setting="Ammo">
+			<InclusionFilter>
+				<Category name="Cluster" />
+			</InclusionFilter>
+			<MinimumWeaponCount>
+				<Constant value="1" />
+			</MinimumWeaponCount>
+			<MinimumSettingValue>
+				<Constant value="1" />
+			</MinimumSettingValue>
+		</WeaponSetting>
+		<!-- Ensure one dropped weapon appears  -->
+		<WeaponSetting setting="Ammo">
+			<InclusionFilter>
+				<Category name="Dropped" />
+			</InclusionFilter>
+			<ExclusionFilter>
+				<Category name="Animal" />
+			</ExclusionFilter>
+			<MinimumWeaponCount>
+				<Constant value="1" />
+			</MinimumWeaponCount>
+			<MinimumSettingValue>
+				<Constant value="1" />
+			</MinimumSettingValue>
+		</WeaponSetting>
+		<!-- Ensure one animal weapon appears  -->
+		<WeaponSetting setting="Ammo">
+			<InclusionFilter>
+				<Category name="Animal" />
+			</InclusionFilter>
+			<ExclusionFilter>
+				<Category name="Strike" />
+			</ExclusionFilter>
+			<MinimumWeaponCount>
+				<Constant value="1" />
+			</MinimumWeaponCount>
+			<MinimumSettingValue>
+				<Constant value="1" />
+			</MinimumSettingValue>
+		</WeaponSetting>
+		<!-- Ensure some traversal weapons appear  -->
+		<WeaponSetting setting="Ammo">
+			<InclusionFilter>
+				<Category name="Traversal" />
+			</InclusionFilter>
+			<MinimumWeaponCount>
+				<Range min="1" max="4" />
+			</MinimumWeaponCount>
+			<MinimumSettingValue>
+				<Range min="1" max="3" />
+			</MinimumSettingValue>
+		</WeaponSetting>
+		<!-- Ensure some traversal weapons have zero delay  -->
+		<WeaponSetting setting="Delay">
+			<InclusionFilter>
+				<Category name="Traversal" />
+			</InclusionFilter>
+			<MinimumWeaponCount>
+				<Range min="1" max="3" />
+			</MinimumWeaponCount>
+			<MaximumSettingValue>
+				<Constant value="0" />
+			</MaximumSettingValue>
+		</WeaponSetting>
+	</Guarantees>
+</Metascheme>

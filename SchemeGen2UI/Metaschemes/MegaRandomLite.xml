@@ -1,0 +1,1537 @@
+<Metascheme>
+	<Information>
+		<DisplayName>MegaRandom Lite</DisplayName>
+		<AuthorName>ipi</AuthorName>
+		<Description>Similar to MegaRandom, but retreat times, mine fuses and weapon delays are capped, and annoying options (such as artillery mode and indestructable terrain) are less likely.</Description>
+	</Information>
+	<Settings>
+		<HotSeatDelay>
+			<Range min="0" max="10" />
+		</HotSeatDelay>
+		<RetreatTime>
+			<Range min="0" max="10" />
+		</RetreatTime>
+		<RopeRetreatTime>
+			<Range min="0" max="10" />
+		</RopeRetreatTime>
+		<DisplayTotalRoundTime>
+			<Boolean chance="0.5" />
+		</DisplayTotalRoundTime>
+		<AutomaticReplays>
+			<Boolean chance="0.5" />
+		</AutomaticReplays>
+		<FallDamage>
+			<Range min="0" max="255" />
+		</FallDamage>
+		<ArtilleryMode>
+			<Boolean chance="0.15" />
+		</ArtilleryMode>
+		<StockpilingMode>
+			<Range min="0" max="2" />
+		</StockpilingMode>
+		<WormSelect>
+			<Range min="0" max="2" />
+		</WormSelect>
+		<SuddenDeathEvent>
+			<Range min="0" max="3" />
+		</SuddenDeathEvent>
+		<WaterRiseRate>
+			<Range min="0" max="255" />
+		</WaterRiseRate>
+		<WeaponCrateProbability>
+			<Range min="0" max="127" />
+		</WeaponCrateProbability>
+		<DonorCards>
+			<Boolean chance="0.5" />
+		</DonorCards>
+		<HealthCrateProbability>
+			<Range min="0" max="127" />
+		</HealthCrateProbability>
+		<HealthCrateEnergy>
+			<Range min="0" max="255" />
+		</HealthCrateEnergy>
+		<UtilityCrateProbability>
+			<Range min="0" max="127" />
+		</UtilityCrateProbability>
+		<HazardousObjectTypes>
+			<Range min="0" max="255" />
+		</HazardousObjectTypes>
+		<MineDelay>
+			<Range min="0" max="5" />
+		</MineDelay>
+		<DudMines>
+			<Boolean chance="0.5" />
+		</DudMines>
+		<InitialWormPlacement>
+			<Boolean chance="0.5" />
+		</InitialWormPlacement>
+		<InitialWormEnergy>
+			<Range min="0" max="255" />
+		</InitialWormEnergy>
+		<TurnTime>
+			<Range min="0" max="255" />
+		</TurnTime>
+		<RoundTime>
+			<Range min="0" max="255" />
+		</RoundTime>
+		<NumberOfRounds>
+			<Range min="0" max="255" />
+		</NumberOfRounds>
+		<Blood>
+			<Boolean chance="0.5" />
+		</Blood>
+		<AquaSheep>
+			<Boolean chance="0.5" />
+		</AquaSheep>
+		<SheepHeaven>
+			<Boolean chance="0.5" />
+		</SheepHeaven>
+		<GodWorms>
+			<Boolean chance="0.5" />
+		</GodWorms>
+		<IndestructibleTerrain>
+			<Boolean chance="0.15" />
+		</IndestructibleTerrain>
+		<UpgradedGrenade>
+			<Boolean chance="0.5" />
+		</UpgradedGrenade>
+		<UpgradedShotgun>
+			<Boolean chance="0.5" />
+		</UpgradedShotgun>
+		<UpgradedCluster>
+			<Boolean chance="0.5" />
+		</UpgradedCluster>
+		<UpgradedLongbow>
+			<Boolean chance="0.5" />
+		</UpgradedLongbow>
+		<TeamWeapons>
+			<Boolean chance="0.5" />
+		</TeamWeapons>
+		<SuperWeapons>
+			<Boolean chance="0.5" />
+		</SuperWeapons>
+	</Settings>
+	<!-- Delay weighted selectors mirror delay values of 0x80-0xFF (infinite delay) selectable by MegaRandom. -->
+	<Weapons>
+		<Bazooka>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="255" />
+			</Crate>
+		</Bazooka>
+		<HomingMissile>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="255" />
+			</Crate>
+		</HomingMissile>
+		<Mortar>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Power>
+				<Range min="0" max="14" />
+			</Power>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="255" />
+			</Crate>
+		</Mortar>
+		<Grenade>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="255" />
+			</Crate>
+		</Grenade>
+		<ClusterBomb>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Power>
+				<Range min="0" max="14" />
+			</Power>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="255" />
+			</Crate>
+		</ClusterBomb>
+		<Skunk>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Power>
+				<Range min="0" max="9" />
+			</Power>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="255" />
+			</Crate>
+		</Skunk>
+		<PetrolBomb>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="255" />
+			</Crate>
+		</PetrolBomb>
+		<BananaBomb>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Power>
+				<Range min="0" max="14" />
+			</Power>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="255" />
+			</Crate>
+		</BananaBomb>
+		<Handgun>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="255" />
+			</Crate>
+		</Handgun>
+		<Shotgun>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="255" />
+			</Crate>
+		</Shotgun>
+		<Uzi>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="255" />
+			</Crate>
+		</Uzi>
+		<Minigun>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="255" />
+			</Crate>
+		</Minigun>
+		<Longbow>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Power>
+				<Range min="0" max="9" />
+			</Power>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="255" />
+			</Crate>
+		</Longbow>
+		<AirStrike>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Power>
+				<Range min="0" max="14" />
+			</Power>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="255" />
+			</Crate>
+		</AirStrike>
+		<NapalmStrike>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Power>
+				<Range min="0" max="14" />
+			</Power>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="255" />
+			</Crate>
+		</NapalmStrike>
+		<Mine>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="255" />
+			</Crate>
+		</Mine>
+		<FirePunch>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="255" />
+			</Crate>
+		</FirePunch>
+		<DragonBall>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="255" />
+			</Crate>
+		</DragonBall>
+		<Kamikaze>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="255" />
+			</Crate>
+		</Kamikaze>
+		<Prod>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="255" />
+			</Crate>
+		</Prod>
+		<BattleAxe>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Power>
+				<Range min="0" max="4" />
+			</Power>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="255" />
+			</Crate>
+		</BattleAxe>
+		<BlowTorch>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="255" />
+			</Crate>
+		</BlowTorch>
+		<PneumaticDrill>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="255" />
+			</Crate>
+		</PneumaticDrill>
+		<Girder>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="255" />
+			</Crate>
+		</Girder>
+		<NinjaRope>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Power>
+				<Range min="0" max="4" />
+			</Power>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="255" />
+			</Crate>
+		</NinjaRope>
+		<Parachute>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="255" />
+			</Crate>
+		</Parachute>
+		<Bungee>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="255" />
+			</Crate>
+		</Bungee>
+		<Teleport>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Delay>
+				<Range min="0" max="15" />
+			</Delay>
+			<Crate>
+				<Range min="0" max="255" />
+			</Crate>
+		</Teleport>
+		<Dynamite>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="255" />
+			</Crate>
+		</Dynamite>
+		<Sheep>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="255" />
+			</Crate>
+		</Sheep>
+		<BaseballBat>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="255" />
+			</Crate>
+		</BaseballBat>
+		<FlameThrower>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Power>
+				<Range min="0" max="14" />
+			</Power>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="255" />
+			</Crate>
+		</FlameThrower>
+		<HomingPigeon>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="255" />
+			</Crate>
+		</HomingPigeon>
+		<MadCow>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="255" />
+			</Crate>
+		</MadCow>
+		<HolyHandGrenade>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Power>
+				<Range min="0" max="2" />
+			</Power>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="255" />
+			</Crate>
+		</HolyHandGrenade>
+		<OldWoman>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="255" />
+			</Crate>
+		</OldWoman>
+		<SheepLauncher>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="255" />
+			</Crate>
+		</SheepLauncher>
+		<SuperSheep>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="255" />
+			</Crate>
+		</SuperSheep>
+		<MoleBomb>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="255" />
+			</Crate>
+		</MoleBomb>
+		<JetPack>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Power>
+				<Range min="0" max="255" />
+			</Power>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+		</JetPack>
+		<LowGravity>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+		</LowGravity>
+		<LaserSight>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+		</LaserSight>
+		<FastWalk>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+		</FastWalk>
+		<Invisibility>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+		</Invisibility>
+		<DoubleDamage>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+		</DoubleDamage>
+		<Freeze>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+		</Freeze>
+		<SuperBananaBomb>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+		</SuperBananaBomb>
+		<MineStrike>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+		</MineStrike>
+		<GirderStarterPack>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+		</GirderStarterPack>
+		<Earthquake>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+		</Earthquake>
+		<ScalesOfJustice>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+		</ScalesOfJustice>
+		<MingVase>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+		</MingVase>
+		<CarpetBomb>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+		</CarpetBomb>
+		<MagicBullet>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+		</MagicBullet>
+		<NuclearTest>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+		</NuclearTest>
+		<SelectWorm>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+		</SelectWorm>
+		<SalvationArmy>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+		</SalvationArmy>
+		<MoleSquadron>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+		</MoleSquadron>
+		<MBBomb>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+		</MBBomb>
+		<ConcreteDonkey>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+		</ConcreteDonkey>
+		<SuicideBomber>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+		</SuicideBomber>
+		<SheepStrike>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+		</SheepStrike>
+		<MailStrike>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+		</MailStrike>
+		<Armageddon>
+			<Ammo>
+				<Range min="0" max="255" />
+			</Ammo>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+					<Selection>
+						<Constant value="255" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+		</Armageddon>
+	</Weapons>
+	<ExtendedOptions version="0">
+		<ConstantWind>
+			<Boolean chance="0.5" />
+		</ConstantWind>
+		<Wind>
+			<Range min="-32768" max="32767" />
+		</Wind>
+		<WindBias>
+			<Range min="0" max="255" />
+		</WindBias>
+		<Gravity>
+			<Range min="1" max="13107200" />
+		</Gravity>
+		<Friction>
+			<Range min="0" max="4095" />
+		</Friction>
+		<RopeKnocking>
+			<Range min="0" max="255" />
+		</RopeKnocking>
+		<BloodLevel>
+			<Range min="0" max="255" />
+		</BloodLevel>
+		<UnrestrictRope>
+			<Boolean chance="0.5" />
+		</UnrestrictRope>
+		<AutoPlaceWormsByAlly>
+			<Boolean chance="0.5" />
+		</AutoPlaceWormsByAlly>
+		<NoCrateProbability>
+			<Range min="0" max="100" />
+		</NoCrateProbability>
+		<MaximumCrateCount>
+			<Range min="0" max="65535" />
+		</MaximumCrateCount>
+		<SuddenDeathDisablesWormSelect>
+			<Boolean chance="0.5" />
+		</SuddenDeathDisablesWormSelect>
+		<SuddenDeathWormDamagePerTurn>
+			<Boolean chance="0.5" />
+		</SuddenDeathWormDamagePerTurn>
+		<AlliedPhasedWorms>
+			<Range min="0" max="3" />
+		</AlliedPhasedWorms>
+		<EnemyPhasedWorms>
+			<Range min="0" max="3" />
+		</EnemyPhasedWorms>
+		<CircularAim>
+			<Boolean chance="0.5" />
+		</CircularAim>
+		<AntiLockAim>
+			<Boolean chance="0.5" />
+		</AntiLockAim>
+		<AntiLockPower>
+			<Boolean chance="0.5" />
+		</AntiLockPower>
+		<WormSelectionDoesntEndHotSeat>
+			<Boolean chance="0.5" />
+		</WormSelectionDoesntEndHotSeat>
+		<WormSelectionNeverCancelled>
+			<Boolean chance="0.5" />
+		</WormSelectionNeverCancelled>
+		<BattyRope>
+			<Boolean chance="0.5" />
+		</BattyRope>
+		<RopeRollDrops>
+			<Range min="0" max="2" />
+		</RopeRollDrops>
+		<XImpactLossOfControl>
+			<CoinFlip headsValue="0" tailsValue="255" />
+		</XImpactLossOfControl>
+		<KeepControlAfterBumpingHead>
+			<Boolean chance="0.5" />
+		</KeepControlAfterBumpingHead>
+		<KeepControlAfterSkimming>
+			<Range min="0" max="2" />
+		</KeepControlAfterSkimming>
+		<FallDamageTriggeredByExplosions>
+			<Boolean chance="0.5" />
+		</FallDamageTriggeredByExplosions>
+		<ExplosionsPushAllObjects>
+			<Boolean chance="0.5" />
+		</ExplosionsPushAllObjects>
+		<UndeterminedCrates>
+			<Boolean chance="0.5" />
+		</UndeterminedCrates>
+		<UndeterminedFuses>
+			<Boolean chance="0.5" />
+		</UndeterminedFuses>
+		<PauseTimerWhileFiring>
+			<Boolean chance="0.5" />
+		</PauseTimerWhileFiring>
+		<LossOfControlDoesntEndTurn>
+			<Boolean chance="0.5" />
+		</LossOfControlDoesntEndTurn>
+		<WeaponUseDoesntEndTurn>
+			<Boolean chance="0.5" />
+		</WeaponUseDoesntEndTurn>
+		<WeaponUseDoesntEndTurnDoesntBlockWeapons>
+			<Boolean chance="0.5" />
+		</WeaponUseDoesntEndTurnDoesntBlockWeapons>
+		<PneumaticDrillImpartsVelocity>
+			<Boolean chance="0.5" />
+		</PneumaticDrillImpartsVelocity>
+		<GirderRadiusAssist>
+			<Boolean chance="0.5" />
+		</GirderRadiusAssist>
+		<PetrolTurnDecay>
+			<Range min="1" max="65535" />
+		</PetrolTurnDecay>
+		<PetrolTouchDecay>
+			<Range min="1" max="255" />
+		</PetrolTouchDecay>
+		<MaximumFlameletCount>
+			<Range min="1" max="65535" />
+		</MaximumFlameletCount>
+		<MaximumProjectileSpeed>
+			<Range min="0" max="2147483647" />
+		</MaximumProjectileSpeed>
+		<MaximumRopeSpeed>
+			<Range min="0" max="2147483647" />
+		</MaximumRopeSpeed>
+		<MaximumJetPackSpeed>
+			<Range min="0" max="2147483647" />
+		</MaximumJetPackSpeed>
+		<GameEngineSpeed>
+			<Range min="4096" max="8388608" />
+		</GameEngineSpeed>
+		<IndianRopeGlitch>
+			<Boolean chance="0.5" />
+		</IndianRopeGlitch>
+		<HerdDoublingGlitch>
+			<Boolean chance="0.5" />
+		</HerdDoublingGlitch>
+		<JetPackBungeeGlitch>
+			<Boolean chance="0.5" />
+		</JetPackBungeeGlitch>
+		<AngleCheatGlitch>
+			<Boolean chance="0.5" />
+		</AngleCheatGlitch>
+		<GlideGlitch>
+			<Boolean chance="0.5" />
+		</GlideGlitch>
+		<Skipwalking>
+			<WeightedSelector>
+				<Selection weight="2">
+					<Boolean chance="0.5" />
+				</Selection>
+				<Selection weight="1">
+					<Constant value="255" />
+				</Selection>
+			</WeightedSelector>
+		</Skipwalking>
+		<BlockRoofing>
+			<Range min="0" max="2" />
+		</BlockRoofing>
+		<FloatingWeaponGlitch>
+			<Boolean chance="0.5" />
+		</FloatingWeaponGlitch>
+		<RubberWormBounciness>
+			<Range min="0" max="65536" />
+		</RubberWormBounciness>
+		<RubberWormAirViscosity>
+			<Range min="0" max="16384" />
+		</RubberWormAirViscosity>
+		<RubberWormAirViscosityAppliesToWorms>
+			<Boolean chance="0.5" />
+		</RubberWormAirViscosityAppliesToWorms>
+		<RubberWormWindInfluence>
+			<Range min="0" max="65536" />
+		</RubberWormWindInfluence>
+		<RubberWormWindInfluenceAppliesToWorms>
+			<Boolean chance="0.5" />
+		</RubberWormWindInfluenceAppliesToWorms>
+		<RubberWormGravityType>
+			<WeightedSelector>
+				<Selection weight="3">
+					<Range min="0" max="1" />
+				</Selection>
+				<Selection weight="1">
+					<Range min="2" max="3" />
+				</Selection>
+			</WeightedSelector>
+		</RubberWormGravityType>
+		<RubberWormGravityStrength>
+			<Range min="-1073741824" max="1073741824" />
+		</RubberWormGravityStrength>
+		<RubberWormCrateRate>
+			<Range min="0" max="15" />
+		</RubberWormCrateRate>
+		<RubberWormCrateShower>
+			<Boolean chance="0.5" />
+		</RubberWormCrateShower>
+		<RubberWormAntiSink>
+			<Boolean chance="0.5" />
+		</RubberWormAntiSink>
+		<RubberWormRememberWeapons>
+			<Boolean chance="0.5" />
+		</RubberWormRememberWeapons>
+		<RubberWormExtendedFuses>
+			<Boolean chance="0.5" />
+		</RubberWormExtendedFuses>
+		<RubberWormAntiLockAim>
+			<Boolean chance="0.5" />
+		</RubberWormAntiLockAim>
+		<TerrainOverlapPhasingGlitch>
+			<Boolean chance="0.5" />
+		</TerrainOverlapPhasingGlitch>
+		<FractionalRoundTimer>
+			<Boolean chance="0.5" />
+		</FractionalRoundTimer>
+		<AutomaticEndOfTurnRetreat>
+			<Boolean chance="0.5" />
+		</AutomaticEndOfTurnRetreat>
+		<HealthCratesCurePoison>
+			<WeightedSelector>
+				<Selection weight="3">
+					<Range min="0" max="2" />
+				</Selection>
+				<Selection weight="1">
+					<Constant value="255" />
+				</Selection>
+			</WeightedSelector>
+		</HealthCratesCurePoison>
+		<RubberWormKaosMod>
+			<Range min="0" max="5" />
+		</RubberWormKaosMod>
+		<SheepHeavensGate>
+			<Range min="1" max="7" />
+		</SheepHeavensGate>
+		<ConserveInstantUtilities>
+			<Boolean chance="0.5" />
+		</ConserveInstantUtilities>
+		<ExpediteInstantUtilities>
+			<Boolean chance="0.5" />
+		</ExpediteInstantUtilities>
+		<DoubleTimeStackLimit>
+			<Range min="0" max="255" />
+		</DoubleTimeStackLimit>
+	</ExtendedOptions>
+</Metascheme>

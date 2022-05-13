@@ -6,21 +6,24 @@ using System.Threading.Tasks;
 
 namespace SchemeGen2.XmlParser
 {
-    enum ElementTypes
-    {
-        Scheme,
-        Settings,
-        Setting,
-        Weapons,
-        Weapon,
+	enum ElementTypes
+	{
+		Metascheme,
+		Information,
+		Settings,
+		Setting,
+		Weapons,
+		Weapon,
+		Guarantees,
+		Guarantee,
+		MinimumWeaponCount,
+		MaximumWeaponCount,
+		MinimumSettingValue,
+		MaximumSettingValue,
+		InclusionFilter,
+		ExclusionFilter,
+		ExtendedOptions,
 
-        Count
-    }
-
-    enum ValueGeneratorTypes
-    {
-        Set,
-
-        Count
-    }
+		Count
+	}
 }

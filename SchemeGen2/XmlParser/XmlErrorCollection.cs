@@ -8,154 +8,181 @@ using System.Xml.Linq;
 
 namespace SchemeGen2.XmlParser
 {
-    struct XmlError
-    {
-        public bool HasLineNumber() { return lineNumber != -1; }
+	struct XmlError
+	{
+		public bool HasLineNumber() { return lineNumber != -1; }
 
-        public int lineNumber;
-        public string errorString;
-    };
+		public int lineNumber;
+		public string errorString;
+	};
 
-    /// <summary>
-    /// Represents a collection of errors found when parsing XML.
-    /// </summary>
-    class XmlErrorCollection
-    {
-        public XmlErrorCollection()
-        {
-            _errors = new List<XmlError>();
-        }
+	/// <summary>
+	/// Represents a collection of errors found when parsing XML.
+	/// </summary>
+	class XmlErrorCollection
+	{
+		public XmlErrorCollection()
+		{
+			_errors = new List<XmlError>();
+		}
 
-        public void Add(string errorString)
-        {
-            XmlError xmlError;
-            xmlError.lineNumber = -1;
-            xmlError.errorString = errorString;
+		public void Add(string errorString)
+		{
+			XmlError xmlError;
+			xmlError.lineNumber = -1;
+			xmlError.errorString = errorString;
 
-            _errors.Add(xmlError);
-        }
+			_errors.Add(xmlError);
+		}
 
-        public void Add(string errorString, XElement element)
-        {
-            IXmlLineInfo lineInfo = element;
+		public void Add(string errorString, XElement element)
+		{
+			IXmlLineInfo lineInfo = element;
 
-            if (lineInfo.HasLineInfo())
-            {
-                int lineNumber = lineInfo.LineNumber;
+			if (lineInfo.HasLineInfo())
+			{
+				int lineNumber = lineInfo.LineNumber;
 
-                XmlError xmlError;
-                xmlError.lineNumber = lineNumber;
-                xmlError.errorString = errorString;
+				XmlError xmlError;
+				xmlError.lineNumber = lineNumber;
+				xmlError.errorString = errorString;
 
-                _errors.Add(xmlError);
-            }
-            else
-            {
-                Add(errorString);
-            }
-        }
-        
-        public void AddElementNotFound(string expectedElement)
-        {
-            string errorString = String.Format("Element '{0}' was expected but was not found.",
-                expectedElement);
+				_errors.Add(xmlError);
+			}
+			else
+			{
+				Add(errorString);
+			}
+		}
+		
+		public void AddElementNotFound(string expectedElement)
+		{
+			string errorString = String.Format("Element '{0}' was expected but was not found.",
+				expectedElement);
 
-            Add(errorString);
-        }
+			Add(errorString);
+		}
 
-        public void AddElementNotFound(string expectedElement, XElement parentElement)
-        {
-            string errorString = String.Format("Element '{0}' was expected in parent element '{1}' but was not found.",
-                expectedElement, parentElement.Name.LocalName);
+		public void AddElementNotFound(string expectedElement, XElement parentElement)
+		{
+			string errorString = String.Format("Element '{0}' was expected in parent element '{1}' but was not found.",
+				expectedElement, parentElement.Name.LocalName);
 
-            Add(errorString, parentElement);
-        }
+			Add(errorString, parentElement);
+		}
 
-        public void AddInvalidElement(XElement element)
-        {
-            string errorString = String.Format("Element '{0}' is invalid.",
-                element.Name.LocalName);
+		public void AddInvalidElement(XElement element)
+		{
+			string errorString = String.Format("Element '{0}' is invalid.",
+				element.Name.LocalName);
 
-            Add(errorString, element);
-        }
+			Add(errorString, element);
+		}
 
-        public void AddRepeatedElement(XElement element)
-        {
-            string errorString = String.Format("Element '{0}' may only appear once within the current element.",
-                element.Name.LocalName);
+		public void AddRepeatedElement(XElement element)
+		{
+			string errorString = String.Format("Element '{0}' may only appear once within the current element.",
+				element.Name.LocalName);
 
-            Add(errorString, element);
-        }
+			Add(errorString, element);
+		}
 
-        public void AddRepeatedElement(XElement element, XElement originalElement)
-        {
-            IXmlLineInfo lineInfo = originalElement;
+		public void AddRepeatedElement(XElement element, XElement originalElement)
+		{
+			IXmlLineInfo lineInfo = originalElement;
 
-            if (lineInfo.HasLineInfo())
-            {
-                int lineNumber = lineInfo.LineNumber;
+			if (lineInfo.HasLineInfo())
+			{
+				int lineNumber = lineInfo.LineNumber;
 
-                string errorString = String.Format("Element '{0}' may only appear once within the current element. " +
-                    "Original occurence is on line {1}.", element.Name.LocalName, lineNumber);
+				string errorString = String.Format("Element '{0}' may only appear once within the current element. " +
+					"Original occurence is on line {1}.", element.Name.LocalName, lineNumber);
 
-                Add(errorString, element);
-            }
-            else
-            {
-                AddRepeatedElement(element);
-            }
-        }
+				Add(errorString, element);
+			}
+			else
+			{
+				AddRepeatedElement(element);
+			}
+		}
 
-        public void AddAttributeNotFound(string expectedAttribute)
-        {
-            string errorString = String.Format("Attribute '{0}' was expected but was not found.",
-                expectedAttribute);
+		public void AddAttributeNotFound(string expectedAttribute)
+		{
+			string errorString = String.Format("Attribute '{0}' was expected but was not found.",
+				expectedAttribute);
 
-            Add(errorString);
-        }
+			Add(errorString);
+		}
 
-        public void AddAttributeNotFound(string expectedAttribute, XElement element)
-        {
-            string errorString = String.Format("Attribute '{0}' was expected but was not found.",
-                expectedAttribute);
+		public void AddAttributeNotFound(string expectedAttribute, XElement element)
+		{
+			string errorString = String.Format("Attribute '{0}' was expected but was not found.",
+				expectedAttribute);
 
-            Add(errorString, element);
-        }
+			Add(errorString, element);
+		}
 
-        public void AddInvalidAttribute(XElement element, XAttribute attribute)
-        {
-            string errorString = String.Format("Attribute '{0}' is invalid.",
-                attribute.Name.LocalName);
+		public void AddInvalidAttribute(XElement element, XAttribute attribute)
+		{
+			string errorString = String.Format("Attribute '{0}' is invalid.",
+				attribute.Name.LocalName);
 
-            Add(errorString, element);
-        }
+			Add(errorString, element);
+		}
 
-        public void AddAttributeValueNonInteger(XElement element, XAttribute attribute)
-        {
-            string errorString = String.Format("Attribute '{0}' has non-integer value '{1}'.",
-                attribute.Name.LocalName, attribute.Value);
+		public void AddAttributeValueNonNumber(XElement element, XAttribute attribute)
+		{
+			string errorString = String.Format("Attribute '{0}' has non-number value '{1}'.",
+				attribute.Name.LocalName, attribute.Value);
 
-            Add(errorString, element);
-        }
+			Add(errorString, element);
+		}
 
-        public void AddAttributeValueOutOfRange(XElement element, XAttribute attribute, byte minValue, byte maxValue)
-        {
-            string errorString = String.Format("Attribute '{0}' has out of range value '{1}'. Valid range is [{2} - {3}].",
-                attribute.Name.LocalName, attribute.Value, minValue, maxValue);
+		public void AddAttributeValueOutOfRange<T>(XElement element, XAttribute attribute, T minValue, T maxValue)
+		{
+			string errorString = String.Format("Attribute '{0}' has out of range value '{1}'. Valid range is [{2} - {3}].",
+				attribute.Name.LocalName, attribute.Value, minValue, maxValue);
 
-            Add(errorString, element);
-        }
+			Add(errorString, element);
+		}
 
-        public void AddAttributeValueOutOfRange(XElement element, XAttribute attribute, Setting setting)
-        {
-            AddAttributeValueOutOfRange(element, attribute, setting.MinimumValue, setting.MaximumValue);
-        }
+		public void AddAttributeValueInvalidValue(XElement element, XAttribute attribute)
+		{
+			string errorString = String.Format("Attribute '{0}' has invalid value '{1}'.",
+				attribute.Name.LocalName, attribute.Value);
 
-        public List<XmlError> Errors
-        {
-            get { return _errors; }
-        }
+			Add(errorString, element);
+		}
 
-        List<XmlError> _errors;
-    }
+		public void AddSettingOutsideLimits(XElement element, SettingLimits settingLimits)
+		{
+			string errorString = String.Format("The values generated by '{0}' must be within the range(s): {1}.",
+				element.Name.LocalName, settingLimits.ToString());
+
+			Add(errorString, element);
+		}
+
+		public void AddSettingNotApplicableToWeapon(XElement element, WeaponTypes weaponType, WeaponSettings weaponSetting)
+		{
+			string errorString = String.Format("Setting '{0}' cannot be applied to weapon '{1}'.",
+				weaponSetting.ToString(), weaponType.ToString());
+
+			Add(errorString, element);
+		}
+
+		public void AddExtendedOptionNotAvailable(XElement element, ExtendedOptionTypes extendedOptionType, int version)
+		{
+			string errorString = String.Format("Extended option '{0}' is not available in data version {1}.",
+				extendedOptionType.ToString(), version);
+
+			Add(errorString, element);
+		}
+
+		public List<XmlError> Errors
+		{
+			get { return _errors; }
+		}
+
+		List<XmlError> _errors;
+	}
 }

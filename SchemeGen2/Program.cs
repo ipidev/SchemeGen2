@@ -1,77 +1,101 @@
 ﻿using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace SchemeGen2
 {
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            //TODO: Make separate limits-storing object
-            Scheme limits = new Scheme(true);
+	public static class SchemeGen2
+	{
+		public static bool Generate(string inputPath, SchemeVersion schemeVersion, string outputPath = null, int? seed = null, TextWriter errorTextWriter = null)
+		{
+			if (!File.Exists(inputPath))
+			{
+				if (errorTextWriter != null)
+					errorTextWriter.WriteLine("File {0} does not exist.", inputPath);
+				return false;
+			}
 
-            Randomisation.SchemeGenerator schemeGenerator = null;
+			if (schemeVersion < SchemeVersion.Armageddon1 || schemeVersion > SchemeVersion.Armageddon3)
+			{
+				if (errorTextWriter != null)
+					errorTextWriter.WriteLine("Invalid scheme version {0}.", schemeVersion);
+				return false;
+			}
 
-            XmlParser.XmlErrorCollection xmlErrorCollection = null;
+			if (outputPath == null)
+			{
+				outputPath = Path.ChangeExtension(inputPath, "wsc");
+			}
 
-            bool parseSucceeded = false;
+			Randomisation.SchemeGenerator schemeGenerator = null;
+			XmlParser.XmlErrorCollection xmlErrorCollection = null;
 
-            //XML testing
-            try
-            {
-                XmlParser.XmlParser schemeXmlParse = new XmlParser.XmlParser("testXml.xml", limits);
-                parseSucceeded = schemeXmlParse.Parse(out xmlErrorCollection, out schemeGenerator);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+			bool parseSucceeded = false;
 
-            if (xmlErrorCollection != null)
-            {
-                if (xmlErrorCollection.Errors.Count > 0)
-                {
-                    Console.WriteLine("Found {0} XML error(s)! :)", xmlErrorCollection.Errors.Count);
+			try
+			{
+				XmlParser.XmlParser schemeXmlParse = new XmlParser.XmlParser(inputPath);
+				parseSucceeded = schemeXmlParse.Parse(out xmlErrorCollection, out schemeGenerator);
+			}
+			catch (Exception e)
+			{
+				if (errorTextWriter != null)
+					errorTextWriter.WriteLine(String.Format("Error while parsing XML file: {0}\r\nStack:\r\n{1}", e.Message, e.StackTrace));
+				return false;
+			}
 
-                    foreach (XmlParser.XmlError xmlError in xmlErrorCollection.Errors)
-                    {
-                        if (xmlError.HasLineNumber())
-                        {
-                            Console.WriteLine(" - Line {0}: {1}", xmlError.lineNumber, xmlError.errorString);
-                        }
-                        else
-                        {
-                            Console.WriteLine(" - Unknown line: {0}", xmlError.errorString);
-                        }
-                    }
-                }
-            }
+			if (xmlErrorCollection != null)
+			{
+				if (xmlErrorCollection.Errors.Count > 0)
+				{
+					if (errorTextWriter != null)
+						errorTextWriter.WriteLine("Found {0} XML error(s):", xmlErrorCollection.Errors.Count);
 
-            if (parseSucceeded)
-            {
-                Scheme testScheme = schemeGenerator.GenerateScheme();
+					foreach (XmlParser.XmlError xmlError in xmlErrorCollection.Errors)
+					{
+						if (xmlError.HasLineNumber())
+						{
+							if (errorTextWriter != null)
+								errorTextWriter.WriteLine(" - Line {0}: {1}", xmlError.lineNumber, xmlError.errorString);
+						}
+						else
+						{
+							if (errorTextWriter != null)
+								errorTextWriter.WriteLine(" - Unknown line: {0}", xmlError.errorString);
+						}
+					}
+				}
+			}
 
-                byte[] schemeBytes = testScheme.GetBytes();
+			if (!parseSucceeded)
+			{
+				return false;
+			}
 
-                try
-                {
-                    FileStream fs = new FileStream("testScheme.wsc", FileMode.Create, FileAccess.Write);
+			try
+			{
+				Random rng = seed.HasValue ? new Random(seed.Value) : new Random();
+				Scheme testScheme = schemeGenerator.GenerateScheme(rng, schemeVersion);
+				
+				using (FileStream fs = new FileStream(outputPath, FileMode.Create, FileAccess.Write))
+				{
+					testScheme.Serialise(fs);
+					fs.Close();
+				}
+			}
+			catch (Exception e)
+			{
+				if (errorTextWriter != null)
+					errorTextWriter.WriteLine(String.Format("Error while writing scheme file: {0}\r\nStack:\r\n{1}", e.Message, e.StackTrace));
+				return false;
+			}
 
-                    fs.Write(schemeBytes, 0, schemeBytes.Length);
-
-                    fs.Close();
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                }
-
-                Console.ReadLine();
-            }
-        }
-    }
+			return true;
+		}
+	}
 }

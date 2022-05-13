@@ -4,176 +4,182 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SchemeGen2.Randomisation.Guarantees;
+using SchemeGen2.Randomisation.ValueGenerators;
 
 namespace SchemeGen2.Randomisation
 {
-    /// <summary>
-    /// Stores a set of value generators for each setting applicable to weapons.
-    /// </summary>
-    struct WeaponGenerator
-    {
-        public ValueGenerator ammo;
-        public ValueGenerator power;
-        public ValueGenerator delay;
-        public ValueGenerator crate;
+	/// <summary>
+	/// A class that generates schemes once all of its value generators are
+	/// initialised.
+	/// </summary>
+	class SchemeGenerator
+	{
+		public SchemeGenerator()
+		{
+			_settingGenerators = new ValueGenerator[SchemeTypes.NumberOfNonWeaponSettings];
 
-        /// <summary>
-        /// Gets the given setting's value generator. May return null.
-        /// </summary>
-        public ValueGenerator Get(WeaponSettings weaponSetting)
-        {
-            switch (weaponSetting)
-            {
-            case WeaponSettings.Ammo:
-                return ammo;
+			_weaponGenerators = new WeaponGenerator[SchemeTypes.NumberOfWeapons];
+			for (int i = 0; i < SchemeTypes.NumberOfWeapons; ++i)
+			{
+				_weaponGenerators[i] = new WeaponGenerator();
+			}
 
-            case WeaponSettings.Power:
-                return power;
+			_extendedOptionGenerators = new ValueGenerator[SchemeTypes.NumberOfExtendedOptions];
+			ExtendedOptionsDataVersion = 0;
 
-            case WeaponSettings.Delay:
-                return delay;
+			_guarantees = new List<Guarantee>();
+		}
 
-            case WeaponSettings.Crate:
-                return crate;
+		public Scheme GenerateScheme(Random rng, SchemeVersion version)
+		{
+			Scheme scheme = new Scheme(version, ExtendedOptionsDataVersion);
 
-            default:
-                Debug.Assert(false, "Invalid enum.");
-                return null;
-            }
-        }
+			//Generate values for every setting.
+			int settingsCount = Math.Min(scheme.Settings.Length, _settingGenerators.Length);
+			for (int i = 0; i < settingsCount; ++i)
+			{
+				ValueGenerator valueGenerator = _settingGenerators[i];
 
-        /// <summary>
-        /// Sets the given setting's value generator.
-        /// </summary>
-        public void Set(WeaponSettings weaponSetting, ValueGenerator valueGenerator)
-        {
-            switch (weaponSetting)
-            {
-            case WeaponSettings.Ammo:
-                ammo = valueGenerator;
-                break;
+				if (valueGenerator != null)
+				{
+					SettingTypes settingType = (SettingTypes)i;
+					Setting setting = scheme.Access(settingType);
+					Debug.Assert(setting != null);
 
-            case WeaponSettings.Power:
-                power = valueGenerator;
-                break;
+					setting.SetValue(valueGenerator.GenerateValue(rng), valueGenerator);
+				}
+			}
 
-            case WeaponSettings.Delay:
-                delay = valueGenerator;
-                break;
+			//Generate values for every weapon.
+			int weaponsCount = Math.Min(scheme.Weapons.Length, _weaponGenerators.Length);
+			for (int i = 0; i < weaponsCount; ++i)
+			{
+				WeaponGenerator weaponGenerator = _weaponGenerators[i];
 
-            case WeaponSettings.Crate:
-                crate = valueGenerator;
-                break;
+				for (int j = 0; j < (int)WeaponSettings.Count; ++j)
+				{
+					WeaponSettings weaponSetting = (WeaponSettings)j;
+					ValueGenerator valueGenerator = weaponGenerator.Get(weaponSetting);
 
-            default:
-                Debug.Assert(false, "Invalid enum.");
-                break;
-            }
-        }
-    }
+					if (valueGenerator != null)
+					{
+						WeaponTypes weaponType = (WeaponTypes)i;
+						Weapon weapon = scheme.Access(weaponType);
+						Debug.Assert(weapon != null);
 
-    /// <summary>
-    /// A class that generates schemes once all of its value generators are
-    /// initialised.
-    /// </summary>
-    class SchemeGenerator
-    {
-        public SchemeGenerator()
-        {
-            _settingGenerators = new ValueGenerator[SchemeTypes.NumberOfNonWeaponSettings];
-            _weaponGenerators = new WeaponGenerator[SchemeTypes.NumberOfWeapons];
-        }
+						Setting setting = weapon.Access(weaponSetting);
+						Debug.Assert(setting != null);
 
-        public Scheme GenerateScheme()
-        {
-            Scheme scheme = new Scheme(true);
+						//Check value generator range (range check is not done at XML parsing-time for default values).
+						if (!valueGenerator.IsValueRangeWithinLimits(setting.Limits))
+						{
+							throw new Exception(String.Format("Generatable values for setting '{0}' must be within the range(s): {1}.",
+								setting.Name, setting.Limits.ToString()));
+						}
 
-            //Generate values for every setting.
-            for (int i = 0; i < _settingGenerators.Length; ++i)
-            {
-                ValueGenerator valueGenerator = _settingGenerators[i];
+						setting.SetValue(valueGenerator.GenerateValue(rng), valueGenerator);
+					}
+				}
+			}
 
-                if (valueGenerator != null)
-                {
-                    SettingTypes settingType = (SettingTypes)i;
-                    Setting setting = scheme.Access(settingType);
-                    Debug.Assert(setting != null);
+			//Generate values for every extended option.
+			if (version >= SchemeVersion.Armageddon3)
+			{
+				int optionsCount = Math.Min(scheme.ExtendedOptions.Length, _extendedOptionGenerators.Length);
+				for (int i = 0; i < optionsCount; ++i)
+				{
+					ValueGenerator valueGenerator = _extendedOptionGenerators[i];
+					if (valueGenerator != null)
+					{
+						ExtendedOptionTypes extendedOption = (ExtendedOptionTypes)i;
+						Setting setting = scheme.Access(extendedOption);
+						Debug.Assert(setting != null);
 
-                    setting.Value = valueGenerator.GenerateByte();
-                }
-            }
+						setting.SetValue(valueGenerator.GenerateValue(rng), valueGenerator);
+					}
+				}
+			}
 
-            //Generate values for every weapon.
-            for (int i = 0; i < _settingGenerators.Length; ++i)
-            {
-                WeaponGenerator weaponGenerator = _weaponGenerators[i];
+			//Handle guarantees.
+			foreach (Guarantee guarantee in _guarantees)
+			{
+				guarantee.ApplyGuarantee(scheme, rng);
+			}
 
-                for (int j = 0; j < (int)WeaponSettings.Count; ++j)
-                {
-                    WeaponSettings weaponSetting = (WeaponSettings)j;
-                    ValueGenerator valueGenerator = weaponGenerator.Get(weaponSetting);
+			return scheme;
+		}
 
-                    if (valueGenerator != null)
-                    {
-                        WeaponTypes weaponType = (WeaponTypes)i;
-                        Weapon weapon = scheme.Access(weaponType);
-                        Debug.Assert(weapon != null);
+		///////////////////////////////////////////////////////////////////////
+		// Accessors / Mutators
 
-                        Setting setting = weapon.Access(weaponSetting);
-                        Debug.Assert(setting != null);
-                        setting.Value = valueGenerator.GenerateByte();
-                    }
-                }
-            }
+		/// <summary>
+		/// Sets the given setting's value generator.
+		/// </summary>
+		public void Set(SettingTypes setting, ValueGenerator valueGenerator)
+		{
+			Debug.Assert(setting < SettingTypes.Count);
 
-            return scheme;
-        }
+			_settingGenerators[(int)setting] = valueGenerator;
+		}
 
-        ///////////////////////////////////////////////////////////////////////
-        // Accessors / Mutators
+		/// <summary>
+		/// Sets the given weapon settings's value generator.
+		/// </summary>
+		public void Set(WeaponTypes weapon, WeaponSettings weaponSetting, ValueGenerator valueGenerator)
+		{
+			Debug.Assert(weaponSetting < WeaponSettings.Count);
+			if (weaponSetting < WeaponSettings.Count)
+			{
+				Debug.Assert(weapon < WeaponTypes.Count);
+				if (weapon < WeaponTypes.Count)
+				{
+					_weaponGenerators[(int)weapon].Set(weaponSetting, valueGenerator);
+				}
+			}
+		}
 
-        /// <summary>
-        /// Gets the given setting's value generator by reference. May return null.
-        /// </summary>
-        public ValueGenerator Access(SettingTypes setting)
-        {
-            Debug.Assert(setting < SettingTypes.Count);
+		/// <summary>
+		/// Sets a copy of the given value generator for all applicable weapons.
+		/// </summary>
+		public void SetDefault(WeaponSettings weaponSetting, ValueGenerator valueGenerator)
+		{
+			for (int i = 0; i < (int)WeaponTypes.Count; ++i)
+			{
+				if (!SchemeTypes.CanApplyWeaponSetting((WeaponTypes)i, weaponSetting))
+					continue;
 
-            return _settingGenerators[(int)setting];
-        }
+				_weaponGenerators[i].Set(weaponSetting, valueGenerator.DeepClone());
+			}
+		}
 
-        /// <summary>
-        /// Gets the given weapon's value generator collection. This returns a copy.
-        /// </summary>
-        public WeaponGenerator Get(WeaponTypes weapon)
-        {
-            Debug.Assert(weapon < WeaponTypes.Count);
+		/// <summary>
+		/// Sets the given extended option's value generator.
+		/// </summary>
+		public void Set(ExtendedOptionTypes extendedOption, ValueGenerator valueGenerator)
+		{
+			Debug.Assert(extendedOption < ExtendedOptionTypes.Count);
 
-            return _weaponGenerators[(int)weapon];
-        }
+			_extendedOptionGenerators[(int)extendedOption] = valueGenerator;
+		}
 
-        /// <summary>
-        /// Sets the given setting's value generator.
-        /// </summary>
-        public void Set(SettingTypes setting, ValueGenerator valueGenerator)
-        {
-            Debug.Assert(setting < SettingTypes.Count);
+		/// <summary>
+		/// Adds the given guarantee.
+		/// </summary>
+		public void AddGuarantee(Guarantee guarantee)
+		{
+			Debug.Assert(guarantee != null);
+			Debug.Assert(!_guarantees.Contains(guarantee));
 
-            _settingGenerators[(int)setting] = valueGenerator;
-        }
+			_guarantees.Add(guarantee);
+		}
 
-        /// <summary>
-        /// Sets the given weapon settings's value generator.
-        /// </summary>
-        public void Set(WeaponTypes weapon, WeaponSettings weaponSetting, ValueGenerator valueGenerator)
-        {
-            Debug.Assert(weapon < WeaponTypes.Count);
-            Debug.Assert(weaponSetting < WeaponSettings.Count);
+		ValueGenerator[] _settingGenerators;
+		WeaponGenerator[] _weaponGenerators;
 
-            _weaponGenerators[(int)weapon].Set(weaponSetting, valueGenerator);
-        }
+		ValueGenerator[] _extendedOptionGenerators;
+		public int ExtendedOptionsDataVersion { get; set; }
 
-        ValueGenerator[] _settingGenerators;
-        WeaponGenerator[] _weaponGenerators;
-    }
+		List<Guarantee> _guarantees;
+	}
 }

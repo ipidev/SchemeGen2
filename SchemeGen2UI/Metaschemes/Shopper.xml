@@ -1,0 +1,489 @@
+<Metascheme>
+	<Information>
+		<DisplayName>Shopper</DisplayName>
+		<AuthorName>ipi</AuthorName>
+		<Description>Players start with only the Ninja Rope, and must collect more weapons from crates. The terrain is indestructable.</Description>
+	</Information>
+	
+	<Settings>
+		<HotSeatDelay>
+			<Range min="0" max="10" />
+		</HotSeatDelay>
+		<RetreatTime>
+			<Range min="0" max="10" />
+		</RetreatTime>
+		<RopeRetreatTime>
+			<Range min="0" max="10" />
+		</RopeRetreatTime>
+		<DisplayTotalRoundTime>
+			<Constant value="False" />
+		</DisplayTotalRoundTime>
+		<AutomaticReplays>
+			<Boolean chance="0.5" />
+		</AutomaticReplays>
+		<FallDamage>
+			<Constant value="True" />
+		</FallDamage>
+		<StockpilingMode>
+			<Constant value="0" />
+		</StockpilingMode>
+		<WormSelect>
+			<Constant value="0" />
+		</WormSelect>
+		<SuddenDeathEvent>
+			<Constant value="3" />
+		</SuddenDeathEvent>
+		<WaterRiseRate>
+			<Constant value="0" />
+		</WaterRiseRate>
+		<WeaponCrateProbability>
+			<Constant value="100" />
+		</WeaponCrateProbability>
+		<DonorCards>
+			<Constant value="False" />
+		</DonorCards>
+		<HealthCrateProbability>
+			<Constant value="0" />
+		</HealthCrateProbability>
+		<UtilityCrateProbability>
+			<Constant value="0" />
+		</UtilityCrateProbability>
+		<HazardousObjectTypes>
+			<Constant value="0" />
+		</HazardousObjectTypes>
+		<InitialWormPlacement>
+			<Constant value="False" />
+		</InitialWormPlacement>
+		<InitialWormEnergy>
+			<Range min="50" max="250" />
+		</InitialWormEnergy>
+		<TurnTime>
+			<Range min="15" max="60" />
+		</TurnTime>
+		<RoundTime>
+			<Constant value="30" />
+		</RoundTime>
+		<NumberOfRounds>
+			<Constant value="1" />
+		</NumberOfRounds>
+		<Blood>
+			<Boolean chance="0.5" />
+		</Blood>
+		<AquaSheep>
+			<Boolean chance="0.5" />
+		</AquaSheep>
+		<SheepHeaven>
+			<Boolean chance="0.25" />
+		</SheepHeaven>
+		<IndestructibleTerrain>
+			<Constant value="True" />
+		</IndestructibleTerrain>
+		<UpgradedGrenade>
+			<Boolean chance="0.25" />
+		</UpgradedGrenade>
+		<UpgradedShotgun>
+			<Boolean chance="0.25" />
+		</UpgradedShotgun>
+		<UpgradedCluster>
+			<Boolean chance="0.25" />
+		</UpgradedCluster>
+		<UpgradedLongbow>
+			<Boolean chance="0.25" />
+		</UpgradedLongbow>
+		<TeamWeapons>
+			<Constant value="False" />
+		</TeamWeapons>
+		<SuperWeapons>
+			<Boolean chance="0.95" />
+		</SuperWeapons>
+	</Settings>
+	
+	<Weapons>
+		<!-- Setup delay/crate rates for all weapons -->
+		<Default>
+			<Delay>
+				<WeightedSelector>
+					<Selection>
+						<Range min="0" max="5" />
+					</Selection>
+					<Selection>
+						<Range min="0" max="15" />
+					</Selection>
+				</WeightedSelector>
+			</Delay>
+			<Crate>
+				<Range min="0" max="8" />
+			</Crate>
+		</Default>
+		<!-- Obviously you need the ninja rope... -->
+		<NinjaRope>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+			<Power>
+				<Constant value="4" />
+			</Power>
+			<Delay>
+				<Null />
+			</Delay>
+		</NinjaRope>
+		<Parachute>
+			<Ammo>
+				<Constant value="10" />
+			</Ammo>
+			<Delay>
+				<Null />
+			</Delay>
+		</Parachute>
+		<!-- Disable other traversal options -->
+		<Girder>
+			<Crate>
+				<Null />
+			</Crate>
+		</Girder>
+		<Bungee>
+			<Crate>
+				<Null />
+			</Crate>
+		</Bungee>
+		<Teleport>
+			<Crate>
+				<Null />
+			</Crate>
+		</Teleport>
+		<!-- Setup weapon powers -->
+		<Bazooka>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</Bazooka>
+		<HomingMissile>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</HomingMissile>
+		<Mortar>
+			<Power>
+				<Range min="0" max="14" />
+			</Power>
+		</Mortar>
+		<Grenade>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</Grenade>
+		<ClusterBomb>
+			<Power>
+				<Range min="0" max="14" />
+			</Power>
+		</ClusterBomb>
+		<Skunk>
+			<Power>
+				<Range min="0" max="9" />
+			</Power>
+		</Skunk>
+		<PetrolBomb>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</PetrolBomb>
+		<BananaBomb>
+			<Power>
+				<Range min="0" max="14" />
+			</Power>
+		</BananaBomb>
+		<Handgun>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</Handgun>
+		<Shotgun>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</Shotgun>
+		<Uzi>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</Uzi>
+		<Minigun>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</Minigun>
+		<Longbow>
+			<Power>
+				<Range min="0" max="9" />
+			</Power>
+		</Longbow>
+		<AirStrike>
+			<Power>
+				<Range min="0" max="14" />
+			</Power>
+		</AirStrike>
+		<NapalmStrike>
+			<Power>
+				<Range min="0" max="14" />
+			</Power>
+		</NapalmStrike>
+		<Mine>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</Mine>
+		<FirePunch>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</FirePunch>
+		<DragonBall>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</DragonBall>
+		<Kamikaze>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</Kamikaze>
+		<Prod>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</Prod>
+		<BattleAxe>
+			<Power>
+				<Range min="0" max="4" />
+			</Power>
+		</BattleAxe>
+		<BlowTorch>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</BlowTorch>
+		<PneumaticDrill>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</PneumaticDrill>
+		<Dynamite>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</Dynamite>
+		<Sheep>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</Sheep>
+		<BaseballBat>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</BaseballBat>
+		<FlameThrower>
+			<Power>
+				<Range min="0" max="14" />
+			</Power>
+		</FlameThrower>
+		<HomingPigeon>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</HomingPigeon>
+		<MadCow>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</MadCow>
+		<HolyHandGrenade>
+			<Power>
+				<Range min="0" max="2" />
+			</Power>
+		</HolyHandGrenade>
+		<OldWoman>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</OldWoman>
+		<SheepLauncher>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</SheepLauncher>
+		<SuperSheep>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</SuperSheep>
+		<MoleBomb>
+			<Power>
+				<Range min="0" max="19" />
+			</Power>
+		</MoleBomb>
+		<!-- Disable useless super weapons -->
+		<Freeze>
+			<Delay>
+				<Constant value="255" />
+			</Delay>
+		</Freeze>
+		<GirderStarterPack>
+			<Delay>
+				<Constant value="255" />
+			</Delay>
+		</GirderStarterPack>
+		<SelectWorm>
+			<Delay>
+				<Constant value="255" />
+			</Delay>
+		</SelectWorm>
+		<!-- Selectively disable other super weapons -->
+		<SuperBananaBomb>
+			<Delay>
+				<CoinFlip headsValue="0" tailsValue="255" headsChance="0.8" />
+			</Delay>
+		</SuperBananaBomb>
+		<MineStrike>
+			<Delay>
+				<CoinFlip headsValue="0" tailsValue="255" headsChance="0.8" />
+			</Delay>
+		</MineStrike>
+		<Earthquake>
+			<Delay>
+				<CoinFlip headsValue="0" tailsValue="255" headsChance="0.8" />
+			</Delay>
+		</Earthquake>
+		<ScalesOfJustice>
+			<Delay>
+				<CoinFlip headsValue="0" tailsValue="255" headsChance="0.8" />
+			</Delay>
+		</ScalesOfJustice>
+		<MingVase>
+			<Delay>
+				<CoinFlip headsValue="0" tailsValue="255" headsChance="0.8" />
+			</Delay>
+		</MingVase>
+		<CarpetBomb>
+			<Delay>
+				<CoinFlip headsValue="0" tailsValue="255" headsChance="0.8" />
+			</Delay>
+		</CarpetBomb>
+		<MagicBullet>
+			<Delay>
+				<CoinFlip headsValue="0" tailsValue="255" headsChance="0.8" />
+			</Delay>
+		</MagicBullet>
+		<NuclearTest>
+			<Delay>
+				<CoinFlip headsValue="0" tailsValue="255" headsChance="0.8" />
+			</Delay>
+		</NuclearTest>
+		<SalvationArmy>
+			<Delay>
+				<CoinFlip headsValue="0" tailsValue="255" headsChance="0.8" />
+			</Delay>
+		</SalvationArmy>
+		<MoleSquadron>
+			<Delay>
+				<CoinFlip headsValue="0" tailsValue="255" headsChance="0.8" />
+			</Delay>
+		</MoleSquadron>
+		<MBBomb>
+			<Delay>
+				<CoinFlip headsValue="0" tailsValue="255" headsChance="0.8" />
+			</Delay>
+		</MBBomb>
+		<ConcreteDonkey>
+			<Delay>
+				<CoinFlip headsValue="0" tailsValue="255" headsChance="0.8" />
+			</Delay>
+		</ConcreteDonkey>
+		<SuicideBomber>
+			<Delay>
+				<CoinFlip headsValue="0" tailsValue="255" headsChance="0.8" />
+			</Delay>
+		</SuicideBomber>
+		<SheepStrike>
+			<Delay>
+				<CoinFlip headsValue="0" tailsValue="255" headsChance="0.8" />
+			</Delay>
+		</SheepStrike>
+		<MailStrike>
+			<Delay>
+				<CoinFlip headsValue="0" tailsValue="255" headsChance="0.8" />
+			</Delay>
+		</MailStrike>
+		<Armageddon>
+			<Delay>
+				<CoinFlip headsValue="0" tailsValue="255" headsChance="0.5" />
+			</Delay>
+		</Armageddon>
+	</Weapons>
+	
+	<ExtendedOptions version="0">
+		<!-- Setup improved rope mechanics -->
+		<UnrestrictRope>
+			<Constant value="True" />
+		</UnrestrictRope>
+		<MaximumRopeSpeed>
+			<Constant value="0" />
+		</MaximumRopeSpeed>
+		<RopeRollDrops>
+			<Constant value="1" />
+		</RopeRollDrops>
+		<RopeKnocking>
+			<Constant value="100" />
+		</RopeKnocking>
+		<XImpactLossOfControl>
+			<Constant value="255" />
+		</XImpactLossOfControl>
+		<KeepControlAfterBumpingHead>
+			<Constant value="True" />
+		</KeepControlAfterBumpingHead>
+		<KeepControlAfterSkimming>
+			<Constant value="2" />
+		</KeepControlAfterSkimming>
+		<!-- Allow more crates, sometimes allow crate shower -->
+		<MaximumCrateCount>
+			<Constant value="10" />
+		</MaximumCrateCount>
+		<RubberWormCrateShower>
+			<Boolean chance="0.25" />
+		</RubberWormCrateShower>
+		<!-- Misc. settings -->
+		<FloatingWeaponGlitch>
+			<Constant value="False" />
+		</FloatingWeaponGlitch>
+		<BlockRoofing>
+			<Constant value="2" />
+		</BlockRoofing>
+		<RubberWormRememberWeapons>
+			<Constant value="True" />
+		</RubberWormRememberWeapons>
+		<RubberWormExtendedFuses>
+			<Constant value="True" />
+		</RubberWormExtendedFuses>
+		<SheepHeavensGate>
+			<Constant value="1" />
+		</SheepHeavensGate>
+	</ExtendedOptions>
+	
+	<Guarantees>
+		<!-- Ensure some weapons are obtainable from the start -->
+		<WeaponSetting setting="Delay">
+			<InclusionFilter>
+				<Category name="Damaging" />
+			</InclusionFilter>
+			<ExclusionFilter>
+				<Category name="SuperWeapon" />
+			</ExclusionFilter>
+			<MinimumWeaponCount>
+				<Range min="2" max="5" />
+			</MinimumWeaponCount>
+			<MaximumSettingValue>
+				<Constant value="0" />
+			</MaximumSettingValue>
+		</WeaponSetting>
+	</Guarantees>
+</Metascheme>
